@@ -1,3 +1,5 @@
+// import Painter from './draw/painter';
+
 const Plotta = (() => {
   const FONT = Symbol('Font');
   const TITLE = Symbol('Title');
@@ -40,8 +42,7 @@ const Plotta = (() => {
   }
 
   class LineData {
-    constructor(id, type, axisX, axisY, legend, color, visible, datas, func, dotNum) {
-      this.id = id || '';
+    constructor(type, axisX, axisY, legend, color, visible, datas, func, dotNum) {
       this.type = type || '';
       this.axisX = axisX === 'x2' ? axisX : 'x';
       this.axisY = axisY === 'y2' ? axisY : 'y';
@@ -374,10 +375,10 @@ const Plotta = (() => {
   class Plotta {
     constructor(canvas, dataSet) {
       if (canvas) {
-        this.graphCanvas = canvas;
+        // this.Painter = new Painter(canvas);
       }
 
-      this.lineDatas = [];
+      this.lineDatas = new Map();
       this.config = new GraphConfig();
       this.Init(dataSet);
     }
@@ -392,8 +393,9 @@ const Plotta = (() => {
             id, type, axisX, axisY, legend, color, visible, datas, func, dotNum
           } = item;
 
-          this.lineDatas.push(
-            new LineData(id, type, axisX, axisY, legend, color, visible, datas, func, dotNum)
+          this.lineDatas.set(
+            id,
+            new LineData(type, axisX, axisY, legend, color, visible, datas, func, dotNum)
           );
         });
 
@@ -403,11 +405,31 @@ const Plotta = (() => {
     }
 
     Update(dataSet) {
-      this.Draw(this.lineDatas, this.config);
-    }
+      if (!IsObject(dataSet)) return;
 
-    Draw(lineDatas, config) {
-      this.graphCanvas.Draw(lineDatas, config);
+      dataSet.linedatas.length
+        && dataSet.linedatas.forEach((item) => {
+          // TODO: validationCheck
+          const {
+            id, type, axisX, axisY, legend, color, visible, datas, func, dotNum
+          } = item;
+
+          if (this.lineDatas.has(id)) {
+            this.lineDatas
+              .get(id)
+              .Update(type, axisX, axisY, legend, color, visible, datas, func, dotNum);
+          } else {
+            this.lineDatas.set(
+              id,
+              new LineData(type, axisX, axisY, legend, color, visible, datas, func, dotNum)
+            );
+          }
+        });
+
+      if (IsObject(dataSet.config)) {
+        this.config && this.config.Init(dataSet.config);
+      }
+      this.Painter.Draw(this.lineDatas, this.config);
     }
   }
   return Plotta;
