@@ -1,4 +1,4 @@
-// import Painter from './draw/painter';
+import Painter from './draw/painter';
 
 const Plotta = (() => {
   const FONT = Symbol('Font');
@@ -375,7 +375,7 @@ const Plotta = (() => {
   class Plotta {
     constructor(canvas, dataSet) {
       if (canvas) {
-        // this.Painter = new Painter(canvas);
+        this.Painter = new Painter(canvas);
       }
 
       this.lineDatas = new Map();
