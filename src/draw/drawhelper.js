@@ -1,6 +1,6 @@
 const DrawHelper = {};
 
-DrawHelper.Draw = function (ctx, width, height, metaDatas) {
+DrawHelper.Draw = function (ctx, width, height, viewModel) {
   const maxCircle = 60;
   const radius = 230;
   const size = 7;

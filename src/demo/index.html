@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <canvas
+      id="canvas"
+      style="border:1px solid #d3d3d3;"
+      width="500"
+      height="500"
+      >Graph Test</canvas
+    >
+    <script src="../plotta.js"></script>
+    <script src="../data/testData.js"></script>
+    <script>
+      const canvas = document.getElementById("canvas");
+      var plotta = new Plotta(canvas, dataSet);
+    </script>
+  </body>
+</html>

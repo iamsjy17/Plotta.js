@@ -4,16 +4,16 @@ const eslint = require('gulp-eslint');
 
 const DIR = {
   SRC: 'src',
-  DEST: 'dist',
+  DEST: 'dist'
 };
 
 const PATH = {
   SRC: {
-    JS: `${DIR.SRC}/*.js`,
+    JS: `${DIR.SRC}/**/*.js`
   },
   DEST: {
-    JS: `${DIR.DEST}/`,
-  },
+    JS: `${DIR.DEST}/`
+  }
 };
 
 gulp.task('default', () => {
