@@ -8,11 +8,12 @@
       height="500"
       >Graph Test</canvas
     >
-    <script src="../plotta.js"></script>
-    <script src="../data/testData.js"></script>
+    <script type="text/javascript" src="../plotta.js"></script>
+    <!-- <script type="text/javascript" src="../data/testData.js"></script> -->
     <script>
       const canvas = document.getElementById("canvas");
-      var plotta = new Plotta(canvas, dataSet);
+      var plotta = new Plotta(canvas);
+      // var plotta = new Plotta(canvas, dataSet);
     </script>
   </body>
 </html>

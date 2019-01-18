@@ -4,9 +4,10 @@ import { IsObject } from '../util';
 
 export default class GraphModel {
   constructor(dataSet) {
+    this.Invalidated = true;
     this.lineDatas = new Map();
     this.config = new Config();
-    this.Init(dataSet);
+    this.InitModel(dataSet);
     this.viewHandeler = null;
   }
 
@@ -14,7 +15,7 @@ export default class GraphModel {
     if (viewHandeler) this.viewHandeler = viewHandeler;
   }
 
-  Init(dataSet) {
+  InitModel(dataSet) {
     if (!IsObject(dataSet)) return;
 
     dataSet.linedatas.length
@@ -33,10 +34,9 @@ export default class GraphModel {
     if (IsObject(dataSet.config)) {
       this.config && this.config.Init(dataSet.config);
     }
-    if (this.viewHandeler) this.viewHandeler.UpdateView();
   }
 
-  Update(dataSet) {
+  UpdateModel(dataSet) {
     if (!IsObject(dataSet)) return;
 
     dataSet.linedatas.length

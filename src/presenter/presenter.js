@@ -5,10 +5,11 @@ class Presenter {
   constructor(graphModel, graphView) {
     this.GraphModel = graphModel;
     this.GraphView = graphView;
-    this.ViewModel = null;
+    this.ViewModel = new ViewModel(graphModel);
 
     this.GraphModel.SetViewHandeler(this._getModelHandeler());
     this.GraphView.SetModelHandeler(this._getViewHandeler());
+    this.GraphView.UpdateView();
   }
 
   _getViewHandeler() {
@@ -22,11 +23,12 @@ class Presenter {
   _getModelHandeler() {
     return {
       GetViewModel() {
+        this.ViewModel.InvalidateModel();
         /* Model => ViewModel */
         return this.ViewModel;
       },
       UpdateModel(dataSet) {
-        this.GraphModel.UpdateMdel(dataSet);
+        this.GraphModel.UpdateModel(dataSet);
       }
     }.bind(this);
   }

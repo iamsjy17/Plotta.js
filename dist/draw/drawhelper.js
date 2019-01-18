@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var DrawHelper = {};
 
-DrawHelper.Draw = function (ctx, width, height, metaDatas) {
+DrawHelper.Draw = function (ctx, width, height, viewModel) {
   var maxCircle = 60;
   var radius = 230;
   var size = 7;
