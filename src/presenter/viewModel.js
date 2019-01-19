@@ -1,9 +1,14 @@
 /* eslint-disable no-console */
 import { IsObject } from '../util';
 
-class ViewModel {
+export default class ViewModel {
   constructor(graphModel) {
     this.GraphModel = graphModel;
+    this.DrawData = {};
+  }
+
+  GetDrawData() {
+    return this.DrawData;
   }
 
   Init() {

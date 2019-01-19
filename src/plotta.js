@@ -10,3 +10,5 @@ class Plotta {
     this.Presenter = new Presenter(this.GraphModel, this.GraphView);
   }
 }
+
+window.Plotta = Plotta;

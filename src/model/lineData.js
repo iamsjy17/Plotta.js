@@ -1,6 +1,6 @@
 import { IsObject } from '../util';
 
-class LineData {
+export default class LineData {
   constructor(type, axisX, axisY, legend, color, visible, datas, func, dotNum) {
     this.type = type || '';
     this.axisX = axisX === 'x2' ? axisX : 'x';

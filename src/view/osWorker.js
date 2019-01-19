@@ -2,7 +2,8 @@ import DrawHelper from '../draw/drawHelper';
 
 self.onmessage = (event) => {
   const {
-    ctx, width, height, viewModel
+    canvas, width, height, drawData
   } = event.data;
-  DrawHelper.Draw(ctx, width, height, viewModel);
+  const ctx = canvas.getContext('2d');
+  DrawHelper.Draw(ctx, width, height, drawData);
 };

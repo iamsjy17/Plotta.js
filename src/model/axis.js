@@ -1,6 +1,6 @@
 import { IsObject } from '../util';
 
-class Axis {
+export default class Axis {
   constructor(type, visible, label, position, range) {
     this.type = type || '';
     this.visible = typeof visible === 'boolean' ? visible : true;

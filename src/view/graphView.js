@@ -2,7 +2,7 @@ import CanvasFactory from './canvasHelperFactory';
 
 export default class GraphView {
   constructor(canvas) {
-    this.graphCanvas = CanvasFactory.CreateGraphCanvas(canvas);
+    this.graphCanvas = CanvasFactory.Create(canvas);
     this.modelHandeler = null;
     this.eventListener = this.GetEventListener();
     this.eventListener.BindEvent(canvas);
@@ -78,7 +78,7 @@ export default class GraphView {
   UpdateView() {
     if (!this.graphCanvas || !this.modelHandeler) return;
 
-    this.graphCanvas.Draw(this.modelHandeler.GetViewModel());
+    this.graphCanvas.Draw(this.modelHandeler.GetDrawData());
   }
 
   UpdateModel(dataSet) {
