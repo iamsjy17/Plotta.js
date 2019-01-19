@@ -1,23 +1,26 @@
 {
   "name": "skeleton",
   "version": "1.0.0",
-  "description": "javascript 프로젝트를 시작할 기본 세팅을 마친 프로젝트입니다. ",
-  "main": "index.js",
+  "description": "Plotta",
+  "main": "plotta.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack -w",
+    "devserver": "webpack-dev-server -w"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-es2015": "^6.24.1",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.2.3",
+    "babel-loader": "^8.0.5",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "gulp": "^4.0.0",
-    "gulp-babel": "^7.0.1",
-    "gulp-eslint": "^5.0.0"
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14",
+    "worker-loader": "^2.0.0"
   }
 }
