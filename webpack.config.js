@@ -1,19 +1,21 @@
 const path = require('path');
+const webpack = require('webpack');
 
-module.exports = {
+const config = {
   entry: {
     plotta: ['@babel/polyfill', './src/plotta.js']
     // worker: ['@babel/polyfill', './src/view/osWorker.js']
   },
   output: {
     filename: '[name].bundle.js',
+    publicPath: '/dist/',
     path: path.resolve(__dirname, 'dist/')
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        include: [path.resolve(__dirname, 'src/js')],
+        // include: [path.resolve(__dirname, 'src/js')],
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -21,14 +23,18 @@ module.exports = {
             presets: ['@babel/preset-env']
           }
         }
+      },
+      {
+        test: /osWorker\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'worker-loader',
+          options: { name: 'worker.bundle.js' }
+        }
       }
-      //   {
-      //     test: /\.worker\.js$/,
-      //     use: { loader: 'worker-loader' }
-      //   }
     ]
   },
-
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   mode: 'development'
 };
+module.exports = config;
