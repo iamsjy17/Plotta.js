@@ -1,20 +1,18 @@
 const dataSet = {
   linedatas: [
     {
-      id: 'string',
-      type: 'string',
-      axisY: 'y2',
-      legend: 'string',
-      color: 'string',
+      id: 'line1',
+      type: 'data',
+      legend: 'dummyData',
+      color: '#FFA500',
       visible: true,
-      data: [0, 1, 2]
+      datas: [{ x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 }]
     },
     {
-      id: 'string',
-      type: 'string',
-      axisX: 'x2',
-      legend: 'string',
-      color: 'string',
+      id: 'line2',
+      type: 'func',
+      legend: 'Sin',
+      color: '#FFAAAA',
       visible: true,
       func: Math.sin,
       dotNum: 100
@@ -22,46 +20,23 @@ const dataSet = {
   ],
 
   config: {
-    font: 'string',
-    title: {
-      fontSize: 10,
-      text: 'string'
-    },
-    legend: {
-      fontSize: 10,
-      location: {
-        x: 0,
-        y: 0
-      }
-    },
+    font: 'Arial',
+    title: 'Hello Graph',
     grid: {
-      type: 'string',
+      type: '',
       visible: true
     },
     border: {
-      type: 'string',
+      type: '',
       visible: true,
-      color: 'string',
+      color: '#AFAAFA',
       width: 1
     },
     axis: {
-      color: 'string',
-      width: 1,
-      fontSize: 10,
       x: {
         type: 'string',
-        visible: false,
-        label: 'string',
-        position: 'string',
-        range: {
-          start: 0,
-          end: 360
-        }
-      },
-      x2: {
-        type: 'string',
-        visible: false,
-        label: 'string',
+        visible: true,
+        label: 'xLabel',
         position: 'string',
         range: {
           start: 0,
@@ -70,18 +45,8 @@ const dataSet = {
       },
       y: {
         type: 'string',
-        visible: false,
-        label: 'string',
-        position: 'string',
-        range: {
-          start: 0,
-          end: 360
-        }
-      },
-      y2: {
-        type: 'string',
-        visible: false,
-        label: 'string',
+        visible: true,
+        label: 'yLabel',
         position: 'string',
         range: {
           start: 0,
@@ -89,9 +54,8 @@ const dataSet = {
         }
       },
       tics: {
-        type: 'string',
-        color: 'string',
-        fontSize: 10,
+        type: '',
+        color: '#AFAAFA',
         visible: true,
         value: {
           x: 1,
@@ -101,3 +65,5 @@ const dataSet = {
     }
   }
 };
+
+window.testData = dataSet;

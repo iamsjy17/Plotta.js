@@ -5,7 +5,7 @@ export default class GraphCanvas {
     this.canvasHelper = CanvasHelperFactory.Create(canvas);
   }
 
-  Update(viewModel) {
-    this.canvasHelper.Draw(viewModel);
+  Draw(drawData) {
+    if (drawData) this.canvasHelper.Draw(drawData);
   }
 }

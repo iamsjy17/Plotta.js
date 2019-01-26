@@ -1,54 +1,33 @@
 import { IsObject } from '../util';
 import Axis from './axis';
+import Tics from './tics';
 
 const GraphConfig = (() => {
   const FONT = Symbol('Font');
   const TITLE = Symbol('Title');
-  const TITLE_FONTSIZE = Symbol('TitleFontSize');
-  const LEGEND_FONTSIZE = Symbol('LegendFontSize');
-  const LEGEND_LOCATION = Symbol('LegendLocation');
   const GRID_TYPE = Symbol('GridType');
   const GRID_VISIBLE = Symbol('GridVisible');
   const BORDER_TYPE = Symbol('BorderVisible');
   const BORDER_VISIBLE = Symbol('BorderVisible');
   const BORDER_COLOR = Symbol('BorderColor');
   const BORDER_WIDTH = Symbol('BorderWidth');
-  const AXIS_COLOR = Symbol('AxisColor');
-  const AXIS_WIDTH = Symbol('AxisWidth');
-  const AXIS_FONTSIZE = Symbol('AxisFontSize');
   const AXIS_X = Symbol('AxisX');
-  const AXIS_X2 = Symbol('AxisX2');
   const AXIS_Y = Symbol('AxisY');
-  const AXIS_Y2 = Symbol('AxisY2');
-  const TICS_COLOR = Symbol('TicsColor');
-  const TICS_FONTSIZE = Symbol('TicsFontSize');
-  const TICS_VISIBLE = Symbol('TicsVisible');
-  const TICS_VALUE = Symbol('TicsValue');
+  const TICS = Symbol('Tics');
 
   class GraphConfig {
     constructor(config) {
       this[FONT] = '';
       this[TITLE] = '';
-      this[TITLE_FONTSIZE] = 10;
-      this[LEGEND_FONTSIZE] = 10;
-      this[LEGEND_LOCATION] = { x: 0, y: 0 };
       this[GRID_TYPE] = '';
       this[GRID_VISIBLE] = true;
       this[BORDER_VISIBLE] = true;
       this[BORDER_TYPE] = '';
       this[BORDER_COLOR] = '';
       this[BORDER_WIDTH] = 1;
-      this[AXIS_COLOR] = 1;
-      this[AXIS_WIDTH] = 1;
-      this[AXIS_FONTSIZE] = 1;
       this[AXIS_X] = new Axis();
-      this[AXIS_X2] = null;
       this[AXIS_Y] = new Axis();
-      this[AXIS_Y2] = null;
-      this[TICS_COLOR] = '';
-      this[TICS_FONTSIZE] = 10;
-      this[TICS_VISIBLE] = true;
-      this[TICS_VALUE] = { x: 0.1, y: 0.1 };
+      this[TICS] = new Tics();
       this.Init(config);
     }
 
@@ -67,40 +46,6 @@ const GraphConfig = (() => {
 
     set title(value) {
       if (value && typeof value === 'string') this[TITLE] = value;
-    }
-
-    get titleFontSize() {
-      return this[TITLE_FONTSIZE];
-    }
-
-    set titleFontSize(value) {
-      if (value && typeof value === 'number') this[TITLE_FONTSIZE] = value;
-    }
-
-    get legendFontSize() {
-      return this[LEGEND_FONTSIZE];
-    }
-
-    set legendFontSize(value) {
-      if (value && typeof value === 'number') this[LEGEND_FONTSIZE] = value;
-    }
-
-    get legendLocation() {
-      return this[LEGEND_LOCATION];
-    }
-
-    set legendLocation(value) {
-      if (
-        value
-        && typeof value === 'object'
-        && value.x
-        && typeof value.x === 'number'
-        && value.y
-        && typeof value.y === 'object'
-      ) {
-        this[LEGEND_LOCATION].x = value.x;
-        this[LEGEND_LOCATION].y = value.y;
-      }
     }
 
     get gridType() {
@@ -148,7 +93,7 @@ const GraphConfig = (() => {
     }
 
     set borderColor(value) {
-      if (value && typeof value === 'boolean') {
+      if (value && typeof value === 'string') {
         this[BORDER_COLOR] = value;
       }
     }
@@ -163,53 +108,13 @@ const GraphConfig = (() => {
       }
     }
 
-    get axisColor() {
-      return this[AXIS_COLOR];
-    }
-
-    set axisColor(value) {
-      if (value && typeof value === 'string') {
-        this[AXIS_COLOR] = value;
-      }
-    }
-
-    get axisWidth() {
-      return this[AXIS_WIDTH];
-    }
-
-    set axisWidth(value) {
-      if (value && typeof value === 'number') {
-        this[AXIS_WIDTH] = value;
-      }
-    }
-
-    get axisFontSize() {
-      return this[AXIS_FONTSIZE];
-    }
-
-    set axisFontSize(value) {
-      if (value && typeof value === 'number') {
-        this[AXIS_FONTSIZE] = value;
-      }
-    }
-
     get axisX() {
       return this[AXIS_X];
     }
 
-    set axisX(value) {
-      if (IsObject(value)) {
-        this[AXIS_X] = value;
-      }
-    }
-
-    get axisX2() {
-      return this[AXIS_X2];
-    }
-
-    set axisX2(value) {
-      if (IsObject(value)) {
-        this[AXIS_X2] = value;
+    set axisX(axis) {
+      if (axis instanceof Axis) {
+        this[AXIS_X] = axis;
       }
     }
 
@@ -217,59 +122,19 @@ const GraphConfig = (() => {
       return this[AXIS_Y];
     }
 
-    set axisY(value) {
-      if (IsObject(value)) {
-        this[AXIS_Y] = value;
+    set axisY(axis) {
+      if (axis instanceof Axis) {
+        this[AXIS_Y] = axis;
       }
     }
 
-    get axisY2() {
-      return this[AXIS_Y2];
+    get tics() {
+      return this[TICS];
     }
 
-    set axisY2(value) {
-      if (IsObject(value)) {
-        this[AXIS_Y2] = value;
-      }
-    }
-
-    get ticsColor() {
-      return this[TICS_COLOR];
-    }
-
-    set ticsColor(value) {
-      if (value && typeof value === 'number') {
-        this[TICS_COLOR] = value;
-      }
-    }
-
-    get ticsFontSize() {
-      return this[TICS_FONTSIZE];
-    }
-
-    set ticsFontSize(value) {
-      if (value && typeof value === 'number') {
-        this[TICS_FONTSIZE] = value;
-      }
-    }
-
-    get ticsVisible() {
-      return this[TICS_VISIBLE];
-    }
-
-    set ticsVisible(value) {
-      if (value && typeof value === 'boolean') {
-        this[TICS_VISIBLE] = value;
-      }
-    }
-
-    get ticsValue() {
-      return this[TICS_VALUE];
-    }
-
-    set ticsValue(value) {
-      if (IsObject(value)) {
-        this[TICS_VALUE] = value;
+    set tics(tics) {
+      if (IsObject(tics)) {
+        this[TICS] = tics;
       }
     }
 
@@ -278,14 +143,8 @@ const GraphConfig = (() => {
 
       this.font = config.font;
 
-      if (IsObject(config.title)) {
-        this.title = config.title.text;
-        this.titleFontSize = config.title.fontSize;
-      }
-
-      if (IsObject(config.legend)) {
-        this.legendFontsize = config.legend.fontSize;
-        this.legendLocation = config.legend.location;
+      if (config.title) {
+        this.title = config.title;
       }
 
       if (IsObject(config.grid)) {
@@ -299,45 +158,32 @@ const GraphConfig = (() => {
         this.borderColor = config.border.color;
         this.borderWidth = config.border.width;
       }
+
       if (IsObject(config.axis)) {
-        this.axisColor = config.axis.color;
-        this.axisWidth = config.axis.width;
-        this.axisFontSize = config.axis.fontSize;
         if (IsObject(config.axis.x)) {
           const {
-            type, visible, label, position, range
+            type, visible, label, range
           } = config.axis.x;
 
-          this.axisX = new Axis(type, visible, label, position, range);
-        }
-        if (IsObject(config.axis.x2)) {
-          const {
-            type, visible, label, position, range
-          } = config.axis.x2;
-
-          this.axisX2 = new Axis(type, visible, label, position, range);
+          if (this.axisX) this.axisX.SetData(type, visible, label, range);
+          else this.axisX = new Axis(type, visible, label, range);
         }
         if (IsObject(config.axis.y)) {
           const {
-            type, visible, label, position, range
+            type, visible, label, range
           } = config.axis.y;
 
-          this.axisY = new Axis(type, visible, label, position, range);
-        }
-        if (IsObject(config.axis.y2)) {
-          const {
-            type, visible, label, position, range
-          } = config.axis.y2;
-
-          this.axisY2 = new Axis(type, visible, label, position, range);
+          if (this.axisY) this.axisY.SetData(type, visible, label, range);
+          else this.axisY = new Axis(type, visible, label, range);
         }
       }
       if (IsObject(config.tics)) {
-        this.ticsType = config.tics.type;
-        this.ticsColor = config.tics.color;
-        this.ticsLabelFontSize = config.tics.fontSize;
-        this.ticsVisible = config.tics.visible;
-        this.ticsValue = config.tics.ticsvalue;
+        const {
+          type, visible, color, value
+        } = config.tics;
+
+        if (this.tics) this.tics.SetData(type, visible, color, value);
+        else this.tics = new Tics(type, visible, color, value);
       }
     }
   }

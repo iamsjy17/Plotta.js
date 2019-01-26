@@ -1,11 +1,21 @@
-import CanvasFactory from './canvasHelperFactory';
+import GraphCanvas from './graphCanvas';
+import ViewModel from './viewModel';
 
 export default class GraphView {
   constructor(canvas) {
-    this.graphCanvas = CanvasFactory.Create(canvas);
-    this.modelHandeler = null;
+    this.graphCanvas = new GraphCanvas(canvas);
+    this.canvasWidth = canvas.width;
+    this.canvasHeight = canvas.height;
+
+    this.ViewModel = null;
+    this.modelHandler = null;
+
     this.eventListener = this.GetEventListener();
     this.eventListener.BindEvent(canvas);
+  }
+
+  SetModelHandler(modelHandler) {
+    this.modelHandler = modelHandler;
   }
 
   GetEventListener() {
@@ -34,7 +44,7 @@ export default class GraphView {
           break;
         }
         case 'dbclick': {
-          this.UpdateView();
+          this.UpdateModel({ config: { tics: { color: '#FFFFFF' } } });
           break;
         }
         case 'mousemove': {
@@ -76,16 +86,22 @@ export default class GraphView {
   }
 
   UpdateView() {
-    if (!this.graphCanvas || !this.modelHandeler) return;
+    if (!this.graphCanvas || !this.modelHandler) return;
 
-    this.graphCanvas.Draw(this.modelHandeler.GetDrawData());
+    if (this.viewModel) {
+      this.viewModel.InvalidateModel();
+    } else {
+      this.viewModel = new ViewModel(
+        this.modelHandler.GetModel(),
+        this.canvasWidth,
+        this.canvasHeight
+      );
+    }
+
+    this.graphCanvas.Draw(this.viewModel.GetDrawData());
   }
 
   UpdateModel(dataSet) {
-    this.modelHandeler.UpdateModel(dataSet);
-  }
-
-  SetModelHandler(modelHandeler) {
-    if (modelHandeler) this.modelHandeler = modelHandeler;
+    this.modelHandler.UpdateModel(dataSet);
   }
 }

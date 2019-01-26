@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
-import Worker from 'worker-loader!./osWorker';
+import Worker from './osWorker';
 
 export default class OffscreenGraphCanvas {
   constructor(canvas) {

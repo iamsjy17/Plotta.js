@@ -1,19 +1,17 @@
-import ViewModel from './viewModel';
 import { IsObject } from '../util';
 
 export default class Presenter {
   constructor(graphModel, graphView) {
     this.GraphModel = graphModel;
     this.GraphView = graphView;
-    this.ViewModel = new ViewModel(graphModel);
 
-    this.GraphModel.SetViewHandler(this._getViewHandeler());
-    this.GraphView.SetModelHandler(this._getModelHandeler());
+    this.GraphModel.SetViewHandler(this._getviewHandler());
+    this.GraphView.SetModelHandler(this._getModelHandler());
     this.GraphView.UpdateView();
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getViewHandeler() {
+  _getviewHandler() {
     return {
       UpdateView: function () {
         this.GraphView.UpdateView();
@@ -22,12 +20,10 @@ export default class Presenter {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getModelHandeler() {
+  _getModelHandler() {
     return {
-      GetDrawData: function () {
-        this.ViewModel.InvalidateModel();
-        /* Model => ViewModel */
-        return this.ViewModel.GetDrawData();
+      GetModel: function () {
+        return this.GraphModel;
       }.bind(this),
       UpdateModel: function (dataSet) {
         this.GraphModel.UpdateModel(dataSet);

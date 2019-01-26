@@ -8,11 +8,11 @@ export default class GraphModel {
     this.lineDatas = new Map();
     this.config = new Config();
     this.InitModel(dataSet);
-    this.viewHandeler = null;
+    this.viewHandler = null;
   }
 
-  SetViewHandler(viewHandeler) {
-    if (viewHandeler) this.viewHandeler = viewHandeler;
+  SetViewHandler(viewHandler) {
+    this.viewHandler = viewHandler;
   }
 
   InitModel(dataSet) {
@@ -22,13 +22,10 @@ export default class GraphModel {
       && dataSet.linedatas.forEach((item) => {
         // TODO: validationCheck
         const {
-          id, type, axisX, axisY, legend, color, visible, datas, func, dotNum
+          id, type, legend, color, visible, datas, func, dotNum
         } = item;
 
-        this.lineDatas.set(
-          id,
-          new LineData(type, axisX, axisY, legend, color, visible, datas, func, dotNum)
-        );
+        this.lineDatas.set(id, new LineData(type, legend, color, visible, datas, func, dotNum));
       });
 
     if (IsObject(dataSet.config)) {
@@ -43,24 +40,19 @@ export default class GraphModel {
       && dataSet.linedatas.forEach((item) => {
         // TODO: validationCheck
         const {
-          id, type, axisX, axisY, legend, color, visible, datas, func, dotNum
+          id, type, legend, color, visible, datas, func, dotNum
         } = item;
 
         if (this.lineDatas.has(id)) {
-          this.lineDatas
-            .get(id)
-            .Update(type, axisX, axisY, legend, color, visible, datas, func, dotNum);
+          this.lineDatas.get(id).Update(type, legend, color, visible, datas, func, dotNum);
         } else {
-          this.lineDatas.set(
-            id,
-            new LineData(type, axisX, axisY, legend, color, visible, datas, func, dotNum)
-          );
+          this.lineDatas.set(id, new LineData(type, legend, color, visible, datas, func, dotNum));
         }
       });
 
     if (IsObject(dataSet.config)) {
       this.config && this.config.Init(dataSet.config);
     }
-    if (this.viewHandeler) this.viewHandeler.UpdateView();
+    if (this.viewHandler) this.viewHandler.UpdateView();
   }
 }

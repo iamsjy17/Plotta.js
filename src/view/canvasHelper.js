@@ -8,12 +8,12 @@ export default class GraphCanvas {
     this.offscreenContext = this.offscreenCanvas.getContext('2d');
   }
 
-  Draw(viewModel) {
+  Draw(drawData) {
     DrawHelper.Draw(
       this.offscreenContext,
       this.presentationCanvas.width,
       this.presentationCanvas.height,
-      viewModel
+      drawData
     );
     this.presentationContext.drawImage(this.offscreenCanvas);
   }
