@@ -1,18 +1,17 @@
-import DrawHelper from '../draw/drawHelper';
+import DrawHelper from './drawHelper';
 
-export default class GraphCanvas {
-  constructor(canvas) {
+export default class CanvasHelper {
+  constructor(canvas, dpr) {
     this.presentationCanvas = canvas;
-    this.presentationContext = this.presentationCanvas.getContext('2d');
+    this.dpr = dpr;
     this.offscreenCanvas = document.createElement('canvas');
     this.offscreenContext = this.offscreenCanvas.getContext('2d');
+    this.offscreenContext.scale(this.dpr, this.dpr);
   }
 
   Draw(drawData) {
     DrawHelper.Draw(
       this.offscreenContext,
-      this.presentationCanvas.width,
-      this.presentationCanvas.height,
       drawData
     );
     this.presentationContext.drawImage(this.offscreenCanvas);

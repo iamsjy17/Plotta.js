@@ -1,10 +1,11 @@
 // eslint-disable-next-line import/no-unresolved
 import Worker from './osWorker';
 
-export default class OffscreenGraphCanvas {
-  constructor(canvas) {
+export default class OffscreenCanvasHelper {
+  constructor(canvas, dpr) {
     this.presentationCanvas = canvas;
     this.offscreenCanvas = this.presentationCanvas.transferControlToOffscreen();
+    this.dpr = dpr;
     this.worker = new Worker();
   }
 
@@ -12,8 +13,7 @@ export default class OffscreenGraphCanvas {
     this.worker.postMessage(
       {
         canvas: this.offscreenCanvas,
-        width: this.presentationCanvas.width,
-        height: this.presentationCanvas.height,
+        dpr: this.dpr,
         drawData
       },
       [this.offscreenCanvas]

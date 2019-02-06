@@ -3,10 +3,11 @@ import ViewModel from './viewModel';
 
 export default class GraphView {
   constructor(canvas) {
-    this.graphCanvas = new GraphCanvas(canvas);
+    //  Size of the actual Canvas
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
 
+    this.graphCanvas = new GraphCanvas(canvas);
     this.ViewModel = null;
     this.modelHandler = null;
 
