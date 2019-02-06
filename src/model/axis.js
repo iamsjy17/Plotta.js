@@ -1,10 +1,12 @@
 import { IsObject } from '../util';
 
 export default class Axis {
-  constructor(type, visible, label, range) {
-    this.type = type || '';
+  constructor(visible, type, label, color, location, range) {
     this.visible = typeof visible === 'boolean' ? visible : true;
+    this.type = typeof type === 'string' ? type : 'Number';
     this.label = label || '';
+    this.color = color || 'black';
+    this.location = location || 'center';
     this.range = IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
       ? {
         start: range.start,
@@ -17,10 +19,12 @@ export default class Axis {
       };
   }
 
-  SetData(type, visible, label, range) {
-    this.type = type || this.value;
+  SetData(visible, type, label, color, location, range) {
     this.visible = typeof visible === 'boolean' ? visible : this.visible;
+    this.type = type || this.type;
     this.label = label || this.label;
+    this.color = color || 'black';
+    this.location = location || 'center';
     this.range = IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
       ? {
         start: range.start,
