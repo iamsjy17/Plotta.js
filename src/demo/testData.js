@@ -1,65 +1,108 @@
+const x2 = x => x * x;
 const dataSet = {
   linedatas: [
     {
       id: 'line1',
-      type: 'data',
-      legend: 'dummyData',
-      color: '#FFA500',
+      type: 'func',
+      legend: 'cos',
+      color: '#FF69B4',
       visible: true,
-      datas: [{ x: 0, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 3 }]
+      func: Math.cos,
+      dotNum: 1000
     },
     {
       id: 'line2',
       type: 'func',
-      legend: 'Sin',
-      color: '#FFAAAA',
+      legend: 'sin',
+      color: '#7B68EE',
       visible: true,
       func: Math.sin,
-      dotNum: 100
+      dotNum: 1000
+    },
+    {
+      id: 'line3',
+      type: 'func',
+      legend: 'x^2',
+      color: '#00FF7F',
+      visible: true,
+      func: x2,
+      dotNum: 1000
+    },
+    {
+      id: 'line4',
+      type: 'func',
+      legend: 'sinh',
+      color: '#72222E',
+      visible: true,
+      func: Math.sinh,
+      dotNum: 1000
+    },
+    {
+      id: 'line5',
+      type: 'func',
+      legend: 'cosh',
+      color: '#AF110F',
+      visible: true,
+      func: Math.cosh,
+      dotNum: 1000
+    },
+    {
+      id: 'line6',
+      type: 'func',
+      legend: 'tanh',
+      color: '#FF110F',
+      visible: true,
+      func: Math.tanh,
+      dotNum: 1000
     }
   ],
-
   config: {
-    font: 'Arial',
-    title: 'Hello Graph',
+    font: '',
+    legendVisible: true,
+    title: {
+      location: 'center',
+      color: 'red',
+      text: 'Hello Graph'
+    },
     grid: {
       type: '',
-      visible: true
+      visible: true,
+      color: 'blue'
     },
     border: {
       type: '',
       visible: true,
-      color: '#AFAAFA',
+      color: 'red',
       width: 1
+    },
+    tics: {
+      visible: true,
+      color: 'green',
+      value: {
+        x: 2,
+        y: 2
+      }
     },
     axis: {
       x: {
-        type: 'string',
         visible: true,
+        // type: 'PI',
         label: 'xLabel',
-        position: 'string',
+        color: 'red',
+        location: 'center',
         range: {
-          start: 0,
-          end: 360
+          start: -10,
+          end: 10
         }
       },
       y: {
-        type: 'string',
         visible: true,
         label: 'yLabel',
-        position: 'string',
+        color: 'blue',
+        location: 'center',
         range: {
-          start: 0,
-          end: 360
-        }
-      },
-      tics: {
-        type: '',
-        color: '#AFAAFA',
-        visible: true,
-        value: {
-          x: 1,
-          y: 1
+          start: -10,
+          end: 10
         }
       }
     }
