@@ -20,7 +20,6 @@ export default class GraphModel {
 
     dataSet.linedatas.length
       && dataSet.linedatas.forEach((item) => {
-        // TODO: validationCheck
         const {
           id, type, legend, color, visible, datas, func, dotNum
         } = item;
@@ -38,7 +37,6 @@ export default class GraphModel {
 
     dataSet.linedatas.length
       && dataSet.linedatas.forEach((item) => {
-        // TODO: validationCheck
         const {
           id, type, legend, color, visible, datas, func, dotNum
         } = item;

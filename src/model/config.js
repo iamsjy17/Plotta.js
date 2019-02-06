@@ -4,10 +4,14 @@ import Tics from './tics';
 
 const GraphConfig = (() => {
   const FONT = Symbol('Font');
+  const LEGEND_VISIBLE = Symbol('LegendVisible');
   const TITLE = Symbol('Title');
+  const TITLE_COLOR = Symbol('TitleColor');
+  const TITLE_LOCATION = Symbol('TitleLocation');
   const GRID_TYPE = Symbol('GridType');
   const GRID_VISIBLE = Symbol('GridVisible');
-  const BORDER_TYPE = Symbol('BorderVisible');
+  const GRID_COLOR = Symbol('GridColor');
+  const BORDER_TYPE = Symbol('BorderType');
   const BORDER_VISIBLE = Symbol('BorderVisible');
   const BORDER_COLOR = Symbol('BorderColor');
   const BORDER_WIDTH = Symbol('BorderWidth');
@@ -17,14 +21,18 @@ const GraphConfig = (() => {
 
   class GraphConfig {
     constructor(config) {
-      this[FONT] = '';
+      this[FONT] = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+      this[LEGEND_VISIBLE] = true;
       this[TITLE] = '';
-      this[GRID_TYPE] = '';
+      this[TITLE_COLOR] = 'black';
+      this[TITLE_LOCATION] = 'center';
       this[GRID_VISIBLE] = true;
+      this[GRID_TYPE] = 'solid';
+      this[GRID_COLOR] = 'black';
       this[BORDER_VISIBLE] = true;
-      this[BORDER_TYPE] = '';
-      this[BORDER_COLOR] = '';
-      this[BORDER_WIDTH] = 1;
+      this[BORDER_TYPE] = 'solid';
+      this[BORDER_COLOR] = 'black';
+      this[BORDER_WIDTH] = 0.3;
       this[AXIS_X] = new Axis();
       this[AXIS_Y] = new Axis();
       this[TICS] = new Tics();
@@ -40,12 +48,36 @@ const GraphConfig = (() => {
       if (value && typeof value === 'string') this[FONT] = value;
     }
 
+    get legendVislble() {
+      return this[LEGEND_VISIBLE];
+    }
+
+    set legendVislble(value) {
+      if (value && typeof value === 'boolean') this[LEGEND_VISIBLE] = value;
+    }
+
     get title() {
       return this[TITLE];
     }
 
     set title(value) {
       if (value && typeof value === 'string') this[TITLE] = value;
+    }
+
+    get titleColor() {
+      return this[TITLE_COLOR];
+    }
+
+    set titleColor(value) {
+      if (value && typeof value === 'string') this[TITLE_COLOR] = value;
+    }
+
+    get titleLocation() {
+      return this[TITLE_LOCATION];
+    }
+
+    set titleLocation(value) {
+      if (value && typeof value === 'string') this[TITLE_LOCATION] = value;
     }
 
     get gridType() {
@@ -65,6 +97,16 @@ const GraphConfig = (() => {
     set gridVisible(value) {
       if (value && typeof value === 'boolean') {
         this[GRID_VISIBLE] = value;
+      }
+    }
+
+    get gridColor() {
+      return this[GRID_COLOR];
+    }
+
+    set gridColor(value) {
+      if (value && typeof value === 'string') {
+        this[GRID_COLOR] = value;
       }
     }
 
@@ -133,7 +175,7 @@ const GraphConfig = (() => {
     }
 
     set tics(tics) {
-      if (IsObject(tics)) {
+      if (tics instanceof Tics) {
         this[TICS] = tics;
       }
     }
@@ -142,14 +184,18 @@ const GraphConfig = (() => {
       if (!IsObject(config)) return;
 
       this.font = config.font;
+      this.legendVisible = config.legendVisible;
 
-      if (config.title) {
-        this.title = config.title;
+      if (IsObject(config.title)) {
+        this.title = config.title.text;
+        this.titleColor = config.title.color;
+        this.titleLocation = config.title.location;
       }
 
       if (IsObject(config.grid)) {
         this.gridType = config.grid.type;
         this.gridVisible = config.grid.visible;
+        this.gridColor = config.grid.color;
       }
 
       if (IsObject(config.border)) {
@@ -162,19 +208,19 @@ const GraphConfig = (() => {
       if (IsObject(config.axis)) {
         if (IsObject(config.axis.x)) {
           const {
-            type, visible, label, range
+            visible, type, label, color, location, range
           } = config.axis.x;
 
-          if (this.axisX) this.axisX.SetData(type, visible, label, range);
-          else this.axisX = new Axis(type, visible, label, range);
+          if (this.axisX) this.axisX.SetData(visible, type, label, color, location, range);
+          else this.axisX = new Axis(visible, type, label, color, location, range);
         }
         if (IsObject(config.axis.y)) {
           const {
-            type, visible, label, range
+            visible, label, color, location, range
           } = config.axis.y;
 
-          if (this.axisY) this.axisY.SetData(type, visible, label, range);
-          else this.axisY = new Axis(type, visible, label, range);
+          if (this.axisY) this.axisY.SetData(visible, 'Number', label, color, location, range);
+          else this.axisY = new Axis(visible, 'Number', label, color, location, range);
         }
       }
       if (IsObject(config.tics)) {
