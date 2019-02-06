@@ -9,6 +9,7 @@ const config = {
   output: {
     filename: '[name].bundle.js',
     publicPath: '../dist/',
+
     path: path.resolve(__dirname, 'dist/')
   },
   module: {
@@ -33,7 +34,11 @@ const config = {
       }
     ]
   },
+<<<<<<< HEAD
   devtool: 'cheap-module-source-map',
+=======
+  devtool: 'inline-source-map',
+>>>>>>> af8834b453fe3c1d4eb6d959b0655f40630bc79a
   mode: 'development'
 };
 module.exports = config;
