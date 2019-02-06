@@ -2,9 +2,9 @@ import { IsObject } from '../util';
 
 export default class Tics {
   constructor(type, visible, color, value) {
-    this.type = type || '';
+    this.type = type || 'number';
     this.visible = visible === 'boolean' ? visible : true;
-    this.color = color || '#FFFFFF';
+    this.color = color || 'black';
 
     this.value = IsObject(value) && value.x && value.y
       ? {
@@ -17,7 +17,7 @@ export default class Tics {
       };
   }
 
-  SetData(type, visible, color, fontSize, value) {
+  SetData(type, visible, color, value) {
     this.type = type || this.type;
     this.visible = visible === 'boolean' ? visible : this.visible;
     this.color = color || this.color;
