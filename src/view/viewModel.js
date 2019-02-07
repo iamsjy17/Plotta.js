@@ -1,181 +1,136 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 import { IsObject } from '../util';
+import PosHelper from './posHelper';
 
-const ViewModel = (() => {
-  const LEFT_OFFSET = 20;
-  const RIGHT_OFFSET = 20;
-  const TOP_OFFSET = 100;
-  const BOTTOM_OFFSET = 40;
+export default class ViewModel {
+  constructor(graphModel, width, height) {
+    this.graphModel = graphModel;
+    this.canvasWidth = width;
+    this.canvasHeight = height;
 
-  const IsHitted = function () {
-    return true;
-  };
-
-  const CanvasPoint2GraphPoint = function (x, y) {
-    return { x, y };
-  };
-
-  const GraphPoint2DataPoint = function (x, y) {
-    return { x, y };
-  };
-
-  class ViewModel {
-    constructor(graphModel, width, height) {
-      this.graphModel = graphModel;
-      this.canvasWidth = width;
-      this.canvasHeight = height;
-      this.graphRect = {
-        x: LEFT_OFFSET,
-        y: RIGHT_OFFSET,
-        w: this.canvasWidth - (LEFT_OFFSET + RIGHT_OFFSET),
-        h: this.canvasHeight - (TOP_OFFSET + BOTTOM_OFFSET)
-      };
-
-      this.drawData = {
-        font: '',
-        title: '',
-        gridType: '',
-        borderColor: '',
-        borderWidth: 0,
-        axisXlabel: '',
-        axisYlabel: '',
-        ticsColor: '',
-        ticsValue: null,
-        lineDatas: null
-      };
-
-      this.Init();
-    }
-
-    DataPoint2GraphPoint(x, y) {
-      if (
-        !this.rangeX
-        || !this.rangeY
-        || typeof x !== 'number'
-        || typeof y !== 'number'
-        || this.rangeX.start > x
-        || this.rangeX.end < x
-        || this.rangeY.start > y
-        || this.rangeY.end < y
-      ) return null;
-
-      const graphPoint = {};
-      graphPoint.x = Math.abs((x - this.rangeX.start) / this.rangeX.value) * this.graphRect.w;
-      graphPoint.y = Math.abs((y - this.rangeY.start) / this.rangeY.value) * this.graphRect.h;
-
-      return graphPoint;
-    }
-
-    GraphPoint2CanvasPoint({ x, y }) {
-      if (typeof x !== 'number' || typeof y !== 'number') return null;
-
-      const canvasPoint = {};
-      canvasPoint.x = x + LEFT_OFFSET;
-      canvasPoint.y = this.canvasHeight - (y + BOTTOM_OFFSET);
-
-      if (
-        canvasPoint.x > this.canvasWidth - RIGHT_OFFSET
-        || canvasPoint.x < LEFT_OFFSET
-        || canvasPoint.y < TOP_OFFSET
-        || canvasPoint.y > this.canvasHeight - BOTTOM_OFFSET
-      ) return null;
-
-      return canvasPoint;
-    }
-
-    GetDrawData() {
-      return this.drawData;
-    }
-
-    LineDatas2ViewPort(lineDatas) {
-      const _lineDatas = [];
-
-      lineDatas.forEach((value, key) => {
-        const {
-          type, legend, color, visible, datas, func, dotNum
-        } = value;
-
-        if (!visible) return;
-
-        const points = [];
-        let graphPoint = null;
-        if (type === 'func' && typeof func === 'function') {
-          let x;
-          let y;
-          const range = Math.abs(this.rangeY.end - this.rangeY.start);
-          const coefficientX = this.rangeX.value / dotNum;
-          for (let i = 0; i < dotNum; i++) {
-            x = i * coefficientX + this.rangeX.start;
-            y = func(x);
-            if (typeof x !== 'number') x = NaN;
-            if (typeof y !== 'number') y = NaN;
-            graphPoint = this.DataPoint2GraphPoint(x, y);
-            if (graphPoint) points.push(this.GraphPoint2CanvasPoint(graphPoint));
-          }
-        } else if (typeof datas === 'object' && datas.length) {
-          datas.forEach((point) => {
-            let { x, y } = point;
-            if (typeof x !== 'number') x = NaN;
-            if (typeof y !== 'number') y = NaN;
-            graphPoint = this.DataPoint2GraphPoint(x, y);
-            if (graphPoint) points.push(this.GraphPoint2CanvasPoint(graphPoint));
-          });
+    this.drawData = {
+      font: '',
+      title: {
+        text: '',
+        color: 'black',
+        position: null
+      },
+      border: {
+        visible: true,
+        type: '',
+        color: '',
+        width: 1,
+        rect: null
+      },
+      grid: {
+        visible: true,
+        type: '',
+        color: ''
+      },
+      axis: {
+        xLabel: {
+          visible: true,
+          text: '',
+          color: 'black',
+          position: null
+        },
+        yLabel: {
+          visible: true,
+          text: '',
+          color: 'black',
+          position: null
         }
+      },
+      tics: {
+        visible: true,
+        color: 'black',
+        xTics: null,
+        yTics: null
+      },
+      lineDatas: null,
+      legendDatas: null
+    };
 
-        _lineDatas.push({ points, legend, color });
-      });
-
-      return _lineDatas;
-    }
-
-    Init() {
-      if (!this.graphModel) return;
-      const {
-        font,
-        title,
-        gridType,
-        gridVisible,
-        borderType,
-        borderVisible,
-        borderColor,
-        borderWidth,
-        axisX,
-        axisY,
-        tics
-      } = this.graphModel.config;
-      if (!IsObject(axisX) || !IsObject(axisY)) return;
-
-      this.rangeX = axisX.range;
-      this.rangeY = axisY.range;
-
-      // NonGraphData Init
-      if (font) this.drawData.font = font;
-      if (title) this.drawData.title = title;
-
-      // gridData Init
-      if (gridType) this.drawData.gridType = gridVisible ? gridType : '';
-
-      // borderData Init
-      if (borderColor) this.drawData.borderColor = borderVisible ? borderColor : '';
-      if (borderWidth) this.drawData.borderWidth = borderVisible ? borderWidth : 0;
-
-      // AxisData Init
-      this.drawData.axisXlabel = axisX.visible ? axisX.label : '';
-      this.drawData.axisYlabel = axisY.visible ? axisY.label : '';
-
-      // ticsData Init
-      this.drawData.ticsColor = IsObject(tics) && tics.visible ? tics.color : '';
-      this.drawData.ticsValue = IsObject(tics) && tics.visible ? tics.value : null;
-
-      this.drawData.lineDatas = this.LineDatas2ViewPort(this.graphModel.lineDatas);
-    }
-
-    InvalidateModel() {
-      if (!this.graphModel) return;
-      this.Init();
-    }
+    this.Init();
   }
-  return ViewModel;
-})();
 
-export default ViewModel;
+  GetDrawData() {
+    return this.drawData;
+  }
+
+  Init() {
+    if (!this.graphModel) return;
+    const {
+      font,
+      legendVisible,
+      title,
+      titleColor,
+      titleLocation,
+      gridType,
+      gridVisible,
+      gridColor,
+      borderType,
+      borderVisible,
+      borderColor,
+      borderWidth,
+      axisX,
+      axisY,
+      tics
+    } = this.graphModel.config;
+    this.posHelper = new PosHelper(font, axisX, axisY, this.canvasWidth, this.canvasHeight);
+
+    this.drawData.canvasWidth = this.canvasWidth;
+    this.drawData.canvasHeight = this.canvasHeight;
+
+    // LegendDatas
+    if (legendVisible) this.drawData.legendDatas = this.posHelper.LegendDatas2CanvasPoint(this.graphModel.lineDatas);
+
+    // ViewRect
+    this.drawData.graphRect = this.posHelper.GetGraphRect();
+    this.drawData.legendRect = this.posHelper.GetLegendRect();
+
+    // Title
+    this.drawData.font = font;
+    this.drawData.title.text = title;
+    this.drawData.title.color = titleColor;
+    this.drawData.title.position = this.posHelper.GetTitlePos(titleLocation);
+
+    // Border
+    this.drawData.border.visible = borderVisible;
+    this.drawData.border.type = borderType;
+    this.drawData.border.color = borderColor;
+    this.drawData.border.width = borderWidth;
+
+    // Grid
+    this.drawData.grid.visible = gridVisible;
+    this.drawData.grid.type = gridType;
+    this.drawData.grid.color = gridColor;
+
+    // AxisX
+    this.drawData.axis.xLabel.visible = axisX.visible;
+    this.drawData.axis.xLabel.text = axisX.label;
+    this.drawData.axis.xLabel.color = axisX.color;
+    this.drawData.axis.xLabel.position = this.posHelper.GetAxisXPos(axisX.location);
+
+    // AxisY
+    this.drawData.axis.yLabel.visible = axisY.visible;
+    this.drawData.axis.yLabel.text = axisY.label;
+    this.drawData.axis.yLabel.color = axisY.color;
+    this.drawData.axis.yLabel.position = this.posHelper.GetAxisYPos(axisY.location);
+
+    // Tics
+    this.drawData.tics.visible = tics.visible;
+    this.drawData.tics.color = tics.color;
+    this.drawData.tics.xTics = this.posHelper.GetxTics(tics.value.x);
+    this.drawData.tics.yTics = this.posHelper.GetyTics(tics.value.y);
+
+    // LineDatas
+    this.drawData.lineDatas = this.posHelper.LineDatas2CanvasPoint(this.graphModel.lineDatas);
+  }
+
+  InvalidateModel() {
+    if (!this.graphModel) return;
+    this.Init();
+  }
+}
