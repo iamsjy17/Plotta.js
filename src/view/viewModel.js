@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
 import { IsObject } from '../util';
-import PosHelper from './posHelper';
+import ViewModelHelper from './ViewModelHelper';
 
 export default class ViewModel {
   constructor(graphModel, width, height) {
@@ -49,7 +49,14 @@ export default class ViewModel {
         yTics: null
       },
       lineDatas: null,
-      legendDatas: null
+      legendDatas: null,
+      tableData: {
+        visible: true,
+        selectedTic: NaN,
+        colors: [],
+        legends: [],
+        datas: []
+      }
     };
 
     this.Init();
@@ -57,6 +64,29 @@ export default class ViewModel {
 
   GetDrawData() {
     return this.drawData;
+  }
+
+  IsInGraph(mousePos) {
+    const graphRect = this.viewModelHelper.GetGraphRect();
+    if (
+      mousePos.x <= graphRect.x + graphRect.w
+      && mousePos.x >= graphRect.x
+      && mousePos.y <= graphRect.y + graphRect.h
+      && mousePos.y >= graphRect.y
+    ) return true;
+    return false;
+  }
+
+  IsNewTic(mousePos) {
+    const selectedTic = this.viewModelHelper.GetSelectedTic(
+      mousePos,
+      this.drawData.tableData.datas
+    );
+    if (this.drawData.tableData.selectedTic !== selectedTic) {
+      this.drawData.tableData.selectedTic = selectedTic;
+      return true;
+    }
+    return false;
   }
 
   Init() {
@@ -76,25 +106,32 @@ export default class ViewModel {
       borderWidth,
       axisX,
       axisY,
-      tics
+      tics,
+      tableVisible
     } = this.graphModel.config;
-    this.posHelper = new PosHelper(font, axisX, axisY, this.canvasWidth, this.canvasHeight);
+    this.viewModelHelper = new ViewModelHelper(
+      font,
+      axisX,
+      axisY,
+      this.canvasWidth,
+      this.canvasHeight
+    );
 
     this.drawData.canvasWidth = this.canvasWidth;
     this.drawData.canvasHeight = this.canvasHeight;
 
     // LegendDatas
-    if (legendVisible) this.drawData.legendDatas = this.posHelper.LegendDatas2CanvasPoint(this.graphModel.lineDatas);
+    if (legendVisible) this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
 
     // ViewRect
-    this.drawData.graphRect = this.posHelper.GetGraphRect();
-    this.drawData.legendRect = this.posHelper.GetLegendRect();
+    this.drawData.graphRect = this.viewModelHelper.GetGraphRect();
+    this.drawData.legendRect = this.viewModelHelper.GetLegendRect();
 
     // Title
     this.drawData.font = font;
     this.drawData.title.text = title;
     this.drawData.title.color = titleColor;
-    this.drawData.title.position = this.posHelper.GetTitlePos(titleLocation);
+    this.drawData.title.position = this.viewModelHelper.GetTitlePos(titleLocation);
 
     // Border
     this.drawData.border.visible = borderVisible;
@@ -111,22 +148,30 @@ export default class ViewModel {
     this.drawData.axis.xLabel.visible = axisX.visible;
     this.drawData.axis.xLabel.text = axisX.label;
     this.drawData.axis.xLabel.color = axisX.color;
-    this.drawData.axis.xLabel.position = this.posHelper.GetAxisXPos(axisX.location);
+    this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(axisX.location);
 
     // AxisY
     this.drawData.axis.yLabel.visible = axisY.visible;
     this.drawData.axis.yLabel.text = axisY.label;
     this.drawData.axis.yLabel.color = axisY.color;
-    this.drawData.axis.yLabel.position = this.posHelper.GetAxisYPos(axisY.location);
+    this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(axisY.location);
 
     // Tics
     this.drawData.tics.visible = tics.visible;
     this.drawData.tics.color = tics.color;
-    this.drawData.tics.xTics = this.posHelper.GetxTics(tics.value.x);
-    this.drawData.tics.yTics = this.posHelper.GetyTics(tics.value.y);
+    this.drawData.tics.xTics = this.viewModelHelper.GetxTics(tics.value.x);
+    this.drawData.tics.yTics = this.viewModelHelper.GetyTics(tics.value.y);
 
     // LineDatas
-    this.drawData.lineDatas = this.posHelper.LineDatas2CanvasPoint(this.graphModel.lineDatas);
+    this.drawData.lineDatas = this.viewModelHelper.GetLineDatas(this.graphModel.lineDatas);
+
+    // tableDatas
+    const tableDatas = this.viewModelHelper.GetTableDatas(this.graphModel.lineDatas, tics.value.x);
+    this.drawData.tableData.visible = tableVisible;
+    this.drawData.tableData.colors = tableDatas.colors;
+    this.drawData.tableData.legends = tableDatas.legends;
+    this.drawData.tableData.legendWidth = tableDatas.legendWidth;
+    this.drawData.tableData.datas = tableDatas.datas;
   }
 
   InvalidateModel() {

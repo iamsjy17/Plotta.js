@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const PosHelper = (() => {
+const ViewModelHelper = (() => {
   const LEFT_OFFSET = 80;
   const RIGHT_OFFSET = 20;
   const TOP_OFFSET = 80;
@@ -24,7 +24,7 @@ const PosHelper = (() => {
     return ratio;
   };
 
-  class PosHelper {
+  class ViewModelHelper {
     constructor(font, axisX, axisY, canvasWidth, canvasHeight) {
       this.font = font;
       this.axisX = axisX;
@@ -98,10 +98,26 @@ const PosHelper = (() => {
       return tics;
     }
 
+    CanvasPoint2DataPoint({ x, y }) {
+      const graphPoint = this.CanvasPoint2GraphPoint(x, y);
+      if (graphPoint) return this.GraphPoint2DataPoint(graphPoint);
+      return null;
+    }
+
     DataPoint2CanvasPoint(x, y) {
       const graphPoint = this.DataPoint2GraphPoint(x, y);
       if (graphPoint) return this.GraphPoint2CanvasPoint(graphPoint);
       return null;
+    }
+
+    GraphPoint2DataPoint({ x, y }) {
+      if (typeof x !== 'number' || typeof y !== 'number') return null;
+
+      const dataPoint = {};
+      dataPoint.x = (x / this.graphRect.w) * this.axisX.range.value + this.axisX.range.start;
+      dataPoint.y = (y / this.graphRect.h) * this.axisY.range.value + this.axisY.range.start;
+
+      return dataPoint;
     }
 
     DataPoint2GraphPoint(x, y) {
@@ -121,6 +137,18 @@ const PosHelper = (() => {
       return graphPoint;
     }
 
+    CanvasPoint2GraphPoint(x, y) {
+      if (typeof x !== 'number' || typeof y !== 'number') return null;
+
+      const graphPoint = {};
+      graphPoint.x = x - this.graphRect.x;
+      graphPoint.y = this.graphRect.y + this.graphRect.h - y;
+
+      if (graphPoint.x > this.graphRect.w || graphPoint.x < 0) return null;
+
+      return graphPoint;
+    }
+
     GraphPoint2CanvasPoint({ x, y }) {
       if (typeof x !== 'number' || typeof y !== 'number') return null;
 
@@ -133,7 +161,7 @@ const PosHelper = (() => {
       return canvasPoint;
     }
 
-    LineDatas2CanvasPoint(lineDatas) {
+    GetLineDatas(lineDatas) {
       const _lineDatas = [];
 
       lineDatas.forEach((value, key) => {
@@ -144,11 +172,10 @@ const PosHelper = (() => {
         if (!visible) return;
 
         const points = [];
+        let x;
+        let y;
         let canvasPoint = null;
         if (type === 'func' && typeof func === 'function') {
-          let x;
-          let y;
-          const range = Math.abs(this.axisY.range.end - this.axisY.range.start);
           const coefficientX = this.axisX.range.value / dotNum;
           for (let i = 0; i <= dotNum; i++) {
             x = i * coefficientX + this.axisX.range.start;
@@ -156,15 +183,12 @@ const PosHelper = (() => {
             if (typeof x !== 'number') x = NaN;
             if (typeof y !== 'number') y = NaN;
 
-            // if (y > this.axisY.range.end) y = this.axisY.range.end;
-            // else if (y < this.axisY.range.start) y = this.axisY.range.start;
-
             canvasPoint = this.DataPoint2CanvasPoint(x, y);
             if (canvasPoint) points.push(canvasPoint);
           }
         } else if (typeof datas === 'object' && datas.length) {
           datas.forEach((point) => {
-            let { x, y } = point;
+            ({ x, y } = point);
             if (typeof x !== 'number') x = NaN;
             if (typeof y !== 'number') y = NaN;
             canvasPoint = this.DataPoint2CanvasPoint(x, y);
@@ -177,7 +201,7 @@ const PosHelper = (() => {
       return _lineDatas;
     }
 
-    LegendDatas2CanvasPoint(lineDatas) {
+    GetLegendDatas(lineDatas) {
       const legendDatas = [];
       const lineHeight = 30;
       const defaultLegendWidth = 30;
@@ -223,9 +247,143 @@ const PosHelper = (() => {
 
       return legendDatas;
     }
+
+    GetSelectedTic(mousePos, datas) {
+      const selectedTicPos = this.CanvasPoint2DataPoint(mousePos);
+
+      if (selectedTicPos === null) return NaN;
+
+      const ticsArray = Object.keys(datas)
+        .map(Number)
+        .filter(tic => !isNaN(tic))
+        .sort((a, b) => a - b);
+
+      const binarySearch = function (arr, value) {
+        const mid = Math.floor(arr.length / 2);
+
+        if (value === arr[mid]) {
+          return arr[mid];
+        }
+
+        if (value < arr[mid + 1] && value > arr[mid]) {
+          return Math.abs(value - arr[mid]) < Math.abs(value - arr[mid + 1])
+            ? arr[mid]
+            : arr[mid + 1];
+        }
+
+        if (arr[mid] < value && arr.length > 1) {
+          return binarySearch(arr.splice(mid, Number.MAX_VALUE), value);
+        }
+        if (arr[mid] > value && arr.length > 1) {
+          return binarySearch(arr.splice(0, mid), value);
+        }
+        return arr[mid];
+      };
+
+      return binarySearch(ticsArray, selectedTicPos.x);
+    }
+
+    GetTableDatas(lineDatas, tic) {
+      const tableDatas = {};
+      let index = -1;
+      let legendWidth = 0;
+      let curlegendWidth = 0;
+
+      const c = document.createElement('canvas');
+      const ctx = c.getContext('2d');
+      ctx.font = `14px ${this.font}`;
+
+      lineDatas.forEach((value) => {
+        const {
+          type, legend, color, visible, datas, func, dotNum
+        } = value;
+
+        if (!visible) return;
+        index++;
+        let x;
+        let y;
+
+        curlegendWidth = ctx.measureText(legend).width;
+        legendWidth = legendWidth > curlegendWidth ? legendWidth : curlegendWidth;
+
+        if (!tableDatas.legends) tableDatas.legends = [];
+        if (!tableDatas.colors) tableDatas.colors = [];
+        if (!tableDatas.datas) tableDatas.datas = [];
+
+        tableDatas.legends[index] = legend;
+        tableDatas.colors[index] = color;
+
+        if (type === 'func' && typeof func === 'function') {
+          x = this.axisX.range.start;
+          const ticDatas = [];
+
+          while (x <= this.axisX.range.end) {
+            y = func(x * (this.axisX.type === 'PI' ? Math.PI : 1));
+            if (typeof x !== 'number') x = NaN;
+            if (typeof y !== 'number') y = NaN;
+            ticDatas.push({ x, y });
+            x += tic;
+          }
+
+          ticDatas.forEach((point, idx, array) => {
+            ({ x, y } = point);
+            if (typeof x !== 'number') x = NaN;
+            if (typeof y !== 'number') y = NaN;
+
+            if (!tableDatas.datas[x]) {
+              tableDatas.datas[x] = [];
+            }
+            tableDatas.datas[x][index] = {
+              dataPos: y,
+              canvasPos: this.DataPoint2CanvasPoint(0, y).y
+            };
+
+            x += tic;
+          });
+        } else if (typeof datas === 'object' && datas.length) {
+          datas.forEach((point, idx, array) => {
+            ({ x, y } = point);
+            if (typeof x !== 'number') x = NaN;
+            if (typeof y !== 'number') y = NaN;
+
+            if (!tableDatas.datas[x]) {
+              tableDatas.datas[x] = [];
+            }
+            tableDatas.datas[x][index] = {
+              dataPos: y,
+              canvasPos: this.DataPoint2CanvasPoint(0, y).y
+            };
+          });
+        }
+      });
+      let valueWidth = 0;
+      let curValueWidth = 0;
+      const tics = Object.keys(tableDatas.datas);
+      tics.forEach((tic) => {
+        tableDatas.datas[tic].forEach((value) => {
+          curValueWidth = ctx.measureText(value.dataPos.toFixed(3)).width;
+          valueWidth = valueWidth > curValueWidth ? valueWidth : curValueWidth;
+        });
+        const array = tableDatas.datas[tic].filter((cur) => {
+          if (cur.dataPos >= this.axisY.range.start && cur.dataPos <= this.axisY.range.end) return true;
+          return false;
+        });
+
+        tableDatas.datas[tic].canvasPos = this.DataPoint2CanvasPoint(
+          parseInt(tic, 10),
+          array.reduce((acc, cur) => {
+            acc.dataPos += cur.dataPos;
+            return acc;
+          }).dataPos / array.length
+        );
+        tableDatas.datas[tic].width = valueWidth;
+      });
+      tableDatas.legendWidth = legendWidth;
+      return tableDatas;
+    }
   }
 
-  return PosHelper;
+  return ViewModelHelper;
 })();
 
-export default PosHelper;
+export default ViewModelHelper;
