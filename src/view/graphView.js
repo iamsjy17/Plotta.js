@@ -11,26 +11,40 @@ export default class GraphView {
     this.ViewModel = null;
     this.modelHandler = null;
 
-    this.eventListener = this.GetEventListener();
-    this.eventListener.BindEvent(canvas);
+    this.BindEvent(canvas);
   }
 
   SetModelHandler(modelHandler) {
     this.modelHandler = modelHandler;
   }
 
-  GetEventListener() {
+  BindEvent(targetEl, type) {
+    if (!targetEl) return;
+
     const EVENT_TYPE = {
       KEYBOARD: 1,
       MOUSE: 2,
       WHEEL: 4,
       ALL: 7
     };
-    const keyboardEventList = ['keydown', 'keyup', 'keypress'];
-    const mouseEventList = ['click', 'dbclick', 'mousemove', 'mousedown', 'mouseup'];
-    const wheelEventList = ['wheel'];
+
+    let _type = type;
+    if (_type === undefined) _type = EVENT_TYPE.ALL;
+
+    const OnMouseMove = function (mousePos) {
+      if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
+
+      if (this.viewModel.IsNewTic(mousePos)) this.graphCanvas.Draw(this.viewModel.GetDrawData());
+    }.bind(this);
+
+    const OnZoomInOut = function (dataSet) {
+      this.UpdateModel(dataSet);
+      this.UpdateView();
+    }.bind(this);
 
     const EventDispatcher = function (e) {
+      const mousePos = { x: e.offsetX, y: e.offsetY };
+      if (!this.viewModel.IsInGraph(mousePos)) return;
       switch (e.type) {
         case 'keydown': {
           break;
@@ -45,10 +59,10 @@ export default class GraphView {
           break;
         }
         case 'dbclick': {
-          this.UpdateModel({ config: { tics: { color: '#FFFFFF' } } });
           break;
         }
         case 'mousemove': {
+          OnMouseMove(mousePos);
           break;
         }
         case 'mousedown': {
@@ -58,32 +72,80 @@ export default class GraphView {
           break;
         }
         case 'wheel': {
+          if (e.ctrlKey === true) {
+            const curModel = this.modelHandler.GetModel();
+            const rangeX = curModel.config.axisX.range;
+            const rangeY = curModel.config.axisY.range;
+            let ticsX = curModel.config.tics.value.x;
+            let ticsY = curModel.config.tics.value.y;
+
+            const minXrange = ticsX * 3;
+            const minYrange = ticsY * 3;
+            const maxXrange = ticsX * 100;
+            const maxYrange = ticsY * 100;
+
+            if (e.deltaY <= 0) {
+              if (rangeX.value <= minXrange || rangeY.value <= minYrange) {
+                break;
+              }
+              ticsX *= -1; // ZoomOut
+              ticsY *= -1; // ZoomOut
+            } else if (rangeX.value >= maxXrange || rangeY.value >= maxYrange) {
+              break;
+            }
+
+            const dataSet = {
+              config: {
+                axis: {
+                  x: {
+                    range: {
+                      start: rangeX.start - ticsX,
+                      end: rangeX.end + ticsX
+                    }
+                  },
+                  y: {
+                    range: {
+                      start: rangeY.start - ticsY,
+                      end: rangeY.end + ticsY
+                    }
+                  }
+                }
+              }
+            };
+            OnZoomInOut(dataSet);
+          }
           break;
         }
         default: {
           break;
         }
       }
-    };
+    }.bind(this);
 
-    const BindEvent = function (targetEl, type) {
-      if (!targetEl) return;
-      let _type = type;
-      if (_type === undefined) _type = EVENT_TYPE.ALL;
-      const eventList = [];
+    const keyboardEventList = ['keydown', 'keyup', 'keypress'];
+    const mouseEventList = ['click', 'dbclick', 'mousemove', 'mousedown', 'mouseup'];
+    const wheelEventList = ['wheel'];
+    const eventList = [];
 
-      _type & EVENT_TYPE.KEYBOARD && eventList.concat(keyboardEventList);
-      _type & EVENT_TYPE.MOUSE && eventList.concat(mouseEventList);
-      _type & EVENT_TYPE.WHEEL && eventList.concat(wheelEventList);
+    if (_type & EVENT_TYPE.KEYBOARD) {
+      keyboardEventList.forEach((event) => {
+        eventList.push(event);
+      });
+    }
+    if (_type & EVENT_TYPE.MOUSE) {
+      mouseEventList.forEach((event) => {
+        eventList.push(event);
+      });
+    }
+    if (_type & EVENT_TYPE.WHEEL) {
+      wheelEventList.forEach((event) => {
+        eventList.push(event);
+      });
+    }
 
-      for (let i = 0; i < eventList.length; i++) {
-        targetEl.addEventListener(eventList[i], EventDispatcher.bind(this));
-      }
-    };
-
-    return {
-      BindEvent: BindEvent.bind(this)
-    };
+    for (let i = 0; i < eventList.length; i++) {
+      targetEl.addEventListener(eventList[i], EventDispatcher);
+    }
   }
 
   UpdateView() {
