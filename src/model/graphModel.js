@@ -35,7 +35,7 @@ export default class GraphModel {
   UpdateModel(dataSet) {
     if (!IsObject(dataSet)) return;
 
-    dataSet.linedatas.length
+    dataSet.linedatas
       && dataSet.linedatas.forEach((item) => {
         const {
           id, type, legend, color, visible, datas, func, dotNum
