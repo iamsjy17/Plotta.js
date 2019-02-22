@@ -18,6 +18,7 @@ const GraphConfig = (() => {
   const AXIS_X = Symbol('AxisX');
   const AXIS_Y = Symbol('AxisY');
   const TICS = Symbol('Tics');
+  const TABLE_VISIBLE = Symbol('TableVisible');
 
   class GraphConfig {
     constructor(config) {
@@ -36,6 +37,7 @@ const GraphConfig = (() => {
       this[AXIS_X] = new Axis();
       this[AXIS_Y] = new Axis();
       this[TICS] = new Tics();
+      this[TABLE_VISIBLE] = true;
       this.Init(config);
     }
 
@@ -48,11 +50,11 @@ const GraphConfig = (() => {
       if (value && typeof value === 'string') this[FONT] = value;
     }
 
-    get legendVislble() {
+    get legendVisible() {
       return this[LEGEND_VISIBLE];
     }
 
-    set legendVislble(value) {
+    set legendVisible(value) {
       if (value && typeof value === 'boolean') this[LEGEND_VISIBLE] = value;
     }
 
@@ -180,6 +182,16 @@ const GraphConfig = (() => {
       }
     }
 
+    get tableVisible() {
+      return this[TABLE_VISIBLE];
+    }
+
+    set tableVisible(value) {
+      if (typeof value === 'boolean') {
+        this[TABLE_VISIBLE] = value;
+      }
+    }
+
     Init(config) {
       if (!IsObject(config)) return;
 
@@ -230,6 +242,12 @@ const GraphConfig = (() => {
 
         if (this.tics) this.tics.SetData(type, visible, color, value);
         else this.tics = new Tics(type, visible, color, value);
+      }
+
+      if (IsObject(config.table)) {
+        const { visible } = config.table;
+
+        this.tableVisible = config.table.visible;
       }
     }
   }
