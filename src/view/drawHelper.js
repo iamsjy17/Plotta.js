@@ -133,27 +133,12 @@ DrawHelper.DrawLines = function (ctx, graphRect, lineDatas) {
   lineDatas.forEach((lineData) => {
     const { points, color } = lineData;
     ctx.strokeStyle = color;
-    // let isTop = false;
-    // let isBottom = false;
     let isStart = true;
-    // const isEnd = false;
     let yCriticalPoint = points[0].y;
     points.forEach((point, index) => {
       if (point.y < graphRect.y) {
-        // if (isTop) {
-        // return;
-        // }
-        // isTop = true;
-        // isBottom = false;
-        // isEnd = true;
         yCriticalPoint = graphRect.y - 1;
       } else if (point.y > graphRect.y + graphRect.h) {
-        // if (isBottom) {
-        // return;
-        // }
-        // isTop = false;
-        // isBottom = true;
-        // isEnd = true;
         yCriticalPoint = graphRect.y + graphRect.h + 1;
       }
 
@@ -161,21 +146,115 @@ DrawHelper.DrawLines = function (ctx, graphRect, lineDatas) {
         ctx.beginPath();
         ctx.moveTo(point.x, point.y);
         isStart = false;
-        // isEnd = false;
-        // } else if (isEnd === true) {
-        // ctx.lineTo(point.x, yCriticalPoint || point.y);
-        // ctx.stroke();
-        // isStart = true;
-        // isEnd = false;
       } else {
         ctx.lineTo(point.x, yCriticalPoint || point.y);
-        // isTop = false;
-        // isBottom = false;
       }
       yCriticalPoint = NaN;
     });
     ctx.stroke();
   });
+  ctx.restore();
+};
+
+DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
+  const {
+    visible, selectedTic, colors, legends, legendWidth, datas
+  } = tableData;
+
+  if (!visible || isNaN(selectedTic) || !colors || !legends || !legendWidth || !datas) return;
+
+  const rectSize = 15;
+  const margin = 4;
+
+  ctx.save();
+  ctx.font = `14px ${font}`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+
+  const selectedTicData = datas[selectedTic];
+  if (!selectedTicData || !selectedTicData.canvasPos) return;
+
+  const tableRowPos = [];
+  tableRowPos[0] = selectedTicData.canvasPos.y - (rectSize + margin * 2);
+  for (let i = 1; i <= selectedTicData.length + 1; i++) {
+    tableRowPos[i] = tableRowPos[i - 1] + (rectSize + margin * 2);
+  }
+  let tableColumnPos = [];
+  tableColumnPos[0] = selectedTicData.canvasPos.x + 20;
+  tableColumnPos[1] = tableColumnPos[0] + margin * 4 + rectSize + legendWidth;
+  tableColumnPos[2] = tableColumnPos[1] + margin * 2 + selectedTicData.width;
+
+  const centerPosX = (graphRect.x + graphRect.w) / 2;
+  const tableWidth = tableColumnPos[2] - tableColumnPos[0];
+  let tablePoint = null;
+  if (selectedTicData.canvasPos.x > centerPosX) {
+    tableColumnPos = tableColumnPos.map(pos => pos - tableWidth - 40);
+    tablePoint = { x: tableColumnPos[2], y: tableRowPos[0] };
+  } else {
+    tablePoint = { x: tableColumnPos[0], y: tableRowPos[0] };
+  }
+
+  ctx.save();
+  ctx.globalAlpha = 0.5;
+  ctx.fillStyle = 'white';
+  ctx.fillRect(
+    tableColumnPos[0],
+    tableRowPos[0],
+    tableColumnPos[2] - tableColumnPos[0],
+    tableRowPos[selectedTicData.length + 1] - tableRowPos[0]
+  );
+  ctx.restore();
+  ctx.strokeRect(
+    tableColumnPos[0],
+    tableRowPos[0],
+    tableColumnPos[2] - tableColumnPos[0],
+    tableRowPos[selectedTicData.length + 1] - tableRowPos[0]
+  );
+  for (let i = 1; i <= selectedTicData.length; i++) {
+    ctx.beginPath();
+    ctx.moveTo(tableColumnPos[0], tableRowPos[i]);
+    ctx.lineTo(tableColumnPos[2], tableRowPos[i]);
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  ctx.moveTo(tableColumnPos[1], tableRowPos[1]);
+  ctx.lineTo(tableColumnPos[1], tableRowPos[selectedTicData.length + 1]);
+  ctx.stroke();
+
+  ctx.fillText(`${selectedTic}`, tableColumnPos[0] + margin, tableRowPos[0] + margin);
+  for (let i = 0; i < selectedTicData.length; i++) {
+    ctx.save();
+    ctx.fillText(
+      `${legends[i]}`,
+      tableColumnPos[0] + rectSize + margin * 3,
+      tableRowPos[i + 1] + margin
+    );
+    ctx.fillText(
+      `${selectedTicData[i].dataPos.toFixed(3)}`,
+      tableColumnPos[1] + margin,
+      tableRowPos[i + 1] + margin
+    );
+    ctx.fillStyle = colors[i];
+    ctx.fillRect(tableColumnPos[0] + margin, tableRowPos[i + 1] + margin, rectSize, rectSize);
+
+    if (
+      selectedTicData[i].canvasPos >= graphRect.y
+      && selectedTicData[i].canvasPos <= graphRect.y + graphRect.h
+    ) {
+      ctx.save();
+      ctx.globalAlpha = 0.3;
+      ctx.beginPath();
+      ctx.moveTo(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos);
+      ctx.lineTo(tablePoint.x, tablePoint.y);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.arc(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
   ctx.restore();
 };
 
@@ -190,6 +269,7 @@ DrawHelper.Draw = function (ctx, drawData) {
     tics,
     lineDatas,
     legendDatas,
+    tableData,
     canvasWidth,
     canvasHeight,
     graphRect,
@@ -204,6 +284,7 @@ DrawHelper.Draw = function (ctx, drawData) {
   DrawHelper.DrawAxis(ctx, font, axis);
   DrawHelper.DrawLines(ctx, graphRect, lineDatas);
   DrawHelper.DrawLegends(ctx, font, legendRect, legendDatas);
+  DrawHelper.DrawTable(ctx, font, graphRect, tableData);
 };
 
 export default DrawHelper;
