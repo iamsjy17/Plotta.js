@@ -7,16 +7,18 @@ export default class OffscreenCanvasHelper {
     this.offscreenCanvas = this.presentationCanvas.transferControlToOffscreen();
     this.dpr = dpr;
     this.worker = new Worker();
-  }
-
-  Draw(drawData) {
     this.worker.postMessage(
       {
         canvas: this.offscreenCanvas,
-        dpr: this.dpr,
-        drawData
+        dpr: this.dpr
       },
       [this.offscreenCanvas]
     );
+  }
+
+  Draw(drawData) {
+    this.worker.postMessage({
+      drawData
+    });
   }
 }
