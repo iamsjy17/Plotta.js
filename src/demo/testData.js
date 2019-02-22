@@ -61,8 +61,8 @@ const dataSet = {
     legendVisible: true,
     title: {
       location: 'center',
-      color: 'red',
-      text: 'Hello Graph'
+      color: 'black',
+      text: 'Plotta.js'
     },
     grid: {
       type: '',
@@ -72,12 +72,12 @@ const dataSet = {
     border: {
       type: '',
       visible: true,
-      color: 'red',
+      color: 'black',
       width: 1
     },
     tics: {
       visible: true,
-      color: 'green',
+      color: 'black',
       value: {
         x: 2,
         y: 2
@@ -87,8 +87,8 @@ const dataSet = {
       x: {
         visible: true,
         // type: 'PI',
-        label: 'xLabel',
-        color: 'red',
+        label: 'X',
+        color: 'black',
         location: 'center',
         range: {
           start: -10,
@@ -97,14 +97,17 @@ const dataSet = {
       },
       y: {
         visible: true,
-        label: 'yLabel',
-        color: 'blue',
+        label: 'Y',
+        color: 'black',
         location: 'center',
         range: {
           start: -10,
           end: 10
         }
       }
+    },
+    table: {
+      visible: true
     }
   }
 };
