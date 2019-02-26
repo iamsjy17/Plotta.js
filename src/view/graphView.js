@@ -10,7 +10,7 @@ export default class GraphView {
     this.graphCanvas = new GraphCanvas(canvas);
     this.ViewModel = null;
     this.modelHandler = null;
-
+    this.renderStack = 0;
     this.BindEvent(canvas);
   }
 
@@ -34,17 +34,19 @@ export default class GraphView {
     const OnMouseMove = function (mousePos) {
       if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
 
-      if (this.viewModel.IsNewTic(mousePos)) this.graphCanvas.Draw(this.viewModel.GetDrawData());
+      if (this.viewModel.IsNewTic(mousePos)) {
+        this.renderStack++;
+      }
     }.bind(this);
 
     const OnZoomInOut = function (dataSet) {
       this.UpdateModel(dataSet);
-      this.UpdateView();
+      this.UndateViewModel();
     }.bind(this);
 
     const EventDispatcher = function (e) {
       const mousePos = { x: e.offsetX, y: e.offsetY };
-      if (!this.viewModel.IsInGraph(mousePos)) return;
+      if (!this.viewModel || !this.viewModel.IsInGraph(mousePos)) return;
       switch (e.type) {
         case 'keydown': {
           break;
@@ -148,7 +150,7 @@ export default class GraphView {
     }
   }
 
-  UpdateView() {
+  UndateViewModel() {
     if (!this.graphCanvas || !this.modelHandler) return;
 
     if (this.viewModel) {
@@ -160,8 +162,16 @@ export default class GraphView {
         this.canvasHeight
       );
     }
+    this.renderStack++;
+  }
 
-    this.graphCanvas.Draw(this.viewModel.GetDrawData());
+  Render() {
+    if (this.renderStack > 0 && this.viewModel.invalidated) {
+      this.graphCanvas.Draw(this.viewModel.GetDrawData());
+      this.renderStack--;
+      this.viewModel.invalidated = false;
+    }
+    requestAnimationFrame(this.Render.bind(this));
   }
 
   UpdateModel(dataSet) {

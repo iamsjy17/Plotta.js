@@ -7,14 +7,15 @@ export default class Presenter {
 
     this.GraphModel.SetViewHandler(this._getviewHandler());
     this.GraphView.SetModelHandler(this._getModelHandler());
-    this.GraphView.UpdateView();
+    this.GraphView.UndateViewModel();
+    this.GraphView.Render();
   }
 
   // eslint-disable-next-line class-methods-use-this
   _getviewHandler() {
     return {
-      UpdateView: function () {
-        this.GraphView.UpdateView();
+      UndateViewModel: function () {
+        this.GraphView.UndateViewModel();
       }.bind(this)
     };
   }

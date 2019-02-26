@@ -60,6 +60,7 @@ export default class ViewModel {
     };
 
     this.Init();
+    this.invalidated = true;
   }
 
   GetDrawData() {
@@ -84,6 +85,7 @@ export default class ViewModel {
     );
     if (this.drawData.tableData.selectedTic !== selectedTic) {
       this.drawData.tableData.selectedTic = selectedTic;
+      this.invalidated = true;
       return true;
     }
     return false;
@@ -177,5 +179,6 @@ export default class ViewModel {
   InvalidateModel() {
     if (!this.graphModel) return;
     this.Init();
+    this.invalidated = true;
   }
 }
