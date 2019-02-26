@@ -55,7 +55,7 @@ const GraphConfig = (() => {
     }
 
     set legendVisible(value) {
-      if (value && typeof value === 'boolean') this[LEGEND_VISIBLE] = value;
+      if (typeof value === 'boolean') this[LEGEND_VISIBLE] = value;
     }
 
     get title() {
@@ -97,7 +97,7 @@ const GraphConfig = (() => {
     }
 
     set gridVisible(value) {
-      if (value && typeof value === 'boolean') {
+      if (typeof value === 'boolean') {
         this[GRID_VISIBLE] = value;
       }
     }
@@ -127,7 +127,7 @@ const GraphConfig = (() => {
     }
 
     set borderVisible(value) {
-      if (value && typeof value === 'boolean') {
+      if (typeof value === 'boolean') {
         this[BORDER_VISIBLE] = value;
       }
     }
@@ -147,7 +147,7 @@ const GraphConfig = (() => {
     }
 
     set borderWidth(value) {
-      if (value && typeof value === 'number') {
+      if (typeof value === 'number') {
         this[BORDER_WIDTH] = value;
       }
     }
