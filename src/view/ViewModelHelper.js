@@ -368,15 +368,16 @@ const ViewModelHelper = (() => {
           if (cur.dataPos >= this.axisY.range.start && cur.dataPos <= this.axisY.range.end) return true;
           return false;
         });
-
-        tableDatas.datas[tic].canvasPos = this.DataPoint2CanvasPoint(
-          parseInt(tic, 10),
-          array.reduce((acc, cur) => {
-            acc.dataPos += cur.dataPos;
-            return acc;
-          }).dataPos / array.length
-        );
-        tableDatas.datas[tic].width = valueWidth;
+        if (array.length > 0) {
+          tableDatas.datas[tic].canvasPos = this.DataPoint2CanvasPoint(
+            parseInt(tic, 10),
+            array.reduce((acc, cur) => {
+              acc.dataPos += cur.dataPos;
+              return acc;
+            }).dataPos / array.length
+          );
+          tableDatas.datas[tic].width = valueWidth;
+        }
       });
       tableDatas.legendWidth = legendWidth;
       return tableDatas;
