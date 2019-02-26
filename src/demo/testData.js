@@ -1,11 +1,11 @@
-const x2 = x => x * x;
+const xy = x => x;
 const dataSet = {
   linedatas: [
     {
       id: 'line1',
       type: 'func',
       legend: 'cos',
-      color: '#FF69B4',
+      color: '#55A8DE',
       visible: true,
       func: Math.cos,
       dotNum: 1000
@@ -14,7 +14,7 @@ const dataSet = {
       id: 'line2',
       type: 'func',
       legend: 'sin',
-      color: '#7B68EE',
+      color: '#A2CCB6',
       visible: true,
       func: Math.sin,
       dotNum: 1000
@@ -22,17 +22,17 @@ const dataSet = {
     {
       id: 'line3',
       type: 'func',
-      legend: 'x^2',
-      color: '#00FF7F',
+      legend: 'x = y',
+      color: '#C94346',
       visible: true,
-      func: x2,
+      func: xy,
       dotNum: 1000
     },
     {
       id: 'line4',
       type: 'func',
       legend: 'sinh',
-      color: '#72222E',
+      color: '#F7CE6F',
       visible: true,
       func: Math.sinh,
       dotNum: 1000
@@ -41,18 +41,9 @@ const dataSet = {
       id: 'line5',
       type: 'func',
       legend: 'cosh',
-      color: '#AF110F',
+      color: '#9168F6',
       visible: true,
       func: Math.cosh,
-      dotNum: 1000
-    },
-    {
-      id: 'line6',
-      type: 'func',
-      legend: 'tanh',
-      color: '#FF110F',
-      visible: true,
-      func: Math.tanh,
       dotNum: 1000
     }
   ],
@@ -61,23 +52,23 @@ const dataSet = {
     legendVisible: true,
     title: {
       location: 'center',
-      color: 'black',
+      color: '#666666',
       text: 'Plotta.js'
     },
     grid: {
       type: '',
       visible: true,
-      color: 'blue'
+      color: '#888888'
     },
     border: {
       type: '',
       visible: true,
-      color: 'black',
+      color: '#DDDDDD',
       width: 1
     },
     tics: {
       visible: true,
-      color: 'black',
+      color: '#888888',
       value: {
         x: 2,
         y: 2
@@ -86,9 +77,8 @@ const dataSet = {
     axis: {
       x: {
         visible: true,
-        // type: 'PI',
         label: 'X',
-        color: 'black',
+        color: '#666666',
         location: 'center',
         range: {
           start: -10,
@@ -98,7 +88,7 @@ const dataSet = {
       y: {
         visible: true,
         label: 'Y',
-        color: 'black',
+        color: '#666666',
         location: 'center',
         range: {
           start: -10,
