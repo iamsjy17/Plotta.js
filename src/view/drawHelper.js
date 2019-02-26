@@ -73,13 +73,15 @@ DrawHelper.DrawGrid = function (ctx, width, height, grid, tics) {
   ctx.strokeStyle = color;
   ctx.lineWidth = 0.3;
 
-  xTics.forEach((tic) => {
+  xTics.forEach((tic, index, array) => {
+    if (index === 0 || index === array.length - 1) return;
     ctx.beginPath();
     ctx.moveTo(tic.x, tic.y);
     ctx.lineTo(tic.x, tic.y - height);
     ctx.stroke();
   });
-  yTics.forEach((tic) => {
+  yTics.forEach((tic, index, array) => {
+    if (index === 0 || index === array.length - 1) return;
     ctx.beginPath();
     ctx.moveTo(tic.x, tic.y);
     ctx.lineTo(tic.x + width, tic.y);
@@ -88,7 +90,7 @@ DrawHelper.DrawGrid = function (ctx, width, height, grid, tics) {
   ctx.restore();
 };
 
-DrawHelper.DrawTics = function (ctx, tics) {
+DrawHelper.DrawTics = function (ctx, width, height, tics) {
   const {
     visible, color, xTics, yTics
   } = tics;
@@ -107,17 +109,31 @@ DrawHelper.DrawTics = function (ctx, tics) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  xTics.forEach((tic) => {
+  xTics.forEach((tic, index, array) => {
+    const yStart = tic.y + ticSize;
+    let yEnd;
+    if (index === 0) {
+      yEnd = tic.y - height;
+    } else {
+      yEnd = tic.y;
+    }
     ctx.beginPath();
-    ctx.moveTo(tic.x, tic.y + ticSize);
-    ctx.lineTo(tic.x, tic.y);
+    ctx.moveTo(tic.x, yStart);
+    ctx.lineTo(tic.x, yEnd);
     ctx.stroke();
     ctx.fillText(tic.value, tic.x, tic.y + ticSize + ticValueMargin);
   });
-  yTics.forEach((tic) => {
+  yTics.forEach((tic, index, array) => {
+    const xStart = tic.x - ticSize;
+    let xEnd;
+    if (index === 0) {
+      xEnd = tic.x + width;
+    } else {
+      xEnd = tic.x;
+    }
     ctx.beginPath();
-    ctx.moveTo(tic.x - ticSize, tic.y);
-    ctx.lineTo(tic.x, tic.y);
+    ctx.moveTo(xStart, tic.y);
+    ctx.lineTo(xEnd, tic.y);
     ctx.stroke();
     ctx.fillText(tic.value, tic.x - ticSize - ticValueMargin, tic.y);
   });
@@ -137,14 +153,14 @@ DrawHelper.DrawLines = function (ctx, graphRect, lineDatas) {
     let yCriticalPoint = points[0].y;
     points.forEach((point, index) => {
       if (point.y < graphRect.y) {
-        yCriticalPoint = graphRect.y - 1;
+        yCriticalPoint = graphRect.y - 5;
       } else if (point.y > graphRect.y + graphRect.h) {
-        yCriticalPoint = graphRect.y + graphRect.h + 1;
+        yCriticalPoint = graphRect.y + graphRect.h + 5;
       }
 
       if (isStart === true) {
         ctx.beginPath();
-        ctx.moveTo(point.x, point.y);
+        ctx.moveTo(point.x, yCriticalPoint || point.y);
         isStart = false;
       } else {
         ctx.lineTo(point.x, yCriticalPoint || point.y);
@@ -203,7 +219,7 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
     tableColumnPos[2] - tableColumnPos[0],
     tableRowPos[selectedTicData.length + 1] - tableRowPos[0]
   );
-  ctx.restore();
+  ctx.strokeStyle = '#999999';
   ctx.strokeRect(
     tableColumnPos[0],
     tableRowPos[0],
@@ -220,6 +236,7 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
   ctx.moveTo(tableColumnPos[1], tableRowPos[1]);
   ctx.lineTo(tableColumnPos[1], tableRowPos[selectedTicData.length + 1]);
   ctx.stroke();
+  ctx.restore();
 
   ctx.fillText(`${selectedTic}`, tableColumnPos[0] + margin, tableRowPos[0] + margin);
   for (let i = 0; i < selectedTicData.length; i++) {
@@ -241,16 +258,16 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
       selectedTicData[i].canvasPos >= graphRect.y
       && selectedTicData[i].canvasPos <= graphRect.y + graphRect.h
     ) {
-      ctx.save();
-      ctx.globalAlpha = 0.3;
-      ctx.beginPath();
-      ctx.moveTo(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos);
-      ctx.lineTo(tablePoint.x, tablePoint.y);
-      ctx.stroke();
-      ctx.restore();
+      // ctx.save();
+      // ctx.globalAlpha = 0.3;
+      // ctx.beginPath();
+      // ctx.moveTo(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos);
+      // ctx.lineTo(tablePoint.x, tablePoint.y);
+      // ctx.stroke();
+      // ctx.restore();
 
       ctx.beginPath();
-      ctx.arc(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos, 3, 0, Math.PI * 2);
+      ctx.arc(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos, 4, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.restore();
@@ -279,7 +296,7 @@ DrawHelper.Draw = function (ctx, drawData) {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   DrawHelper.DrawTitle(ctx, font, title);
   DrawHelper.DrawBorder(ctx, graphRect, border);
-  DrawHelper.DrawTics(ctx, tics);
+  DrawHelper.DrawTics(ctx, graphRect.w, graphRect.h, tics);
   DrawHelper.DrawGrid(ctx, graphRect.w, graphRect.h, grid, tics);
   DrawHelper.DrawAxis(ctx, font, axis);
   DrawHelper.DrawLines(ctx, graphRect, lineDatas);
