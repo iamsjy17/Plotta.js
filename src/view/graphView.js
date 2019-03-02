@@ -12,6 +12,14 @@ import ViewModel from './viewModel';
  * @property {Number} renderStack Render Command Count
  * @param {Object} canvas canvas Element
  *
+ *
+ * See function description
+ * @method SetModelHandler
+ * @method BindEvent
+ * @method UpdateModel
+ * @method UpdateViewModel
+ * @method Render
+ *
  */
 
 export default class GraphView {
