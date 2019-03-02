@@ -1,14 +1,25 @@
 import GraphCanvas from './graphCanvas';
 import ViewModel from './viewModel';
 
+/**
+ * @name Plotta
+ * @type class
+ * @property {Number} canvasWidth Size of the actual Canvas Width
+ * @property {Number} canvasHeight Size of the actual Canvas Height
+ * @property {Object} graphCanvas Instance of GraphCanvas
+ * @property {Object} viewModel
+ * @property {Object} modelHandler
+ * @property {Number} renderStack Render Command Count
+ * @param {Object} canvas canvas Element
+ *
+ */
+
 export default class GraphView {
   constructor(canvas) {
-    //  Size of the actual Canvas
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
-
     this.graphCanvas = new GraphCanvas(canvas);
-    this.ViewModel = null;
+    this.viewModel = null;
     this.modelHandler = null;
     this.renderStack = 0;
     this.BindEvent(canvas);
@@ -18,6 +29,12 @@ export default class GraphView {
     this.modelHandler = modelHandler;
   }
 
+  /**
+   * @name BindEvent
+   * @type function
+   * @param {Object} targetEl Target Element
+   * @param {Number} type Event Type
+   */
   BindEvent(targetEl, type) {
     if (!targetEl) return;
 
@@ -30,19 +47,6 @@ export default class GraphView {
 
     let _type = type;
     if (_type === undefined) _type = EVENT_TYPE.ALL;
-
-    const OnMouseMove = function (mousePos) {
-      if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
-
-      if (this.viewModel.IsNewTic(mousePos)) {
-        this.renderStack++;
-      }
-    }.bind(this);
-
-    const OnZoomInOut = function (dataSet) {
-      this.UpdateModel(dataSet);
-      this.UndateViewModel();
-    }.bind(this);
 
     const EventDispatcher = function (e) {
       const mousePos = { x: e.offsetX, y: e.offsetY };
@@ -64,7 +68,11 @@ export default class GraphView {
           break;
         }
         case 'mousemove': {
-          OnMouseMove(mousePos);
+          if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
+
+          if (this.viewModel.IsNewTic(mousePos)) {
+            this.renderStack++; // Render Count++;
+          }
           break;
         }
         case 'mousedown': {
@@ -114,7 +122,8 @@ export default class GraphView {
                 }
               }
             };
-            OnZoomInOut(dataSet);
+
+            this.UpdateModel(dataSet); // UpdateMode -> UpdateViewModel -> Render Count++
           }
           break;
         }
@@ -150,7 +159,25 @@ export default class GraphView {
     }
   }
 
-  UndateViewModel() {
+  /**
+   * @name UpdateModel
+   * @type function
+   * @Description
+   * Update the graph model. Only for properties that exist in the delivered dataSet
+   */
+  UpdateModel(dataSet) {
+    this.modelHandler.UpdateModel(dataSet);
+  }
+
+  /**
+   * @name UpdateViewModel
+   * @type function
+   * @Description
+   * If there is no ViewModel, create a new model,
+   * and if there is a ViewModel, update the ViewModel to the current graph model.
+   * + Render Count++;
+   */
+  UpdateViewModel() {
     if (!this.graphCanvas || !this.modelHandler) return;
 
     if (this.viewModel) {
@@ -165,6 +192,13 @@ export default class GraphView {
     this.renderStack++;
   }
 
+  /**
+   * @name Render
+   * @type function
+   * @Description
+   * If the ViewModel is in the Invalidated state
+   * and there is a RenderStack that is not drawn, draw it.
+   */
   Render() {
     if (this.renderStack > 0 && this.viewModel.invalidated) {
       this.graphCanvas.Draw(this.viewModel.GetDrawData());
@@ -172,9 +206,5 @@ export default class GraphView {
       this.viewModel.invalidated = false;
     }
     requestAnimationFrame(this.Render.bind(this));
-  }
-
-  UpdateModel(dataSet) {
-    this.modelHandler.UpdateModel(dataSet);
   }
 }

@@ -51,6 +51,6 @@ export default class GraphModel {
     if (IsObject(dataSet.config)) {
       this.config && this.config.Init(dataSet.config);
     }
-    if (this.viewHandler) this.viewHandler.UndateViewModel();
+    if (this.viewHandler) this.viewHandler.UpdateViewModel();
   }
 }
