@@ -1,3 +1,14 @@
+/**
+ * @name pf
+ * @type Object
+ * @property {Object} PLATFORM_TYPE
+ * @property {Object} BROWSER_TYPE
+ * @property {Number} currentPlaform
+ * @property {Number} currentBrowser
+ * @property {Boolean} IsAvailableOffScreen
+ *
+ */
+
 const pf = {};
 
 pf.PLATFORM_TYPE = {

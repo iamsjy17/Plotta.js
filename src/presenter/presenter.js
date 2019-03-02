@@ -1,10 +1,16 @@
 import { IsObject } from '../util';
 
+/**
+ * @name Presenter
+ * @type class
+ * @property {Object} GraphModel
+ * @property {Object} GraphView
+ *
+ */
 export default class Presenter {
   constructor(graphModel, graphView) {
     this.GraphModel = graphModel;
     this.GraphView = graphView;
-
     this.GraphModel.SetViewHandler(this._getviewHandler());
     this.GraphView.SetModelHandler(this._getModelHandler());
     this.GraphView.UndateViewModel();
