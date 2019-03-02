@@ -1,6 +1,18 @@
 // eslint-disable-next-line import/no-unresolved
 import Worker from './osWorker';
 
+/**
+ * @name CanvasHelper
+ * @type class
+ * @property {Object} presentationCanvas
+ * @property {Number} dpr Divice Pixel Ratio
+ * @property {Object} offscreenCanvas
+ * @property {Object} worker Worker for OffscreenCanvas
+ * @param {Object} canvas canvas Element
+ * @param {Number} dpr Divice Pixel Ratio
+ * @method Draw
+ */
+
 export default class OffscreenCanvasHelper {
   constructor(canvas, dpr) {
     this.presentationCanvas = canvas;
@@ -16,6 +28,13 @@ export default class OffscreenCanvasHelper {
     );
   }
 
+  /**
+   * @name Draw
+   * @type function
+   * @param {Object} drawData
+   * @description
+   * Pass DrawData to the Worker.
+   */
   Draw(drawData) {
     this.worker.postMessage({
       drawData
