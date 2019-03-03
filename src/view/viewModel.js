@@ -3,12 +3,40 @@
 import { IsObject } from '../util';
 import ViewModelHelper from './ViewModelHelper';
 
+/**
+ * @name ViewModel
+ * @type class
+ * @property {Object} graphModel
+ * @property {Number} canvasWidth
+ * @property {Number} canvasHeight
+ * @property {Object} drawData
+ * @property {String} drawData.font default Helvetica Neue', Helvetica, Arial, sans-serif
+ * @property {Object} drawData.title default color : black
+ * @property {Object} drawData.border default visible : true, width : 1
+ * @property {Object} drawData.grid default visible : true
+ * @property {Object} drawData.axis default visible : true, color : black
+ * @property {Object} drawData.tics default visible : true, color : black
+ * @property {Object} drawData.lineDatas
+ * @property {Object} drawData.legendDatas
+ * @property {Object} drawData.tableData
+ * @property {Boolean} Invalidated
+ * @property {Object} ViewModelHelper Calc DataPos to ViewPos(Canvas Pos), Calc ViewPos(Canvas Pos) to DataPos
+ * @param {Object} graphModel
+ * @param {Number} width canvasWidth
+ * @param {Number} height canvasHeight
+ *
+ * See function description
+ * @method GetDrawData
+ * @method IsInGraph
+ * @method IsNewTic
+ * @method Init
+ * @method InvalidateModel
+ */
 export default class ViewModel {
   constructor(graphModel, width, height) {
     this.graphModel = graphModel;
     this.canvasWidth = width;
     this.canvasHeight = height;
-
     this.drawData = {
       font: '',
       title: {
@@ -63,10 +91,22 @@ export default class ViewModel {
     this.invalidated = true;
   }
 
+  /**
+   * @name GetDrawData
+   * @type function
+   * @return {Object} drawData
+   */
   GetDrawData() {
     return this.drawData;
   }
 
+  /**
+   * @name IsInGraph
+   * @type function
+   * @return {Boolean}
+   * @Description
+   * Returns true if the mouse is in the graph area.
+   */
   IsInGraph(mousePos) {
     const graphRect = this.viewModelHelper.GetGraphRect();
     if (
@@ -78,6 +118,13 @@ export default class ViewModel {
     return false;
   }
 
+  /**
+   * @name IsNewTic
+   * @type function
+   * @return {Boolean}
+   * @Description
+   * If a new tick is selected, update drawdata's selected tic and change viewmodel to invalidated state. And returns true.
+   */
   IsNewTic(mousePos) {
     const selectedTic = this.viewModelHelper.GetSelectedTic(
       mousePos,
@@ -91,6 +138,13 @@ export default class ViewModel {
     return false;
   }
 
+  /**
+   * @name Init
+   * @type function
+   * @Description
+   * Update the viewmodel using the current graph model.
+   * The viewmodel is data that can be drawn directly using the canvas coordinate system.
+   */
   Init() {
     if (!this.graphModel) return;
     const {
@@ -176,6 +230,12 @@ export default class ViewModel {
     this.drawData.tableData.datas = tableDatas.datas;
   }
 
+  /**
+   * @name InvalidateModel
+   * @type function
+   * @description
+   * Update the viewmodel using the current graph model. Then change viewmodel to invalidated state.
+   */
   InvalidateModel() {
     if (!this.graphModel) return;
     this.Init();
