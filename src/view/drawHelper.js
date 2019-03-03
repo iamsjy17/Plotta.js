@@ -1,5 +1,26 @@
+/**
+ * @name DrawHelper
+ * @type Object
+ * @method Draw
+ * @method DrawTitle
+ * @method DrawLegends
+ * @method DrawAxis
+ * @method DrawBorder
+ * @method DrawGrid
+ * @method DrawTics
+ * @method DrawLines
+ * @method DrawTable
+ */
+
 const DrawHelper = {};
 
+/**
+ * @name DrawTitle
+ * @type function
+ * @Description
+ * Draw Title,
+ * Default fontSize : 20px, textAlign : Center, textBaseline : middle
+ */
 DrawHelper.DrawTitle = function (ctx, font, title) {
   const { text, color, position } = title;
   ctx.save();
@@ -11,6 +32,13 @@ DrawHelper.DrawTitle = function (ctx, font, title) {
   ctx.restore();
 };
 
+/**
+ * @name DrawLegends
+ * @type function
+ * @Description
+ * Draw Legends,
+ * Default fontSize : 14px, textAlign : Left, textBaseline : top, rectSize : 15px
+ */
 DrawHelper.DrawLegends = function (ctx, font, legendRect, legendDatas) {
   ctx.save();
   ctx.font = `14px ${font}`;
@@ -29,6 +57,13 @@ DrawHelper.DrawLegends = function (ctx, font, legendRect, legendDatas) {
   ctx.restore();
 };
 
+/**
+ * @name DrawAxis
+ * @type function
+ * @Description
+ * Draw Axis,
+ * Default fontSize : 14px, textAlign : Center, textBaseline : middle
+ */
 DrawHelper.DrawAxis = function (ctx, font, axis) {
   const { xLabel, yLabel } = axis;
 
@@ -50,6 +85,10 @@ DrawHelper.DrawAxis = function (ctx, font, axis) {
   ctx.restore();
 };
 
+/**
+ * @name DrawBorder
+ * @type function
+ */
 DrawHelper.DrawBorder = function (ctx, rect, border) {
   const {
     visible, type, color, width
@@ -64,6 +103,13 @@ DrawHelper.DrawBorder = function (ctx, rect, border) {
   ctx.restore();
 };
 
+/**
+ * @name DrawGrid
+ * @type function
+ * @Description
+ * Draw Grid,
+ * Default lineWidth : 0.3px
+ */
 DrawHelper.DrawGrid = function (ctx, width, height, grid, tics) {
   const { xTics, yTics } = tics;
   const { visible, type, color } = grid;
@@ -90,6 +136,13 @@ DrawHelper.DrawGrid = function (ctx, width, height, grid, tics) {
   ctx.restore();
 };
 
+/**
+ * @name DrawTics
+ * @type function
+ * @Description
+ * Draw Tics,
+ * Default lineWidth : 0.3px, textAlign : center, textBaseline : middle, ticSize : 10px
+ */
 DrawHelper.DrawTics = function (ctx, width, height, tics) {
   const {
     visible, color, xTics, yTics
@@ -140,6 +193,14 @@ DrawHelper.DrawTics = function (ctx, width, height, tics) {
   ctx.restore();
 };
 
+/**
+ * @name DrawLines
+ * @type function
+ * @Description
+ * Draw Tics,
+ * Default lineWidth : 3px
+ * @Todo Add LineStyle
+ */
 DrawHelper.DrawLines = function (ctx, graphRect, lineDatas) {
   ctx.save();
   ctx.lineWidth = 3;
@@ -172,6 +233,14 @@ DrawHelper.DrawLines = function (ctx, graphRect, lineDatas) {
   ctx.restore();
 };
 
+/**
+ * @name DrawTable
+ * @type function
+ * @Description
+ * Draw Tics,
+ * Default fontSize : 14px, textAlign : left, textBaseline : top,
+ * Default fillAlpha : 0.5, fillColor : white, LineColor : #999999
+ */
 DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
   const {
     visible, selectedTic, colors, legends, legendWidth, datas
@@ -258,14 +327,6 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
       selectedTicData[i].canvasPos >= graphRect.y
       && selectedTicData[i].canvasPos <= graphRect.y + graphRect.h
     ) {
-      // ctx.save();
-      // ctx.globalAlpha = 0.3;
-      // ctx.beginPath();
-      // ctx.moveTo(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos);
-      // ctx.lineTo(tablePoint.x, tablePoint.y);
-      // ctx.stroke();
-      // ctx.restore();
-
       ctx.beginPath();
       ctx.arc(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos, 4, 0, Math.PI * 2);
       ctx.fill();
@@ -275,6 +336,12 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
   ctx.restore();
 };
 
+/**
+ * @name Draw
+ * @type function
+ * @Description
+ * Default fontSize : 12px
+ */
 DrawHelper.Draw = function (ctx, drawData) {
   const {
     font,
