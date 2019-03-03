@@ -1,4 +1,40 @@
 /* eslint-disable max-len */
+/**
+ * @name ViewModelHelper
+ * @type class
+ * @property {String} font
+ * @property {Object} axisX
+ * @property {Object} axisY
+ * @property {Number} canvasWidth
+ * @property {Number} canvasHeight
+ * @property {Object} graphRect graph area in canvas
+ * @property {Object} legendRect legend area in canvas
+ * @param {String} font
+ * @param {Object} axisX
+ * @param {Object} axisY
+ * @param {Number} canvasWidth
+ * @param {Number} canvasHeight
+ *
+ * See function description
+ * @method GetGraphRect
+ * @method GetLegendRect
+ * @method GetTitlePos
+ * @method GetAxisXPos
+ * @method GetAxisYPos
+ * @method GetxTics
+ * @method GetyTics
+ * @method CanvasPoint2DataPoint
+ * @method DataPoint2CanvasPoint
+ * @method GraphPoint2DataPoint
+ * @method DataPoint2GraphPoint
+ * @method CanvasPoint2GraphPoint
+ * @method GraphPoint2CanvasPoint
+ * @method GetLineDatas
+ * @method GetLegendDatas
+ * @method GetSelectedTic
+ * @method GetTableDatas
+ */
+
 const ViewModelHelper = (() => {
   const LEFT_OFFSET = 80;
   const RIGHT_OFFSET = 20;
@@ -39,19 +75,52 @@ const ViewModelHelper = (() => {
       };
     }
 
+    /**
+     * @name GetGraphRect
+     * @type function
+     * @return {Object}
+     * @Description
+     * graph area in canvas
+     * GraphHeight = CanvasHeight - LegendHeight - Margins
+     */
     GetGraphRect() {
       return this.graphRect;
     }
 
+    /**
+     * @name GetLegendRect
+     * @type function
+     * @return {Object}
+     * @Description
+     * legend area in canvas
+     */
     GetLegendRect() {
       return this.legendRect;
     }
 
+    /**
+     * @name GetTitlePos
+     * @type function
+     * @return {Object}
+     * @Description
+     * Default Y : TOP_OFFSET / 2 (40px)
+     * X : Depend On Location info
+     * left 20, center 50, right 80 (ratio)
+     */
     GetTitlePos(location) {
       const ratio = GetLocationRatio(location);
       return { x: this.graphRect.x + (this.graphRect.w * ratio) / 100, y: TOP_OFFSET / 2 };
     }
 
+    /**
+     * @name GetAxisXPos
+     * @type function
+     * @return {Object}
+     * @Description
+     * Default Y : Graph Bottom Pos + 50px
+     * X : Depend On Location info
+     * left 20, center 50, right 80 (ratio)
+     */
     GetAxisXPos(location) {
       const ratio = GetLocationRatio(location);
       return {
@@ -60,6 +129,15 @@ const ViewModelHelper = (() => {
       };
     }
 
+    /**
+     * @name GetAxisYPos
+     * @type function
+     * @return {Object}
+     * @Description
+     * Default X : Graph Left Pos - 50px
+     * Y : Depend On Location info
+     * top 20, middle 50, bottom 80 (ratio)
+     */
     GetAxisYPos(location) {
       const ratio = GetLocationRatio(location);
       return {
@@ -68,6 +146,14 @@ const ViewModelHelper = (() => {
       };
     }
 
+    // TODO :
+    /**
+     * @name GetxTics
+     * @type function
+     * @return {Object}
+     * @Description
+     * Gets the tics contained in the x-axis range
+     */
     GetxTics(ticValue) {
       const tics = [];
       let _ticValue = this.axisX.range.start;
@@ -82,6 +168,13 @@ const ViewModelHelper = (() => {
       return tics;
     }
 
+    /**
+     * @name GetyTics
+     * @type function
+     * @return {Object}
+     * @Description
+     * Gets the tics contained in the y-axis range
+     */
     GetyTics(ticValue) {
       if (ticValue <= 0) return null;
 
@@ -98,18 +191,39 @@ const ViewModelHelper = (() => {
       return tics;
     }
 
+    /**
+     * @name CanvasPoint2DataPoint
+     * @type function
+     * @return {Object}
+     * @Description
+     * Change the Canvas Point to Data Point.
+     */
     CanvasPoint2DataPoint({ x, y }) {
       const graphPoint = this.CanvasPoint2GraphPoint(x, y);
       if (graphPoint) return this.GraphPoint2DataPoint(graphPoint);
       return null;
     }
 
+    /**
+     * @name DataPoint2CanvasPoint
+     * @type function
+     * @return {Object}
+     * @Description
+     * Change the Data Point to Canvas Point.
+     */
     DataPoint2CanvasPoint(x, y) {
       const graphPoint = this.DataPoint2GraphPoint(x, y);
       if (graphPoint) return this.GraphPoint2CanvasPoint(graphPoint);
       return null;
     }
 
+    /**
+     * @name GraphPoint2DataPoint
+     * @type function
+     * @return {Object}
+     * @Description
+     * Change the Graph Point to Data Point.
+     */
     GraphPoint2DataPoint({ x, y }) {
       if (typeof x !== 'number' || typeof y !== 'number') return null;
 
@@ -120,6 +234,13 @@ const ViewModelHelper = (() => {
       return dataPoint;
     }
 
+    /**
+     * @name DataPoint2GraphPoint
+     * @type function
+     * @return {Object}
+     * @Description
+     * Change the Data Point to Graph Point.
+     */
     DataPoint2GraphPoint(x, y) {
       if (
         !this.axisX.range
@@ -137,6 +258,13 @@ const ViewModelHelper = (() => {
       return graphPoint;
     }
 
+    /**
+     * @name CanvasPoint2GraphPoint
+     * @type function
+     * @return {Object}
+     * @Description
+     * Change the Canvas Point to Graph Point.
+     */
     CanvasPoint2GraphPoint(x, y) {
       if (typeof x !== 'number' || typeof y !== 'number') return null;
 
@@ -149,6 +277,13 @@ const ViewModelHelper = (() => {
       return graphPoint;
     }
 
+    /**
+     * @name GraphPoint2CanvasPoint
+     * @type function
+     * @return {Object}
+     * @Description
+     * Change the Graph Point to Canvas Point.
+     */
     GraphPoint2CanvasPoint({ x, y }) {
       if (typeof x !== 'number' || typeof y !== 'number') return null;
 
@@ -161,6 +296,14 @@ const ViewModelHelper = (() => {
       return canvasPoint;
     }
 
+    /**
+     * @name GetLineDatas
+     * @type function
+     * @return {Object}
+     * @Description
+     * If the type is 'func', get the result value y of the function.
+     * convert the x and y values to Canvas Pos.
+     */
     GetLineDatas(lineDatas) {
       const _lineDatas = [];
 
@@ -201,6 +344,15 @@ const ViewModelHelper = (() => {
       return _lineDatas;
     }
 
+    /**
+     * @name GetLegendDatas
+     * @type function
+     * @return {Object}
+     * @Description
+     * Get Legend Data Using Line Data.
+     * Default Font Size : 14px,
+     * Decreases the height of the GraphRect by the height of the calculated LegendRect.
+     */
     GetLegendDatas(lineDatas) {
       const legendDatas = [];
       const lineHeight = 30;
@@ -248,6 +400,13 @@ const ViewModelHelper = (() => {
       return legendDatas;
     }
 
+    /**
+     * @name GetSelectedTic
+     * @type function
+     * @return {Object}
+     * @Description
+     * Gets the value of the Tic where the mouse cursor is located.
+     */
     GetSelectedTic(mousePos, datas) {
       const selectedTicPos = this.CanvasPoint2DataPoint(mousePos);
 
@@ -283,6 +442,14 @@ const ViewModelHelper = (() => {
       return binarySearch(ticsArray, selectedTicPos.x);
     }
 
+    /**
+     * @name GetTableDatas
+     * @type function
+     * @return {Object}
+     * @Description
+     * The y values of each line corresponding to the current x value are converted to table information.
+     * The table information includes the width of each column.
+     */
     GetTableDatas(lineDatas, tic) {
       const tableDatas = {};
       let index = -1;
