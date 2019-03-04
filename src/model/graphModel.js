@@ -2,6 +2,20 @@ import Config from './config';
 import LineData from './lineData';
 import { IsObject } from '../util';
 
+/**
+ * @name GraphModel
+ * @type class
+ * @property {Object} LineDatas
+ * @property {Object} Config
+ * @property {Object} ViewHandler
+ * @property {Boolean} Invalidated
+ *
+ * See function description
+ * @method SetViewHandler
+ * @method InitModel
+ * @method UpdateModel
+ */
+
 export default class GraphModel {
   constructor(dataSet) {
     this.Invalidated = true;
@@ -11,10 +25,20 @@ export default class GraphModel {
     this.viewHandler = null;
   }
 
+  /**
+   * @name SetViewHandler
+   * @type function
+   */
   SetViewHandler(viewHandler) {
     this.viewHandler = viewHandler;
   }
 
+  /**
+   * @name InitModel
+   * @type function
+   * @Description
+   * Initializes the graphModel with the input dataSet.
+   */
   InitModel(dataSet) {
     if (!IsObject(dataSet)) return;
 
@@ -32,6 +56,12 @@ export default class GraphModel {
     }
   }
 
+  /**
+   * @name UpdateModel
+   * @type function
+   * @Description
+   * Updates the graphModel with the input dataSet.
+   */
   UpdateModel(dataSet) {
     if (!IsObject(dataSet)) return;
 
