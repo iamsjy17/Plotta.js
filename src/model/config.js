@@ -219,7 +219,7 @@ const GraphConfig = (() => {
      * @name Init
      * @type function
      * @Description
-     * Init, Update the config with the input dataSet.
+     * Init, Update the config data with the input dataSet.
      */
 
     Init(config) {

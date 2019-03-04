@@ -1,5 +1,21 @@
 import { IsObject } from '../util';
 
+/**
+ * @name Tics
+ * @type class
+ * @property {String} type default type : number
+ * @property {Boolean} visible default visible : true
+ * @property {String} color default color : black
+ * @property {Object} value x, y tics
+ *
+ * See function description
+ * @method SetModelHandler
+ * @method BindEvent
+ * @method UpdateModel
+ * @method UpdateViewModel
+ * @method Render
+ *
+ */
 export default class Tics {
   constructor(type, visible, color, value) {
     this.type = type || 'number';
@@ -17,6 +33,12 @@ export default class Tics {
       };
   }
 
+  /**
+   * @name SetData
+   * @type function
+   * @Description
+   * Update Tic datas.
+   */
   SetData(type, visible, color, value) {
     this.type = type || this.type;
     this.visible = visible === 'boolean' ? visible : this.visible;

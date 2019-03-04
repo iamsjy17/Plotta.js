@@ -1,5 +1,18 @@
 import { IsObject } from '../util';
 
+/**
+ * @name Axis
+ * @type class
+ * @property {Boolean} visible default visible : true
+ * @property {String} type default type : Number
+ * @property {String} label
+ * @property {String} color default color : black
+ * @property {String} location default location : center
+ * @property {Object} range start, end, value
+ *
+ * See function description
+ * @method SetData
+ */
 export default class Axis {
   constructor(visible, type, label, color, location, range) {
     this.visible = typeof visible === 'boolean' ? visible : true;
@@ -19,6 +32,12 @@ export default class Axis {
       };
   }
 
+  /**
+   * @name SetData
+   * @type function
+   * @Description
+   * Update Axis Datas
+   */
   SetData(visible, type, label, color, location, range) {
     this.visible = typeof visible === 'boolean' ? visible : this.visible;
     this.type = type || this.type;
