@@ -72,7 +72,10 @@ export default class GraphModel {
     if (Object.prototype.hasOwnProperty.call(dataSet, 'linedatas')) {
       this.lineDatas.clear();
       dataSet.linedatas.forEach((item) => {
-        this.AddLine(item);
+        const {
+          id, type, legend, color, visible, datas, func, dotNum
+        } = item;
+        this.lineDatas.set(id, new LineData(type, legend, color, visible, datas, func, dotNum));
       });
     }
 
