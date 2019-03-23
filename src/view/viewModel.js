@@ -244,22 +244,64 @@ export default class ViewModel {
     switch (updateType) {
       case UPDATE_TYPE.NEW_LINE:
       case UPDATE_TYPE.UPDATE_LINE:
-      case UPDATE_TYPE.DELETE_LINE:
-      case UPDATE_TYPE.FONT: {
+      case UPDATE_TYPE.DELETE_LINE: {
         // value : id;
-        // Update, table, legend, lines
+        // Update Rect, Tics, Table, Lines, Axis, Legends
+
+        // LegendDatas
+        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
+
+        // Rect
+        this.drawData.graphRect = this.viewModelHelper.GetGraphRect();
+        this.drawData.legendRect = this.viewModelHelper.GetLegendRect();
+
         if (updateType === UPDATE_TYPE.DELETE_LINE) {
           this.drawData.lineDatas.delete(value);
-        } else if (updateType === UPDATE_TYPE.FONT) {
-          this.drawData.font = this.graphModel.config.font;
-          this.viewModelHelper.font = this.graphModel.config.font;
         } else {
           this.drawData.lineDatas.set(
             value,
             this.viewModelHelper.GetLineData(this.graphModel.lineDatas.get(value))
           );
         }
+
+        // Tics
+        this.drawData.tics.xTics = this.viewModelHelper.GetxTics(
+          this.graphModel.config.tics.value.x
+        );
+        this.drawData.tics.yTics = this.viewModelHelper.GetyTics(
+          this.graphModel.config.tics.value.y
+        );
+
+        // Axis Position
+        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(
+          this.graphModel.config.axisX.location
+        );
+        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(
+          this.graphModel.config.axisY.location
+        );
+
+        // TableDatas
+        const tableDatas = this.viewModelHelper.GetTableDatas(
+          this.graphModel.lineDatas,
+          this.graphModel.config.tics.value.x
+        );
+        if (tableDatas) {
+          this.drawData.tableData.legendWidth = tableDatas.legendWidth;
+          this.drawData.tableData.datas = tableDatas.datas;
+        } else {
+          this.drawData.tableData.legendWidth = 0;
+          this.drawData.tableData.datas = null;
+        }
+        break;
+      }
+      case UPDATE_TYPE.FONT: {
+        // Update Font Table, Legends
+        this.drawData.font = this.graphModel.config.font;
+        this.viewModelHelper.font = this.graphModel.config.font;
+
+        // legendDatas
         this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
+
         // tableDatas
         const tableDatas = this.viewModelHelper.GetTableDatas(
           this.graphModel.lineDatas,
