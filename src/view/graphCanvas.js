@@ -14,10 +14,10 @@ import CanvasHelperFactory from './canvasHelperFactory';
 class GraphCanvas {
   constructor(canvas) {
     const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
+    const { width, height } = canvas;
     // Scale up the size of the canvas.
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
     this.canvasHelper = CanvasHelperFactory.Create(canvas, dpr);
   }
 
