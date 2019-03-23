@@ -400,7 +400,7 @@ const ViewModelHelper = (() => {
 
       ctx.restore();
       this.legendRect = legendRect;
-      this.graphRect.h -= this.legendRect.h;
+      this.graphRect.h = this.canvasHeight - (TOP_OFFSET + BOTTOM_OFFSET + this.legendRect.h);
       this.legendRect.y = this.graphRect.y + this.graphRect.h + BOTTOM_OFFSET;
 
       return legendDatas;
