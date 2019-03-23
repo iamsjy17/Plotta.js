@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-console */
-import { IsObject } from '../util';
+import { UPDATE_TYPE, IsObject } from '../util';
 import ViewModelHelper from './ViewModelHelper';
 
 /**
@@ -119,23 +119,21 @@ export default class ViewModel {
   }
 
   /**
-   * @name IsNewTic
+   * @name GetNewTic
    * @type function
-   * @return {Boolean}
+   * @return {Boolean, Number} result, newTic
    * @Description
    * If a new tick is selected, update drawdata's selected tic and change viewmodel to invalidated state. And returns true.
    */
-  IsNewTic(mousePos) {
+  GetNewTic(mousePos) {
     const selectedTic = this.viewModelHelper.GetSelectedTic(
       mousePos,
       this.drawData.tableData.datas
     );
     if (this.drawData.tableData.selectedTic !== selectedTic) {
-      this.drawData.tableData.selectedTic = selectedTic;
-      this.invalidated = true;
-      return true;
+      return { result: true, selectedTic };
     }
-    return false;
+    return { result: false, selectedTic: null };
   }
 
   /**
@@ -177,7 +175,7 @@ export default class ViewModel {
     this.drawData.canvasHeight = this.canvasHeight;
 
     // LegendDatas
-    if (legendVisible) this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
+    this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
 
     // ViewRect
     this.drawData.graphRect = this.viewModelHelper.GetGraphRect();
@@ -223,11 +221,16 @@ export default class ViewModel {
 
     // tableDatas
     const tableDatas = this.viewModelHelper.GetTableDatas(this.graphModel.lineDatas, tics.value.x);
-    this.drawData.tableData.visible = tableVisible;
-    this.drawData.tableData.colors = tableDatas.colors;
-    this.drawData.tableData.legends = tableDatas.legends;
-    this.drawData.tableData.legendWidth = tableDatas.legendWidth;
-    this.drawData.tableData.datas = tableDatas.datas;
+    if (tableDatas) {
+      this.drawData.tableData.visible = tableVisible;
+      this.drawData.tableData.colors = tableDatas.colors;
+      this.drawData.tableData.legends = tableDatas.legends;
+      this.drawData.tableData.legendWidth = tableDatas.legendWidth;
+      this.drawData.tableData.datas = tableDatas.datas;
+    } else {
+      this.drawData.tableData.legendWidth = 0;
+      this.drawData.tableData.datas = null;
+    }
   }
 
   /**
@@ -236,9 +239,111 @@ export default class ViewModel {
    * @description
    * Update the viewmodel using the current graph model. Then change viewmodel to invalidated state.
    */
-  InvalidateModel() {
+  InvalidateModel(updateType, value) {
     if (!this.graphModel) return;
-    this.Init();
+    switch (updateType) {
+      case UPDATE_TYPE.NEW_LINE:
+      case UPDATE_TYPE.UPDATE_LINE:
+      case UPDATE_TYPE.DELETE_LINE:
+      case UPDATE_TYPE.FONT: {
+        // value : id;
+        // Update, table, legend, lines
+        if (updateType === UPDATE_TYPE.DELETE_LINE) {
+          this.drawData.lineDatas.delete(value);
+        } else if (updateType === UPDATE_TYPE.FONT) {
+          this.drawData.font = this.graphModel.config.font;
+          this.viewModelHelper.font = this.graphModel.config.font;
+        } else {
+          this.drawData.lineDatas.set(
+            value,
+            this.viewModelHelper.GetLineData(this.graphModel.lineDatas.get(value))
+          );
+        }
+        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
+        // tableDatas
+        const tableDatas = this.viewModelHelper.GetTableDatas(
+          this.graphModel.lineDatas,
+          this.graphModel.config.tics.value.x
+        );
+        if (tableDatas) {
+          this.drawData.tableData.legendWidth = tableDatas.legendWidth;
+          this.drawData.tableData.datas = tableDatas.datas;
+        } else {
+          this.drawData.tableData.legendWidth = 0;
+          this.drawData.tableData.datas = null;
+        }
+        break;
+      }
+      case UPDATE_TYPE.TITLE:
+        this.drawData.title.text = this.graphModel.config.title;
+        break;
+      case UPDATE_TYPE.TITLE_COLOR:
+        this.drawData.title.color = this.graphModel.config.titleColor;
+        break;
+      case UPDATE_TYPE.TITLE_LOCATION:
+        this.drawData.title.position = this.viewModelHelper.GetTitlePos(
+          this.graphModel.config.titleLocation
+        );
+        break;
+      case UPDATE_TYPE.GRID_VISIBLE:
+        this.drawData.grid.visible = this.graphModel.config.gridVisible;
+        break;
+      case UPDATE_TYPE.GRID_COLOR:
+        this.drawData.grid.color = this.graphModel.config.gridColor;
+        break;
+      case UPDATE_TYPE.BORDER_VISIBLE:
+        this.drawData.border.visible = this.graphModel.config.borderVisible;
+        break;
+      case UPDATE_TYPE.BORDER_COLOR:
+        this.drawData.border.color = this.graphModel.config.borderColor;
+        break;
+      case UPDATE_TYPE.BORDER_WIDTH:
+        this.drawData.border.width = this.graphModel.config.borderWidth;
+        break;
+      case UPDATE_TYPE.TICS_VISIBLE:
+        this.drawData.tics.visible = this.graphModel.config.tics.visible;
+        break;
+      case UPDATE_TYPE.TICS_COLOR:
+        this.drawData.tics.color = this.graphModel.config.tics.color;
+        break;
+      case UPDATE_TYPE.AXISX_VISIBLE:
+        this.drawData.axis.xLabel.visible = this.graphModel.config.axisX.visible;
+        break;
+      case UPDATE_TYPE.AXISX_LABEL:
+        this.drawData.axis.xLabel.text = this.graphModel.config.axisX.label;
+        break;
+      case UPDATE_TYPE.AXISX_LOCATION:
+        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(
+          this.graphModel.config.axisX.location
+        );
+        break;
+      case UPDATE_TYPE.AXISX_COLOR:
+        this.drawData.axis.xLabel.color = this.graphModel.config.axisX.color;
+        break;
+      case UPDATE_TYPE.AXISY_VISIBLE:
+        this.drawData.axis.yLabel.visible = this.graphModel.config.axisY.visible;
+        break;
+      case UPDATE_TYPE.AXISY_LABEL:
+        this.drawData.axis.yLabel.text = this.graphModel.config.axisY.label;
+        break;
+      case UPDATE_TYPE.AXISY_LOCATION:
+        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(
+          this.graphModel.config.axisY.location
+        );
+        break;
+      case UPDATE_TYPE.AXISY_COLOR:
+        this.drawData.axis.yLabel.color = this.graphModel.config.axisY.color;
+        break;
+      case UPDATE_TYPE.NEW_TIC:
+        this.drawData.tableData.selectedTic = value;
+        break;
+      case UPDATE_TYPE.AXISX_RANGE:
+      case UPDATE_TYPE.TICS_VALUE:
+      case UPDATE_TYPE.AXISY_RANGE:
+      default:
+        this.Init();
+        break;
+    }
     this.invalidated = true;
   }
 }

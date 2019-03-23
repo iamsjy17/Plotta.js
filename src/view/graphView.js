@@ -1,5 +1,6 @@
 import GraphCanvas from './graphCanvas';
 import ViewModel from './viewModel';
+import { UPDATE_TYPE } from '../util';
 
 /**
  * @name Plotta
@@ -77,9 +78,9 @@ export default class GraphView {
         }
         case 'mousemove': {
           if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
-
-          if (this.viewModel.IsNewTic(mousePos)) {
-            this.renderStack++; // Render Count++;
+          const newTic = this.viewModel.GetNewTic(mousePos);
+          if (newTic.result) {
+            this.UpdateViewModel(UPDATE_TYPE.NEW_TIC, newTic.selectedTic);
           }
           break;
         }
@@ -185,11 +186,11 @@ export default class GraphView {
    * and if there is a ViewModel, update the ViewModel to the current graph model.
    * + Render Count++;
    */
-  UpdateViewModel() {
+  UpdateViewModel(updateType, value) {
     if (!this.graphCanvas || !this.modelHandler) return;
 
     if (this.viewModel) {
-      this.viewModel.InvalidateModel();
+      this.viewModel.InvalidateModel(updateType, value);
     } else {
       this.viewModel = new ViewModel(
         this.modelHandler.GetModel(),
@@ -197,6 +198,7 @@ export default class GraphView {
         this.canvasHeight
       );
     }
+
     this.renderStack++;
   }
 

@@ -12,6 +12,11 @@ import { IsObject } from '../util';
  *
  * See function description
  * @method SetData
+ * @method SetVisible
+ * @method SetLabel
+ * @method SetColor
+ * @method SetLocation
+ * @method SetRange
  */
 export default class Axis {
   constructor(visible, type, label, color, location, range) {
@@ -44,6 +49,32 @@ export default class Axis {
     this.label = label || this.label;
     this.color = color || 'black';
     this.location = location || 'center';
+    this.range = IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
+      ? {
+        start: range.start,
+        end: range.end,
+        value: Math.abs(range.end - range.start)
+      }
+      : this.range;
+  }
+
+  SetVisible(visible) {
+    this.visible = typeof visible === 'boolean' ? visible : this.visible;
+  }
+
+  SetLabel(label) {
+    this.label = label || this.label;
+  }
+
+  SetColor(color) {
+    this.color = color || 'black';
+  }
+
+  SetLocation(location) {
+    this.location = location || 'center';
+  }
+
+  SetRange(range) {
     this.range = IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
       ? {
         start: range.start,

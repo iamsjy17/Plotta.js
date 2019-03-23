@@ -20,8 +20,8 @@ export default class Presenter {
   // eslint-disable-next-line class-methods-use-this
   _getviewHandler() {
     return {
-      UpdateViewModel: function () {
-        this.GraphView.UpdateViewModel();
+      UpdateViewModel: function (updateType, value) {
+        this.GraphView.UpdateViewModel(updateType, value);
       }.bind(this)
     };
   }

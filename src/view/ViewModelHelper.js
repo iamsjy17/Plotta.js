@@ -43,7 +43,8 @@ const ViewModelHelper = (() => {
 
   const GetLocationRatio = function (location) {
     let ratio = 50;
-    switch (location) {
+    const _location = location.toLowerCase();
+    switch (_location) {
       case 'left':
       case 'top':
         ratio = 20;
@@ -305,43 +306,48 @@ const ViewModelHelper = (() => {
      * convert the x and y values to Canvas Pos.
      */
     GetLineDatas(lineDatas) {
-      const _lineDatas = [];
+      const _lineDatas = new Map();
 
       lineDatas.forEach((value, key) => {
-        const {
-          type, legend, color, visible, datas, func, dotNum
-        } = value;
-
-        if (!visible) return;
-
-        const points = [];
-        let x;
-        let y;
-        let canvasPoint = null;
-        if (type === 'func' && typeof func === 'function') {
-          const coefficientX = this.axisX.range.value / dotNum;
-          for (let i = 0; i <= dotNum; i++) {
-            x = i * coefficientX + this.axisX.range.start;
-            y = func(x * (this.axisX.type === 'PI' ? Math.PI : 1));
-            if (typeof x !== 'number') x = NaN;
-            if (typeof y !== 'number') y = NaN;
-
-            canvasPoint = this.DataPoint2CanvasPoint(x, y);
-            if (canvasPoint) points.push(canvasPoint);
-          }
-        } else if (typeof datas === 'object' && datas.length) {
-          datas.forEach((point) => {
-            ({ x, y } = point);
-            if (typeof x !== 'number') x = NaN;
-            if (typeof y !== 'number') y = NaN;
-            canvasPoint = this.DataPoint2CanvasPoint(x, y);
-            if (canvasPoint) points.push(canvasPoint);
-          });
-        }
-        _lineDatas.push({ points, color });
+        _lineDatas.set(key, this.GetLineData(value));
       });
 
       return _lineDatas;
+    }
+
+    GetLineData(lineData) {
+      const {
+        type, legend, color, visible, datas, func, dotNum
+      } = lineData;
+
+      if (!visible) return null;
+
+      const points = [];
+      let x;
+      let y;
+      let canvasPoint = null;
+      if (type === 'func' && typeof func === 'function') {
+        const coefficientX = this.axisX.range.value / dotNum;
+        for (let i = 0; i <= dotNum; i++) {
+          x = i * coefficientX + this.axisX.range.start;
+          y = func(x * (this.axisX.type === 'PI' ? Math.PI : 1));
+          if (typeof x !== 'number') x = NaN;
+          if (typeof y !== 'number') y = NaN;
+
+          canvasPoint = this.DataPoint2CanvasPoint(x, y);
+          if (canvasPoint) points.push(canvasPoint);
+        }
+      } else if (typeof datas === 'object' && datas.length) {
+        datas.forEach((point) => {
+          ({ x, y } = point);
+          if (typeof x !== 'number') x = NaN;
+          if (typeof y !== 'number') y = NaN;
+          canvasPoint = this.DataPoint2CanvasPoint(x, y);
+          if (canvasPoint) points.push(canvasPoint);
+        });
+      }
+
+      return { points, color };
     }
 
     /**
@@ -408,8 +414,9 @@ const ViewModelHelper = (() => {
      * Gets the value of the Tic where the mouse cursor is located.
      */
     GetSelectedTic(mousePos, datas) {
-      const selectedTicPos = this.CanvasPoint2DataPoint(mousePos);
+      if (mousePos == null || datas == null) return NaN;
 
+      const selectedTicPos = this.CanvasPoint2DataPoint(mousePos);
       if (selectedTicPos === null) return NaN;
 
       const ticsArray = Object.keys(datas)
@@ -451,11 +458,14 @@ const ViewModelHelper = (() => {
      * The table information includes the width of each column.
      */
     GetTableDatas(lineDatas, tic) {
+      if (!lineDatas || lineDatas.length === 0) {
+        return null;
+      }
+
       const tableDatas = {};
       let index = -1;
       let legendWidth = 0;
       let curlegendWidth = 0;
-
       const c = document.createElement('canvas');
       const ctx = c.getContext('2d');
       ctx.font = `14px ${this.font}`;
@@ -523,6 +533,10 @@ const ViewModelHelper = (() => {
           });
         }
       });
+      if (!tableDatas.datas || tableDatas.datas.length === 0) {
+        return null;
+      }
+
       let valueWidth = 0;
       let curValueWidth = 0;
       const tics = Object.keys(tableDatas.datas);
