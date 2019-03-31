@@ -34,7 +34,7 @@ const config = {
       }
     ]
   },
-  devtool: 'inline-source-map',
+  devtool: 'cheap-source-map',
   mode: 'production'
 };
 module.exports = config;
