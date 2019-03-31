@@ -8,8 +8,7 @@ const config = {
   },
   output: {
     filename: '[name].js',
-    publicPath: '../dist/',
-
+    publicPath: './dist/',
     path: path.resolve(__dirname, 'dist/')
   },
   module: {
@@ -29,12 +28,12 @@ const config = {
         exclude: /node_modules/,
         use: {
           loader: 'worker-loader',
-          options: { name: 'PlottaDraw.worker.js' }
+          options: { name: 'plottadraw.js' }
         }
       }
     ]
   },
-  devtool: 'cheap-source-map',
+  devtool: 'inline-source-map',
   mode: 'production'
 };
 module.exports = config;

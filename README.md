@@ -2,9 +2,11 @@
 
 ## Documentation
 
-- [Introduction](https://iamsjy17.github.io/plotta/)
-- [API Documentation & Example](https://iamsjy17.github.io/plotta/api)
-- [Demo App](https://iamsjy17.github.io/plotta/demo/)
+- ~~[Introduction : Comming Soon!](https://iamsjy17.github.io/plotta/)~~
+- ~~[API Documentation & Example : Comming Soon!](https://iamsjy17.github.io/plotta/api)~~
+
+- [Demo](https://iamsjy17.github.io/plottajs-example/)
+  ![Alt Example](./Example.png)
 
 ## Features
 
@@ -23,10 +25,6 @@ You can customize various properties such as axis, grid, font, title, tics, line
 ### API
 
 Provides APIs to control various properties.
-
-## Graph Example
-
-![Alt Example](./Example.png)
 
 ## Version
 

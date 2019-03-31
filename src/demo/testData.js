@@ -1,5 +1,5 @@
 const xy = x => x;
-const dataSet = {
+const testData = {
   linedatas: [
     {
       id: 'line1',
@@ -101,5 +101,5 @@ const dataSet = {
     }
   }
 };
-
-window.testData = dataSet;
+export default testData;
+window.testData = testData;
