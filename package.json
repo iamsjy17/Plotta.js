@@ -1,7 +1,7 @@
 {
-  "name": "skeleton",
+  "name": "plotta",
   "version": "1.0.0",
-  "description": "Plotta",
+  "description": "Plotting Mathematical Functions with Javascript Library",
   "main": "plotta.js",
   "scripts": {
     "build": "webpack -w",

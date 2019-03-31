@@ -7,7 +7,7 @@ const config = {
     testData: ['./src/demo/testData.js']
   },
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].js',
     publicPath: '../dist/',
 
     path: path.resolve(__dirname, 'dist/')
@@ -29,12 +29,12 @@ const config = {
         exclude: /node_modules/,
         use: {
           loader: 'worker-loader',
-          options: { name: 'worker.bundle.js' }
+          options: { name: 'PlottaDraw.worker.js' }
         }
       }
     ]
   },
-  devtool: 'cheap-module-source-map',
-  mode: 'development'
+  devtool: 'inline-source-map',
+  mode: 'production'
 };
 module.exports = config;
