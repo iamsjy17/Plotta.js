@@ -6,12 +6,14 @@
 
 ## Demo
 
-> Version 1.0 only supports Chrome and whale browsers.
+> Version 1.0 only supports Chrome and whale browsers.  
 > Version 1.1 will be updated in May 2019, and various browsers will be supported.
 
 https://iamsjy17.github.io/plottajs-example/
 
-![Alt Example](./Example.png){:height="70%" width="70%"}
+<img width="500" alt="Example" src="./Example.png">
+
+
 
 ## Features
 
