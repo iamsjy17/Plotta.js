@@ -135,7 +135,7 @@ export default class Plotta {
    * Add New Line.
    */
   AddLine(lineData) {
-    this.GraphModel.UpdateLine(lineData);
+    this.GraphModel.AddLine(lineData);
   }
 
   /**
