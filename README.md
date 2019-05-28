@@ -1,7 +1,6 @@
 ![Alt Plotta.js](./img/plottajs_logo.png)
 
-`Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas.
-
+`Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas. 
 `Plotta.js` Renders using an HTML5 Canvas.
 
 <p align="left"><img src="./img/plotta_demo1.gif" /></a></p>
@@ -234,7 +233,7 @@ Set the graph title.
 Plotta.SetTitle("Hello Graph");
 ```
 
-### SetTitleColor\
+### SetTitleColor
 
 ##### Description
 
