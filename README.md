@@ -1,6 +1,8 @@
 ![Alt Plotta.js](./img/plottajs_logo.png)
 
-`Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas. 
+![npm version](https://img.shields.io/npm/v/plotta.js.svg) ![license](https://img.shields.io/npm/l/plotta.js.svg)
+
+`Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas.
 `Plotta.js` Renders using an HTML5 Canvas.
 
 <p align="left"><img src="./img/plotta_demo1.gif" /></a></p>
@@ -21,17 +23,15 @@ You can customize various properties such as axis, grid, font, title, tics, line
 
 <p align="left"><img src="./img/plotta_demo2.gif" /></a></p>
 
-
 ## Demo
 
 https://iamsjy17.github.io/plottajs-example/
 
-
 ## Browser Support
 
-| Chrome | Interner Exploer | Edge  | Safari | FireFox | Whale |
-| :----: | :--------------: | :---: | :----: | :-----: | :---: |
-|   O    |                  |       |   O    |         |   O   |
+| Chrome | Interner Exploer | Edge | Safari | FireFox | Whale |
+| :----: | :--------------: | :--: | :----: | :-----: | :---: |
+|   O    |                  |      |   O    |         |   O   |
 
 ## Version
 
@@ -60,7 +60,6 @@ https://iamsjy17.github.io/plottajs-example/
 #### 1.3
 
 - Add Polar coordinates Type.
-
 
 ## API Documentation
 
@@ -183,9 +182,9 @@ Delete the line that matches the id you entered.
 
 ##### Parameters
 
-| Name  | Type   | Description              |
-| :---: | ------ | ------------------------ |
-|  id   | String | Id of the line to delete |
+| Name | Type   | Description              |
+| :--: | ------ | ------------------------ |
+|  id  | String | Id of the line to delete |
 
 ##### Example
 
@@ -203,9 +202,9 @@ Set the font.
 
 ##### Parameters
 
-| Name  | Type   | Description |
-| :---: | ------ | ----------- |
-| font  | String | font        |
+| Name | Type   | Description |
+| :--: | ------ | ----------- |
+| font | String | font        |
 
 ##### Example
 
@@ -285,9 +284,9 @@ Set the visibility value of the grid.
 
 ##### Parameters
 
-| Name  | Type    | Description                   |
-| :---: | ------- | ----------------------------- |
-| show  | boolean | visibility value of the grid. |
+| Name | Type    | Description                   |
+| :--: | ------- | ----------------------------- |
+| show | boolean | visibility value of the grid. |
 
 ##### Example
 
@@ -325,9 +324,9 @@ Set the visibility value of the border.
 
 ##### Parameters
 
-| Name  | Type    | Description                     |
-| :---: | ------- | ------------------------------- |
-| show  | boolean | visibility value of the border. |
+| Name | Type    | Description                     |
+| :--: | ------- | ------------------------------- |
+| show | boolean | visibility value of the border. |
 
 ##### Example
 
@@ -385,9 +384,9 @@ Set the visibility value of the ticks.
 
 ##### Parameters
 
-| Name  | Type    | Description                    |
-| :---: | ------- | ------------------------------ |
-| show  | boolean | visibility value of the ticks. |
+| Name | Type    | Description                    |
+| :--: | ------- | ------------------------------ |
+| show | boolean | visibility value of the ticks. |
 
 ##### Example
 
@@ -446,9 +445,9 @@ Set the visibility value of the X axis label.
 
 ##### Parameters
 
-| Name  | Type    | Description                           |
-| :---: | ------- | ------------------------------------- |
-| show  | boolean | visibility value of the X axis label. |
+| Name | Type    | Description                           |
+| :--: | ------- | ------------------------------------- |
+| show | boolean | visibility value of the X axis label. |
 
 ##### Example
 
@@ -528,9 +527,9 @@ Set the visibility value of the Y axis label.
 
 ##### Parameters
 
-| Name  | Type    | Description                           |
-| :---: | ------- | ------------------------------------- |
-| show  | boolean | visibility value of the X axis label. |
+| Name | Type    | Description                           |
+| :--: | ------- | ------------------------------------- |
+| show | boolean | visibility value of the X axis label. |
 
 ##### Example
 
@@ -610,9 +609,9 @@ Set the visibility value of the Table.
 
 ##### Parameters
 
-| Name  | Type    | Description                    |
-| :---: | ------- | ------------------------------ |
-| show  | boolean | visibility value of the Table. |
+| Name | Type    | Description                    |
+| :--: | ------- | ------------------------------ |
+| show | boolean | visibility value of the Table. |
 
 ##### Example
 
