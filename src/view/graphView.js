@@ -91,49 +91,48 @@ export default class GraphView {
           break;
         }
         case 'wheel': {
-          if (e.ctrlKey === true) {
-            const curModel = this.modelHandler.GetModel();
-            const rangeX = curModel.config.axisX.range;
-            const rangeY = curModel.config.axisY.range;
-            let ticsX = curModel.config.tics.value.x;
-            let ticsY = curModel.config.tics.value.y;
+          const curModel = this.modelHandler.GetModel();
+          const rangeX = curModel.config.axisX.range;
+          const rangeY = curModel.config.axisY.range;
+          let ticsX = curModel.config.tics.value.x;
+          let ticsY = curModel.config.tics.value.y;
 
-            const minXrange = ticsX * 3;
-            const minYrange = ticsY * 3;
-            const maxXrange = ticsX * 100;
-            const maxYrange = ticsY * 100;
+          const minXrange = ticsX * 3;
+          const minYrange = ticsY * 3;
+          const maxXrange = ticsX * 100;
+          const maxYrange = ticsY * 100;
 
-            if (e.deltaY <= 0) {
-              if (rangeX.value <= minXrange || rangeY.value <= minYrange) {
-                break;
-              }
-              ticsX *= -1; // ZoomOut
-              ticsY *= -1; // ZoomOut
-            } else if (rangeX.value >= maxXrange || rangeY.value >= maxYrange) {
+          if (e.deltaY <= 0) {
+            if (rangeX.value <= minXrange || rangeY.value <= minYrange) {
               break;
             }
+            ticsX *= -1; // ZoomOut
+            ticsY *= -1; // ZoomOut
+          } else if (rangeX.value >= maxXrange || rangeY.value >= maxYrange) {
+            break;
+          }
 
-            const dataSet = {
-              config: {
-                axis: {
-                  x: {
-                    range: {
-                      start: rangeX.start - ticsX,
-                      end: rangeX.end + ticsX
-                    }
-                  },
-                  y: {
-                    range: {
-                      start: rangeY.start - ticsY,
-                      end: rangeY.end + ticsY
-                    }
+          const dataSet = {
+            config: {
+              axis: {
+                x: {
+                  range: {
+                    start: rangeX.start - ticsX,
+                    end: rangeX.end + ticsX
+                  }
+                },
+                y: {
+                  range: {
+                    start: rangeY.start - ticsY,
+                    end: rangeY.end + ticsY
                   }
                 }
               }
-            };
+            }
+          };
 
-            this.UpdateModel(dataSet); // UpdateMode -> UpdateViewModel -> Render Count++
-          }
+          this.UpdateModel(dataSet); // UpdateMode -> UpdateViewModel -> Render Count++
+          e.preventDefault();
           break;
         }
         default: {
