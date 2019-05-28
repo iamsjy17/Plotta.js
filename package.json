@@ -1,14 +1,31 @@
 {
-  "name": "plotta",
-  "version": "1.0.0",
+  "name": "plotta.js",
+  "version": "1.0.1",
   "description": "Plotting Mathematical Functions with Javascript Library",
-  "main": "plotta.js",
+  "keywords": [
+    "function",
+    "canvas",
+    "plotta.js",
+    "plotting",
+    "javascript",
+    "graph",
+    "chart"
+  ],
+  "homepage": "https://github.com/iamsjy17/Plotta.js",
+  "bugs": "https://github.com/iamsjy17/Plotta.js/issues",
+  "author": "Song Jewoo <iamsjy0808@gmail.com> (https://github.com/iamsjy17/Plotta.js/)",
+  "repository": "https://github.com/iamsjy17/Plotta.js.git",
+  "license": "MIT",
+  "files": [
+    "dist/",
+    "src/",
+    "index.html"
+  ],
+  "main": "dist/plotta.js",
   "scripts": {
     "build": "webpack -w",
     "devserver": "webpack-dev-server -w"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",

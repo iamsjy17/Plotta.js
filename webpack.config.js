@@ -8,6 +8,8 @@ const config = {
   },
   output: {
     filename: '[name].js',
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
     publicPath: './dist/',
     path: path.resolve(__dirname, 'dist/')
   },
@@ -34,6 +36,6 @@ const config = {
     ]
   },
   devtool: 'inline-source-map',
-  mode: 'production'
+  mode: 'development'
 };
 module.exports = config;
