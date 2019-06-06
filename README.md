@@ -2,7 +2,8 @@
 
 
 ![npm version](https://img.shields.io/npm/v/plotta.js.svg) ![license](https://img.shields.io/npm/l/plotta.js.svg)
-
+<a href="https://www.npmjs.com/package/plotta"><img src="https://img.shields.io/npm/dt/plotta.svg" alt="Downloads"></a>
+  
 `Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas.
 `Plotta.js` Renders using an HTML5 Canvas.
 
