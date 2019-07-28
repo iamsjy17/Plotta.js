@@ -24,18 +24,10 @@ const config = {
             presets: ['@babel/preset-env']
           }
         }
-      },
-      {
-        test: /osWorker\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'worker-loader',
-          options: { name: 'plottadraw.js' }
-        }
       }
     ]
   },
-  devtool: 'inline-source-map',
+  devtool: 'cheap-module-source-map',
   mode: 'production'
 };
 module.exports = config;
