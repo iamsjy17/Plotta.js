@@ -18,7 +18,6 @@ const CanvasHelperFactory = {
    */
   Create(canvas, dpr) {
     if (!canvas) return null;
-    if (false) return new OffscreenCanvasHelper(canvas, dpr);
     // if (Platform.IsAvailableOffScreen) return new OffscreenCanvasHelper(canvas, dpr);
     return new CanvasHelper(canvas, dpr);
   }

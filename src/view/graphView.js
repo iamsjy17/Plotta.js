@@ -10,7 +10,6 @@ import { UPDATE_TYPE } from '../util';
  * @property {Object} graphCanvas Instance of GraphCanvas
  * @property {Object} viewModel
  * @property {Object} modelHandler
- * @property {Number} renderStack Render Command Count
  * @param {Object} canvas canvas Element
  *
  *
@@ -30,12 +29,12 @@ export default class GraphView {
     this.graphCanvas = new GraphCanvas(canvas);
     this.viewModel = null;
     this.modelHandler = null;
-    this.renderStack = 0;
     this.BindEvent(canvas);
   }
 
   SetModelHandler(modelHandler) {
     this.modelHandler = modelHandler;
+    this.UpdateViewModel();
   }
 
   /**
@@ -57,88 +56,94 @@ export default class GraphView {
     let _type = type;
     if (_type === undefined) _type = EVENT_TYPE.ALL;
 
+    let frameTick = false;
     const EventDispatcher = function (e) {
-      const mousePos = { x: e.offsetX, y: e.offsetY };
-      if (!this.viewModel || !this.viewModel.IsInGraph(mousePos)) return;
-      switch (e.type) {
-        case 'keydown': {
-          break;
-        }
-        case 'keyup': {
-          break;
-        }
-        case 'keypress': {
-          break;
-        }
-        case 'click': {
-          break;
-        }
-        case 'dbclick': {
-          break;
-        }
-        case 'mousemove': {
-          if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
-          const newTic = this.viewModel.GetNewTic(mousePos);
-          if (newTic.result) {
-            this.UpdateViewModel(UPDATE_TYPE.NEW_TIC, newTic.selectedTic);
-          }
-          break;
-        }
-        case 'mousedown': {
-          break;
-        }
-        case 'mouseup': {
-          break;
-        }
-        case 'wheel': {
-          const curModel = this.modelHandler.GetModel();
-          const rangeX = curModel.config.axisX.range;
-          const rangeY = curModel.config.axisY.range;
-          let ticsX = curModel.config.tics.value.x;
-          let ticsY = curModel.config.tics.value.y;
-
-          const minXrange = ticsX * 3;
-          const minYrange = ticsY * 3;
-          const maxXrange = ticsX * 100;
-          const maxYrange = ticsY * 100;
-
-          if (e.deltaY <= 0) {
-            if (rangeX.value <= minXrange || rangeY.value <= minYrange) {
-              break;
-            }
-            ticsX *= -1; // ZoomOut
-            ticsY *= -1; // ZoomOut
-          } else if (rangeX.value >= maxXrange || rangeY.value >= maxYrange) {
+      if (frameTick) return;
+      frameTick = true;
+      requestAnimationFrame(() => {
+        frameTick = false;
+        const mousePos = { x: e.offsetX, y: e.offsetY };
+        if (!this.viewModel || !this.viewModel.IsInGraph(mousePos)) return;
+        switch (e.type) {
+          case 'keydown': {
             break;
           }
+          case 'keyup': {
+            break;
+          }
+          case 'keypress': {
+            break;
+          }
+          case 'click': {
+            break;
+          }
+          case 'dbclick': {
+            break;
+          }
+          case 'mousemove': {
+            if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
+            const newTic = this.viewModel.GetNewTic(mousePos);
+            if (newTic.result) {
+              this.UpdateViewModel(UPDATE_TYPE.NEW_TIC, newTic.selectedTic);
+            }
+            break;
+          }
+          case 'mousedown': {
+            break;
+          }
+          case 'mouseup': {
+            break;
+          }
+          case 'wheel': {
+            const curModel = this.modelHandler.GetModel();
+            const rangeX = curModel.config.axisX.range;
+            const rangeY = curModel.config.axisY.range;
+            let ticsX = curModel.config.tics.value.x;
+            let ticsY = curModel.config.tics.value.y;
 
-          const dataSet = {
-            config: {
-              axis: {
-                x: {
-                  range: {
-                    start: rangeX.start - ticsX,
-                    end: rangeX.end + ticsX
-                  }
-                },
-                y: {
-                  range: {
-                    start: rangeY.start - ticsY,
-                    end: rangeY.end + ticsY
+            const minXrange = ticsX * 3;
+            const minYrange = ticsY * 3;
+            const maxXrange = ticsX * 100;
+            const maxYrange = ticsY * 100;
+
+            if (e.deltaY <= 0) {
+              if (rangeX.value <= minXrange || rangeY.value <= minYrange) {
+                break;
+              }
+              ticsX *= -1; // ZoomOut
+              ticsY *= -1; // ZoomOut
+            } else if (rangeX.value >= maxXrange || rangeY.value >= maxYrange) {
+              break;
+            }
+
+            const dataSet = {
+              config: {
+                axis: {
+                  x: {
+                    range: {
+                      start: rangeX.start - ticsX,
+                      end: rangeX.end + ticsX
+                    }
+                  },
+                  y: {
+                    range: {
+                      start: rangeY.start - ticsY,
+                      end: rangeY.end + ticsY
+                    }
                   }
                 }
               }
-            }
-          };
+            };
 
-          this.UpdateModel(dataSet); // UpdateMode -> UpdateViewModel -> Render Count++
-          e.preventDefault();
-          break;
+            this.UpdateModel(dataSet); // UpdateMode -> UpdateViewModel -> Render Count++
+            e.preventDefault();
+            break;
+          }
+          default: {
+            break;
+          }
         }
-        default: {
-          break;
-        }
-      }
+      });
     }.bind(this);
 
     const keyboardEventList = ['keydown', 'keyup', 'keypress'];
@@ -187,7 +192,6 @@ export default class GraphView {
    */
   UpdateViewModel(updateType, value) {
     if (!this.graphCanvas || !this.modelHandler) return;
-
     if (this.viewModel) {
       this.viewModel.InvalidateModel(updateType, value);
     } else {
@@ -197,8 +201,7 @@ export default class GraphView {
         this.canvasHeight
       );
     }
-
-    this.renderStack++;
+    requestAnimationFrame(this.Render.bind(this));
   }
 
   /**
@@ -209,11 +212,9 @@ export default class GraphView {
    * and there is a RenderStack that is not drawn, draw it.
    */
   Render() {
-    if (this.renderStack > 0 && this.viewModel.invalidated) {
+    if (this.viewModel.invalidated) {
       this.graphCanvas.Draw(this.viewModel.GetDrawData());
-      this.renderStack--;
       this.viewModel.invalidated = false;
     }
-    requestAnimationFrame(this.Render.bind(this));
   }
 }
