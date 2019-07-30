@@ -32,8 +32,9 @@ export default class Axis {
         value: Math.abs(range.end - range.start)
       }
       : {
-        start: -1,
-        end: 1
+        start: -5,
+        end: 5,
+        value: 10
       };
   }
 

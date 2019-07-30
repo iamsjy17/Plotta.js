@@ -47,7 +47,7 @@ const GraphConfig = (() => {
     constructor(config) {
       this[FONT] = "'Helvetica Neue', Helvetica, Arial, sans-serif";
       this[LEGEND_VISIBLE] = true;
-      this[TITLE] = '';
+      this[TITLE] = 'Title';
       this[TITLE_COLOR] = 'black';
       this[TITLE_LOCATION] = 'center';
       this[GRID_VISIBLE] = true;
