@@ -112,6 +112,11 @@ const plotta = new Plotta(canvas, {
     }
   ],
   config: {
+    title: {
+      location: "center",
+      color: "#666666",
+      text: "Plotta.js"
+    },
     grid: {
       visible: true,
       color: "#888888"
