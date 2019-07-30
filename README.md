@@ -1,9 +1,8 @@
 <p align="left"><img src="./img/plottajs_logo.png" width="80%"/></a></p>
 
-
 ![npm version](https://img.shields.io/npm/v/plotta.js.svg) ![license](https://img.shields.io/npm/l/plotta.js.svg)
 <a href="https://www.npmjs.com/package/plotta"><img src="https://img.shields.io/npm/dt/plotta.svg" alt="Downloads"></a>
-  
+
 `Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas.
 `Plotta.js` Renders using an HTML5 Canvas.
 
@@ -11,9 +10,9 @@
 
 ## Features
 
-#### High-performance canvas rendering
+#### HTML5 Canvas
 
-Supports high performance canvas rendering with offscreencanvas, vsync, and supports hdpi.
+Plotta.js uses HTML5 Canvas without library dependency.
 
 #### User Interections
 
@@ -27,17 +26,11 @@ You can customize various properties such as axis, grid, font, title, tics, line
 
 ## Demo
 
-https://iamsjy17.github.io/plottajs-example/
-
-## Browser Support
-
-| Chrome | Interner Exploer | Edge  | Safari | FireFox | Whale |
-| :----: | :--------------: | :---: | :----: | :-----: | :---: |
-|   O    |                  |       |   O    |         |   O   |
+https://iamsjy17.github.io/plotta.js-page/
 
 ## Version
 
-1.1
+1.1.1
 
 ## RoadMap
 
@@ -48,13 +41,13 @@ https://iamsjy17.github.io/plottajs-example/
 
 #### 1.1
 
-- Coming in May 2019
-- Version 1.1 will be updated in May 2019, and various browsers will be supported.
+- Coming in July 2019
+- Version 1.1 will be updated in July 2019, and various browsers will be supported.
 - More documentation on usage and examples will be added.
 
 #### 1.2
 
-- Coming in July 2019
+- Coming in October 2019
 - Add Line Types.(Dotted lines, stick lines, Bar etc.)
 - Add export related API(SaveAsImage, SaveAsPDF)
 - The demo app is coming soon.
@@ -62,6 +55,75 @@ https://iamsjy17.github.io/plottajs-example/
 #### 1.3
 
 - Add Polar coordinates Type.
+
+## Browser Support
+
+| Chrome | Interner Exploer |  Edge  | Safari | FireFox | Whale  |
+| :----: | :--------------: | :----: | :----: | :-----: | :----: |
+| Latest |        9+        | Latest | Latest | Latest  | Latest |
+
+## Download
+
+#### Development
+
+Uncompressed file for development
+
+- https://iamsjy17.github.io/plotta.js-page/release/latest/dist/plotta.js
+
+#### Production
+
+Compressed file for Production
+
+- https://iamsjy17.github.io/plotta.js-page/release/latest/dist/plotta.min.js
+
+## Install
+
+```bash
+$ npm install plotta
+```
+
+## Usage
+
+### HTML
+
+```html
+<canvas
+  id="canvas"
+  width="700px"
+  height="700px"
+  style="width:700px; height:700px; border:1px solid #d3d3d3;"
+></canvas>
+```
+
+### Javascript
+
+```js
+const canvas = document.getElementById("canvas");
+const plotta = new Plotta(canvas, {
+  linedatas: [
+    {
+      id: "line1",
+      type: "func",
+      legend: "cos",
+      color: "#55A8DE",
+      visible: true,
+      func: Math.cos,
+      dotNum: 1000
+    }
+  ],
+  config: {
+    grid: {
+      visible: true,
+      color: "#888888"
+    },
+    border: {
+      visible: true,
+      color: "#DDDDDD",
+      width: 1
+    }
+  }
+});
+```
 
 ## API Documentation
 
@@ -184,9 +246,9 @@ Delete the line that matches the id you entered.
 
 ##### Parameters
 
-| Name  | Type   | Description              |
-| :---: | ------ | ------------------------ |
-|  id   | String | Id of the line to delete |
+| Name | Type   | Description              |
+| :--: | ------ | ------------------------ |
+|  id  | String | Id of the line to delete |
 
 ##### Example
 
@@ -204,9 +266,9 @@ Set the font.
 
 ##### Parameters
 
-| Name  | Type   | Description |
-| :---: | ------ | ----------- |
-| font  | String | font        |
+| Name | Type   | Description |
+| :--: | ------ | ----------- |
+| font | String | font        |
 
 ##### Example
 
@@ -286,9 +348,9 @@ Set the visibility value of the grid.
 
 ##### Parameters
 
-| Name  | Type    | Description                   |
-| :---: | ------- | ----------------------------- |
-| show  | boolean | visibility value of the grid. |
+| Name | Type    | Description                   |
+| :--: | ------- | ----------------------------- |
+| show | boolean | visibility value of the grid. |
 
 ##### Example
 
@@ -326,9 +388,9 @@ Set the visibility value of the border.
 
 ##### Parameters
 
-| Name  | Type    | Description                     |
-| :---: | ------- | ------------------------------- |
-| show  | boolean | visibility value of the border. |
+| Name | Type    | Description                     |
+| :--: | ------- | ------------------------------- |
+| show | boolean | visibility value of the border. |
 
 ##### Example
 
@@ -386,9 +448,9 @@ Set the visibility value of the ticks.
 
 ##### Parameters
 
-| Name  | Type    | Description                    |
-| :---: | ------- | ------------------------------ |
-| show  | boolean | visibility value of the ticks. |
+| Name | Type    | Description                    |
+| :--: | ------- | ------------------------------ |
+| show | boolean | visibility value of the ticks. |
 
 ##### Example
 
@@ -447,9 +509,9 @@ Set the visibility value of the X axis label.
 
 ##### Parameters
 
-| Name  | Type    | Description                           |
-| :---: | ------- | ------------------------------------- |
-| show  | boolean | visibility value of the X axis label. |
+| Name | Type    | Description                           |
+| :--: | ------- | ------------------------------------- |
+| show | boolean | visibility value of the X axis label. |
 
 ##### Example
 
@@ -529,9 +591,9 @@ Set the visibility value of the Y axis label.
 
 ##### Parameters
 
-| Name  | Type    | Description                           |
-| :---: | ------- | ------------------------------------- |
-| show  | boolean | visibility value of the X axis label. |
+| Name | Type    | Description                           |
+| :--: | ------- | ------------------------------------- |
+| show | boolean | visibility value of the X axis label. |
 
 ##### Example
 
@@ -611,15 +673,27 @@ Set the visibility value of the Table.
 
 ##### Parameters
 
-| Name  | Type    | Description                    |
-| :---: | ------- | ------------------------------ |
-| show  | boolean | visibility value of the Table. |
+| Name | Type    | Description                    |
+| :--: | ------- | ------------------------------ |
+| show | boolean | visibility value of the Table. |
 
 ##### Example
 
 ```js
 Plotta.ShowTable(true);
 ```
+
+## Commit Message Convention
+
+- feat: A new feature
+- fix: A bug fix
+- docs: Documentation only changes
+- style: Changes that do not affect the meaning of the code. Such as white-space, formatting, missing semi-colons, etc.
+- refactor: A code change that neither fixes a bug nor adds a feature
+- perf: A code change that improves performance
+- test: Adding missing or correcting existing tests
+- chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
+- skip: For commits made by after the 1st commit. Usually for applying code review changes.
 
 ## CopyLight & License
 
