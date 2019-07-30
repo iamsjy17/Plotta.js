@@ -79,7 +79,7 @@ Compressed file for Production
 ## Install
 
 ```bash
-$ npm install plotta
+$ npm install plotta.js
 ```
 
 ## Usage
