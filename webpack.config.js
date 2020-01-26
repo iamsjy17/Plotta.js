@@ -7,11 +7,11 @@ const config = {
     testData: ['./src/demo/testData.js']
   },
   output: {
-    filename: '[name].js',
+    filename: '[name].min.js',
     libraryTarget: 'umd',
     umdNamedDefine: true,
-    publicPath: './dist/',
-    path: path.resolve(__dirname, 'dist/')
+    publicPath: './dist/release/',
+    path: path.resolve(__dirname, 'dist/release/')
   },
   module: {
     rules: [

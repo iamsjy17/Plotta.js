@@ -1,13 +1,14 @@
 {
-  "name": "plotta",
+  "name": "plotta.js",
   "version": "1.1.1",
   "description": "Plotting Mathematical Functions with Javascript Library",
   "keywords": [
-    "function",
     "canvas",
     "plotta.js",
     "plotting",
-    "javascript",
+    "mathlab",
+    "javascript functional graph",
+    "javascript plotting library",
     "graph",
     "chart"
   ],
@@ -21,7 +22,7 @@
     "src/",
     "index.html"
   ],
-  "main": "dist/plotta.js",
+  "main": "dist/release/plotta.js",
   "scripts": {
     "build": "webpack -w",
     "devserver": "webpack-dev-server -w"
