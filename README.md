@@ -47,14 +47,12 @@ https://iamsjy17.github.io/plotta.js-page/
 
 #### 1.2
 
-- Coming in October 2019
-- Add Line Types.(Dotted lines, stick lines, Bar etc.)
-- Add export related API(SaveAsImage, SaveAsPDF)
+- Coming in 2020
+- Feature: Line Types.(Dotted lines, stick lines, Bar etc.)
+- Feature: Add export related API(SaveAsImage, SaveAsPDF)
+- Feature: Move coordinate system by dragging mouse
 - The demo app is coming soon.
 
-#### 1.3
-
-- Add Polar coordinates Type.
 
 ## Browser Support
 
