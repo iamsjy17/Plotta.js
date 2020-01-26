@@ -1,7 +1,7 @@
 <p align="left"><img src="./img/plottajs_logo.png" width="80%"/></a></p>
 
 ![npm version](https://img.shields.io/npm/v/plotta.js.svg) ![license](https://img.shields.io/npm/l/plotta.js.svg)
-<a href="https://www.npmjs.com/package/plotta"><img src="https://img.shields.io/npm/dt/plotta.svg" alt="Downloads"></a>
+<a href="https://www.npmjs.com/package/plotta.js"><img src="https://img.shields.io/npm/dt/plotta.js.svg" alt="Downloads"></a>
 
 `Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas.
 `Plotta.js` Renders using an HTML5 Canvas.
@@ -47,14 +47,12 @@ https://iamsjy17.github.io/plotta.js-page/
 
 #### 1.2
 
-- Coming in October 2019
-- Add Line Types.(Dotted lines, stick lines, Bar etc.)
-- Add export related API(SaveAsImage, SaveAsPDF)
+- Coming in 2020
+- Feature: Line Types.(Dotted lines, stick lines, Bar etc.)
+- Feature: Add export related API(SaveAsImage, SaveAsPDF)
+- Feature: Move coordinate system by dragging mouse
 - The demo app is coming soon.
 
-#### 1.3
-
-- Add Polar coordinates Type.
 
 ## Browser Support
 
@@ -79,7 +77,7 @@ Compressed file for Production
 ## Install
 
 ```bash
-$ npm install plotta
+$ npm install plotta.js
 ```
 
 ## Usage
