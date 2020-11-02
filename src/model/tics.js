@@ -21,15 +21,16 @@ export default class Tics {
     this.visible = typeof visible === 'boolean' ? visible : true;
     this.color = color || 'black';
 
-    this.value = IsObject(value) && value.x && value.y
-      ? {
-        x: value.x,
-        y: value.y
-      }
-      : {
-        x: 1,
-        y: 1
-      };
+    this.value =
+      IsObject(value) && value.x && value.y
+        ? {
+            x: value.x,
+            y: value.y,
+          }
+        : {
+            x: 1,
+            y: 1,
+          };
   }
 
   /**
@@ -42,12 +43,13 @@ export default class Tics {
     this.type = type || this.type;
     this.visible = typeof visible === 'boolean' ? visible : this.visible;
     this.color = color || this.color;
-    this.value = IsObject(value) && value.x && value.y
-      ? {
-        x: value.x,
-        y: value.y
-      }
-      : this.value;
+    this.value =
+      IsObject(value) && value.x && value.y
+        ? {
+            x: value.x,
+            y: value.y,
+          }
+        : this.value;
   }
 
   SetVisible(visible) {
@@ -59,11 +61,12 @@ export default class Tics {
   }
 
   SetValue(value) {
-    this.value = IsObject(value) && value.x && value.y
-      ? {
-        x: value.x,
-        y: value.y
-      }
-      : this.value;
+    this.value =
+      IsObject(value) && value.x && value.y
+        ? {
+            x: value.x,
+            y: value.y,
+          }
+        : this.value;
   }
 }

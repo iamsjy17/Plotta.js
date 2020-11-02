@@ -20,7 +20,7 @@ const CanvasHelperFactory = {
     if (!canvas) return null;
     // if (Platform.IsAvailableOffScreen) return new OffscreenCanvasHelper(canvas, dpr);
     return new CanvasHelper(canvas, dpr);
-  }
+  },
 };
 
 export default CanvasHelperFactory;

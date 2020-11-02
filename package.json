@@ -25,7 +25,9 @@
   "main": "dist/release/plotta.js",
   "scripts": {
     "build": "webpack -w",
-    "devserver": "webpack-dev-server -w"
+    "devserver": "webpack-dev-server -w",
+    "lint": "npx eslint src/**/*.js",
+    "lint:fix": "npx eslint --fix src/**/*.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -35,10 +37,14 @@
     "babel-loader": "^8.0.5",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14",
     "worker-loader": "^2.0.0"
-  }
+  },
+  "dependencies": {}
 }

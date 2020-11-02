@@ -22,7 +22,7 @@ export default class OffscreenCanvasHelper {
     this.worker.postMessage(
       {
         canvas: this.offscreenCanvas,
-        dpr: this.dpr
+        dpr: this.dpr,
       },
       [this.offscreenCanvas]
     );
@@ -37,7 +37,7 @@ export default class OffscreenCanvasHelper {
    */
   Draw(drawData) {
     this.worker.postMessage({
-      drawData
+      drawData,
     });
   }
 }
