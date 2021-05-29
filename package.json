@@ -1,6 +1,6 @@
 {
   "name": "plotta.js",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Plotting Mathematical Functions with Javascript Library",
   "keywords": [
     "canvas",
@@ -27,24 +27,39 @@
     "build": "webpack -w",
     "devserver": "webpack-dev-server -w",
     "lint": "npx eslint src/**/*.js",
-    "lint:fix": "npx eslint --fix src/**/*.js"
+    "lint:fix": "npx eslint --fix src/**/*.js",
+    "release": "standard-version"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.2.3",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "babel-loader": "^8.0.5",
     "eslint": "^5.9.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^6.0.0",
     "prettier": "^2.1.2",
+    "standard-version": "^9.3.0",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14",
     "worker-loader": "^2.0.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
 }
