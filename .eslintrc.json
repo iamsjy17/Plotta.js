@@ -1,5 +1,5 @@
 {
-  "extends": "airbnb-base",
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
   "rules": {
     "no-plusplus": 0,
     "no-unused-expressions": 0,
@@ -11,10 +11,12 @@
     "import/prefer-default-export": 0,
     "no-underscore-dangle": 0,
     "no-bitwise": 0,
-    "import/no-webpack-loader-syntax": 0
+    "import/no-webpack-loader-syntax": 0,
+    "import/no-extraneous-dependencies": 0
   },
   "env": {
     "browser": true,
+    "amd": true,
     "node": true
   }
 }

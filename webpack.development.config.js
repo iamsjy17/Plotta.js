@@ -1,17 +1,16 @@
 const path = require('path');
-const webpack = require('webpack');
 
 const config = {
   entry: {
     plotta: ['@babel/polyfill', './src/plotta.js'],
-    testData: ['./src/demo/testData.js']
+    testData: ['./src/demo/testData.js'],
   },
   output: {
-    filename: '[name].min.js',
+    filename: '[name].js',
     libraryTarget: 'umd',
     umdNamedDefine: true,
-    publicPath: './dist/release/',
-    path: path.resolve(__dirname, 'dist/release/')
+    publicPath: './dist/dev/',
+    path: path.resolve(__dirname, 'dist/dev/'),
   },
   module: {
     rules: [
@@ -21,13 +20,16 @@ const config = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
-      }
-    ]
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+    ],
   },
-  devtool: 'cheap-module-source-map',
-  mode: 'production'
+  devServer: {
+    port: 9000,
+  },
+  devtool: 'inline-source-map',
+  mode: 'development',
 };
 module.exports = config;

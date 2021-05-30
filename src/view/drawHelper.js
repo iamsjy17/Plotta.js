@@ -49,9 +49,18 @@ DrawHelper.DrawLegends = function (ctx, font, legendRect, legendDatas) {
   legendDatas.forEach((legendData) => {
     const { color, legend, point } = legendData;
     ctx.save();
-    ctx.fillText(legend, legendRect.x + point.x + rectSize + margin, legendRect.y + point.y);
+    ctx.fillText(
+      legend,
+      legendRect.x + point.x + rectSize + margin,
+      legendRect.y + point.y
+    );
     if (color) ctx.fillStyle = color;
-    ctx.fillRect(legendRect.x + point.x, legendRect.y + point.y, rectSize, rectSize);
+    ctx.fillRect(
+      legendRect.x + point.x,
+      legendRect.y + point.y,
+      rectSize,
+      rectSize
+    );
     ctx.restore();
   });
   ctx.restore();
@@ -90,9 +99,7 @@ DrawHelper.DrawAxis = function (ctx, font, axis) {
  * @type function
  */
 DrawHelper.DrawBorder = function (ctx, rect, border) {
-  const {
-    visible, type, color, width
-  } = border;
+  const { visible, type, color, width } = border;
 
   if (!visible) return;
 
@@ -144,9 +151,7 @@ DrawHelper.DrawGrid = function (ctx, width, height, grid, tics) {
  * Default lineWidth : 0.3px, textAlign : center, textBaseline : middle, ticSize : 10px
  */
 DrawHelper.DrawTics = function (ctx, width, height, tics) {
-  const {
-    visible, color, xTics, yTics
-  } = tics;
+  const { visible, color, xTics, yTics } = tics;
 
   if (!visible) return;
 
@@ -243,10 +248,23 @@ DrawHelper.DrawLines = function (ctx, graphRect, lineDatas) {
  */
 DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
   const {
-    visible, selectedTic, colors, legends, legendWidth, datas
+    visible,
+    selectedTic,
+    colors,
+    legends,
+    legendWidth,
+    datas,
   } = tableData;
 
-  if (!visible || isNaN(selectedTic) || !colors || !legends || !legendWidth || !datas) return;
+  if (
+    !visible ||
+    isNaN(selectedTic) ||
+    !colors ||
+    !legends ||
+    !legendWidth ||
+    !datas
+  )
+    return;
 
   const rectSize = 15;
   const margin = 4;
@@ -273,7 +291,7 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
   const tableWidth = tableColumnPos[2] - tableColumnPos[0];
   let tablePoint = null;
   if (selectedTicData.canvasPos.x > centerPosX) {
-    tableColumnPos = tableColumnPos.map(pos => pos - tableWidth - 40);
+    tableColumnPos = tableColumnPos.map((pos) => pos - tableWidth - 40);
     tablePoint = { x: tableColumnPos[2], y: tableRowPos[0] };
   } else {
     tablePoint = { x: tableColumnPos[0], y: tableRowPos[0] };
@@ -307,7 +325,11 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
   ctx.stroke();
   ctx.restore();
 
-  ctx.fillText(`${selectedTic}`, tableColumnPos[0] + margin, tableRowPos[0] + margin);
+  ctx.fillText(
+    `${selectedTic}`,
+    tableColumnPos[0] + margin,
+    tableRowPos[0] + margin
+  );
   for (let i = 0; i < selectedTicData.length; i++) {
     ctx.save();
     ctx.fillText(
@@ -321,14 +343,25 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
       tableRowPos[i + 1] + margin
     );
     ctx.fillStyle = colors[i];
-    ctx.fillRect(tableColumnPos[0] + margin, tableRowPos[i + 1] + margin, rectSize, rectSize);
+    ctx.fillRect(
+      tableColumnPos[0] + margin,
+      tableRowPos[i + 1] + margin,
+      rectSize,
+      rectSize
+    );
 
     if (
-      selectedTicData[i].canvasPos >= graphRect.y
-      && selectedTicData[i].canvasPos <= graphRect.y + graphRect.h
+      selectedTicData[i].canvasPos >= graphRect.y &&
+      selectedTicData[i].canvasPos <= graphRect.y + graphRect.h
     ) {
       ctx.beginPath();
-      ctx.arc(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos, 4, 0, Math.PI * 2);
+      ctx.arc(
+        selectedTicData.canvasPos.x,
+        selectedTicData[i].canvasPos,
+        4,
+        0,
+        Math.PI * 2
+      );
       ctx.fill();
     }
     ctx.restore();
@@ -357,7 +390,7 @@ DrawHelper.Draw = function (ctx, drawData) {
     canvasWidth,
     canvasHeight,
     graphRect,
-    legendRect
+    legendRect,
   } = drawData;
   ctx.font = `12px ${font}`;
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);

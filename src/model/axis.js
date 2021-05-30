@@ -18,6 +18,7 @@ import { IsObject } from '../util';
  * @method SetLocation
  * @method SetRange
  */
+
 export default class Axis {
   constructor(visible, type, label, color, location, range) {
     this.visible = typeof visible === 'boolean' ? visible : true;
@@ -25,17 +26,20 @@ export default class Axis {
     this.label = label || '';
     this.color = color || 'black';
     this.location = location || 'center';
-    this.range = IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
-      ? {
-        start: range.start,
-        end: range.end,
-        value: Math.abs(range.end - range.start)
-      }
-      : {
-        start: -5,
-        end: 5,
-        value: 10
-      };
+    this.range =
+      IsObject(range) &&
+      typeof range.start === 'number' &&
+      typeof range.end === 'number'
+        ? {
+            start: range.start,
+            end: range.end,
+            value: Math.abs(range.end - range.start),
+          }
+        : {
+            start: -5,
+            end: 5,
+            value: 10,
+          };
   }
 
   /**
@@ -50,13 +54,16 @@ export default class Axis {
     this.label = label || this.label;
     this.color = color || 'black';
     this.location = location || 'center';
-    this.range = IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
-      ? {
-        start: range.start,
-        end: range.end,
-        value: Math.abs(range.end - range.start)
-      }
-      : this.range;
+    this.range =
+      IsObject(range) &&
+      typeof range.start === 'number' &&
+      typeof range.end === 'number'
+        ? {
+            start: range.start,
+            end: range.end,
+            value: Math.abs(range.end - range.start),
+          }
+        : this.range;
   }
 
   SetVisible(visible) {
@@ -76,13 +83,16 @@ export default class Axis {
   }
 
   SetRange(range) {
-    this.range = IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
-      ? {
-        start: range.start,
-        end: range.end,
-        value: Math.abs(range.end - range.start)
-      }
-      : this.range;
+    this.range =
+      IsObject(range) &&
+      typeof range.start === 'number' &&
+      typeof range.end === 'number'
+        ? {
+            start: range.start,
+            end: range.end,
+            value: Math.abs(range.end - range.start),
+          }
+        : this.range;
   }
 
   get Start() {
