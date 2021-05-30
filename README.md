@@ -42,17 +42,15 @@ https://iamsjy17.github.io/plotta.js-page/
 #### 1.1
 
 - Coming in July 2019
-- Version 1.1 will be updated in July 2019, and various browsers will be supported.
-- More documentation on usage and examples will be added.
+- Added more documentation on usage and examples.
+- Supports all major browsers.
 
 #### 1.2
 
-- Coming in 2020
+- Coming in 2021
 - Feature: Line Types.(Dotted lines, stick lines, Bar etc.)
 - Feature: Add export related API(SaveAsImage, SaveAsPDF)
 - Feature: Move coordinate system by dragging mouse
-- The demo app is coming soon.
-
 
 ## Browser Support
 
@@ -96,35 +94,35 @@ $ npm install plotta.js
 ### Javascript
 
 ```js
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById('canvas');
 const plotta = new Plotta(canvas, {
   linedatas: [
     {
-      id: "line1",
-      type: "func",
-      legend: "cos",
-      color: "#55A8DE",
+      id: 'line1',
+      type: 'func',
+      legend: 'cos',
+      color: '#55A8DE',
       visible: true,
       func: Math.cos,
-      dotNum: 1000
-    }
+      dotNum: 1000,
+    },
   ],
   config: {
     title: {
-      location: "center",
-      color: "#666666",
-      text: "Plotta.js"
+      location: 'center',
+      color: '#666666',
+      text: 'Plotta.js',
     },
     grid: {
       visible: true,
-      color: "#888888"
+      color: '#888888',
     },
     border: {
       visible: true,
-      color: "#DDDDDD",
-      width: 1
-    }
-  }
+      color: '#DDDDDD',
+      width: 1,
+    },
+  },
 });
 ```
 
@@ -188,26 +186,26 @@ Update `line1`, gridVisible, gridColor, borderVisible, borderColor, borderWidth.
 Plotta.UpdateGraph({
   linedatas: [
     {
-      id: "line1",
-      type: "func",
-      legend: "cos",
-      color: "#55A8DE",
+      id: 'line1',
+      type: 'func',
+      legend: 'cos',
+      color: '#55A8DE',
       visible: true,
       func: Math.cos,
-      dotNum: 1000
-    }
+      dotNum: 1000,
+    },
   ],
   config: {
     grid: {
       visible: true,
-      color: "#888888"
+      color: '#888888',
     },
     border: {
       visible: true,
-      color: "#DDDDDD",
-      width: 1
-    }
-  }
+      color: '#DDDDDD',
+      width: 1,
+    },
+  },
 });
 ```
 
@@ -229,13 +227,13 @@ Add New Line. If it is an existing id, it is not added.
 
 ```js
 Plotta.AddLine({
-  id: "line1",
-  type: "func",
-  legend: "cos",
-  color: "#55A8DE",
+  id: 'line1',
+  type: 'func',
+  legend: 'cos',
+  color: '#55A8DE',
   visible: true,
   func: Math.cos,
-  dotNum: 1000
+  dotNum: 1000,
 });
 ```
 
@@ -256,7 +254,7 @@ Delete the line that matches the id you entered.
 ##### Example
 
 ```js
-Plotta.DeleteLine("line1");
+Plotta.DeleteLine('line1');
 ```
 
 ### SetFont
@@ -296,7 +294,7 @@ Set the graph title.
 ##### Example
 
 ```js
-Plotta.SetTitle("Hello Graph");
+Plotta.SetTitle('Hello Graph');
 ```
 
 ### SetTitleColor
@@ -338,7 +336,7 @@ The default value is center.
 ##### Example
 
 ```js
-Plotta.SetTitleLocation("left");
+Plotta.SetTitleLocation('left');
 ```
 
 ### ShowGrid
@@ -539,7 +537,7 @@ Set the X axis label.
 ##### Example
 
 ```js
-Plotta.SetAxisXLabel("X label");
+Plotta.SetAxisXLabel('X label');
 ```
 
 ### SetAxisXLabelColor
@@ -581,7 +579,7 @@ The default value is center.
 ##### Example
 
 ```js
-Plotta.SetAxisXLabelLocation("center");
+Plotta.SetAxisXLabelLocation('center');
 ```
 
 ### ShowAxisYLabel
@@ -621,7 +619,7 @@ Set the Y axis label.
 ##### Example
 
 ```js
-Plotta.SetAxisXLabel("Y label");
+Plotta.SetAxisXLabel('Y label');
 ```
 
 ### SetAxisYLabelColor
@@ -663,7 +661,7 @@ The default value is center.
 ##### Example
 
 ```js
-Plotta.SetAxisYLabelLocation("middle");
+Plotta.SetAxisYLabelLocation('middle');
 ```
 
 ### ShowTable
@@ -688,15 +686,7 @@ Plotta.ShowTable(true);
 
 ## Commit Message Convention
 
-- feat: A new feature
-- fix: A bug fix
-- docs: Documentation only changes
-- style: Changes that do not affect the meaning of the code. Such as white-space, formatting, missing semi-colons, etc.
-- refactor: A code change that neither fixes a bug nor adds a feature
-- perf: A code change that improves performance
-- test: Adding missing or correcting existing tests
-- chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
-- skip: For commits made by after the 1st commit. Usually for applying code review changes.
+- https://www.conventionalcommits.org/en/v1.0.0/
 
 ## CopyLight & License
 
