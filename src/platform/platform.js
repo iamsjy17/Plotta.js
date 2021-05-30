@@ -13,7 +13,7 @@ const pf = {};
 
 pf.PLATFORM_TYPE = {
   NODE: 0,
-  BROWSER: 1
+  BROWSER: 1,
 };
 
 pf.BROWSER_TYPE = {
@@ -22,12 +22,12 @@ pf.BROWSER_TYPE = {
   IE_11: 2,
   EDGE: 3,
   SAFARI: 4,
-  FIREFOX: 5
+  FIREFOX: 5,
 };
 
 pf.currentPlaform = (function () {
   return pf.PLATFORM_TYPE.BROWSER;
-}());
+})();
 
 pf.currentBrowser = (function () {
   const agt = navigator.userAgent.toLowerCase();
@@ -49,12 +49,13 @@ pf.currentBrowser = (function () {
   }
 
   return type;
-}());
+})();
 
 pf.IsAvailableOffScreen = (function () {
   return (
-    pf.currentPlaform === pf.PLATFORM_TYPE.BROWSER && pf.currentBrowser === pf.BROWSER_TYPE.CHROME
+    pf.currentPlaform === pf.PLATFORM_TYPE.BROWSER &&
+    pf.currentBrowser === pf.BROWSER_TYPE.CHROME
   );
-}());
+})();
 
 export default pf;

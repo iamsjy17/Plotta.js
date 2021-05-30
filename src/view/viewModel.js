@@ -42,39 +42,39 @@ export default class ViewModel {
       title: {
         text: '',
         color: 'black',
-        position: null
+        position: null,
       },
       border: {
         visible: true,
         type: '',
         color: '',
         width: 1,
-        rect: null
+        rect: null,
       },
       grid: {
         visible: true,
         type: '',
-        color: ''
+        color: '',
       },
       axis: {
         xLabel: {
           visible: true,
           text: '',
           color: 'black',
-          position: null
+          position: null,
         },
         yLabel: {
           visible: true,
           text: '',
           color: 'black',
-          position: null
-        }
+          position: null,
+        },
       },
       tics: {
         visible: true,
         color: 'black',
         xTics: null,
-        yTics: null
+        yTics: null,
       },
       lineDatas: null,
       legendDatas: null,
@@ -83,8 +83,8 @@ export default class ViewModel {
         selectedTic: NaN,
         colors: [],
         legends: [],
-        datas: []
-      }
+        datas: [],
+      },
     };
 
     this.Init();
@@ -110,11 +110,12 @@ export default class ViewModel {
   IsInGraph(mousePos) {
     const graphRect = this.viewModelHelper.GetGraphRect();
     if (
-      mousePos.x <= graphRect.x + graphRect.w
-      && mousePos.x >= graphRect.x
-      && mousePos.y <= graphRect.y + graphRect.h
-      && mousePos.y >= graphRect.y
-    ) return true;
+      mousePos.x <= graphRect.x + graphRect.w &&
+      mousePos.x >= graphRect.x &&
+      mousePos.y <= graphRect.y + graphRect.h &&
+      mousePos.y >= graphRect.y
+    )
+      return true;
     return false;
   }
 
@@ -161,7 +162,7 @@ export default class ViewModel {
       axisX,
       axisY,
       tics,
-      tableVisible
+      tableVisible,
     } = this.graphModel.config;
     this.viewModelHelper = new ViewModelHelper(
       font,
@@ -175,7 +176,9 @@ export default class ViewModel {
     this.drawData.canvasHeight = this.canvasHeight;
 
     // LegendDatas
-    this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
+    this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(
+      this.graphModel.lineDatas
+    );
 
     // ViewRect
     this.drawData.graphRect = this.viewModelHelper.GetGraphRect();
@@ -185,7 +188,9 @@ export default class ViewModel {
     this.drawData.font = font;
     this.drawData.title.text = title;
     this.drawData.title.color = titleColor;
-    this.drawData.title.position = this.viewModelHelper.GetTitlePos(titleLocation);
+    this.drawData.title.position = this.viewModelHelper.GetTitlePos(
+      titleLocation
+    );
 
     // Border
     this.drawData.border.visible = borderVisible;
@@ -202,13 +207,17 @@ export default class ViewModel {
     this.drawData.axis.xLabel.visible = axisX.visible;
     this.drawData.axis.xLabel.text = axisX.label;
     this.drawData.axis.xLabel.color = axisX.color;
-    this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(axisX.location);
+    this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(
+      axisX.location
+    );
 
     // AxisY
     this.drawData.axis.yLabel.visible = axisY.visible;
     this.drawData.axis.yLabel.text = axisY.label;
     this.drawData.axis.yLabel.color = axisY.color;
-    this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(axisY.location);
+    this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(
+      axisY.location
+    );
 
     // Tics
     this.drawData.tics.visible = tics.visible;
@@ -217,10 +226,15 @@ export default class ViewModel {
     this.drawData.tics.yTics = this.viewModelHelper.GetyTics(tics.value.y);
 
     // LineDatas
-    this.drawData.lineDatas = this.viewModelHelper.GetLineDatas(this.graphModel.lineDatas);
+    this.drawData.lineDatas = this.viewModelHelper.GetLineDatas(
+      this.graphModel.lineDatas
+    );
 
     // tableDatas
-    const tableDatas = this.viewModelHelper.GetTableDatas(this.graphModel.lineDatas, tics.value.x);
+    const tableDatas = this.viewModelHelper.GetTableDatas(
+      this.graphModel.lineDatas,
+      tics.value.x
+    );
     if (tableDatas) {
       this.drawData.tableData.visible = tableVisible;
       this.drawData.tableData.colors = tableDatas.colors;
@@ -249,7 +263,9 @@ export default class ViewModel {
         // Update Rect, Tics, Table, Lines, Axis, Legends
 
         // LegendDatas
-        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
+        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(
+          this.graphModel.lineDatas
+        );
 
         // Rect
         this.drawData.graphRect = this.viewModelHelper.GetGraphRect();
@@ -260,7 +276,9 @@ export default class ViewModel {
         } else {
           this.drawData.lineDatas.set(
             value,
-            this.viewModelHelper.GetLineData(this.graphModel.lineDatas.get(value))
+            this.viewModelHelper.GetLineData(
+              this.graphModel.lineDatas.get(value)
+            )
           );
         }
 
@@ -300,7 +318,9 @@ export default class ViewModel {
         this.viewModelHelper.font = this.graphModel.config.font;
 
         // legendDatas
-        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
+        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(
+          this.graphModel.lineDatas
+        );
 
         // tableDatas
         const tableDatas = this.viewModelHelper.GetTableDatas(

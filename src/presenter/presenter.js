@@ -20,7 +20,7 @@ export default class Presenter {
     return {
       UpdateViewModel: function (updateType, value) {
         this.GraphView.UpdateViewModel(updateType, value);
-      }.bind(this)
+      }.bind(this),
     };
   }
 
@@ -32,7 +32,7 @@ export default class Presenter {
       }.bind(this),
       UpdateModel: function (dataSet) {
         this.GraphModel.UpdateModel(dataSet);
-      }.bind(this)
+      }.bind(this),
     };
   }
 }

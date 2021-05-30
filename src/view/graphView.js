@@ -50,7 +50,7 @@ export default class GraphView {
       KEYBOARD: 1,
       MOUSE: 2,
       WHEEL: 4,
-      ALL: 7
+      ALL: 7,
     };
 
     let _type = type;
@@ -81,7 +81,8 @@ export default class GraphView {
             break;
           }
           case 'mousemove': {
-            if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
+            if (!this.graphCanvas || !this.modelHandler || !this.viewModel)
+              return;
             const newTic = this.viewModel.GetNewTic(mousePos);
             if (newTic.result) {
               this.UpdateViewModel(UPDATE_TYPE.NEW_TIC, newTic.selectedTic);
@@ -122,17 +123,17 @@ export default class GraphView {
                   x: {
                     range: {
                       start: rangeX.start - ticsX,
-                      end: rangeX.end + ticsX
-                    }
+                      end: rangeX.end + ticsX,
+                    },
                   },
                   y: {
                     range: {
                       start: rangeY.start - ticsY,
-                      end: rangeY.end + ticsY
-                    }
-                  }
-                }
-              }
+                      end: rangeY.end + ticsY,
+                    },
+                  },
+                },
+              },
             };
 
             this.UpdateModel(dataSet); // UpdateMode -> UpdateViewModel -> Render Count++
@@ -147,7 +148,13 @@ export default class GraphView {
     }.bind(this);
 
     const keyboardEventList = ['keydown', 'keyup', 'keypress'];
-    const mouseEventList = ['click', 'dbclick', 'mousemove', 'mousedown', 'mouseup'];
+    const mouseEventList = [
+      'click',
+      'dbclick',
+      'mousemove',
+      'mousedown',
+      'mouseup',
+    ];
     const wheelEventList = ['wheel'];
     const eventList = [];
 

@@ -250,25 +250,45 @@ const GraphConfig = (() => {
       if (IsObject(config.axis)) {
         if (IsObject(config.axis.x)) {
           const {
-            visible, type, label, color, location, range
+            visible,
+            type,
+            label,
+            color,
+            location,
+            range,
           } = config.axis.x;
 
-          if (this.axisX) this.axisX.SetData(visible, type, label, color, location, range);
-          else this.axisX = new Axis(visible, type, label, color, location, range);
+          if (this.axisX)
+            this.axisX.SetData(visible, type, label, color, location, range);
+          else
+            this.axisX = new Axis(visible, type, label, color, location, range);
         }
         if (IsObject(config.axis.y)) {
-          const {
-            visible, label, color, location, range
-          } = config.axis.y;
+          const { visible, label, color, location, range } = config.axis.y;
 
-          if (this.axisY) this.axisY.SetData(visible, 'Number', label, color, location, range);
-          else this.axisY = new Axis(visible, 'Number', label, color, location, range);
+          if (this.axisY) {
+            this.axisY.SetData(
+              visible,
+              'Number',
+              label,
+              color,
+              location,
+              range
+            );
+          } else {
+            this.axisY = new Axis(
+              visible,
+              'Number',
+              label,
+              color,
+              location,
+              range
+            );
+          }
         }
       }
       if (IsObject(config.tics)) {
-        const {
-          type, visible, color, value
-        } = config.tics;
+        const { type, visible, color, value } = config.tics;
 
         if (this.tics) this.tics.SetData(type, visible, color, value);
         else this.tics = new Tics(type, visible, color, value);

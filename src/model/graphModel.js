@@ -42,13 +42,14 @@ export default class GraphModel {
   InitModel(dataSet) {
     if (!IsObject(dataSet)) return;
 
-    dataSet.linedatas.length
-      && dataSet.linedatas.forEach((item) => {
-        const {
-          id, type, legend, color, visible, datas, func, dotNum
-        } = item;
+    dataSet.linedatas.length &&
+      dataSet.linedatas.forEach((item) => {
+        const { id, type, legend, color, visible, datas, func, dotNum } = item;
 
-        this.lineDatas.set(id, new LineData(type, legend, color, visible, datas, func, dotNum));
+        this.lineDatas.set(
+          id,
+          new LineData(type, legend, color, visible, datas, func, dotNum)
+        );
       });
 
     if (IsObject(dataSet.config)) {
@@ -72,10 +73,11 @@ export default class GraphModel {
     if (Object.prototype.hasOwnProperty.call(dataSet, 'linedatas')) {
       this.lineDatas.clear();
       dataSet.linedatas.forEach((item) => {
-        const {
-          id, type, legend, color, visible, datas, func, dotNum
-        } = item;
-        this.lineDatas.set(id, new LineData(type, legend, color, visible, datas, func, dotNum));
+        const { id, type, legend, color, visible, datas, func, dotNum } = item;
+        this.lineDatas.set(
+          id,
+          new LineData(type, legend, color, visible, datas, func, dotNum)
+        );
       });
     }
 
@@ -92,15 +94,17 @@ export default class GraphModel {
    * Add New Line.
    */
   AddLine(lineData) {
-    const {
-      id, type, legend, color, visible, datas, func, dotNum
-    } = lineData;
+    const { id, type, legend, color, visible, datas, func, dotNum } = lineData;
 
     if (this.lineDatas.has(id)) {
       return false;
     }
-    this.lineDatas.set(id, new LineData(type, legend, color, visible, datas, func, dotNum));
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.NEW_LINE, id);
+    this.lineDatas.set(
+      id,
+      new LineData(type, legend, color, visible, datas, func, dotNum)
+    );
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.NEW_LINE, id);
     return true;
   }
 
@@ -110,7 +114,8 @@ export default class GraphModel {
    */
   DeleteLine(id) {
     this.lineDatas.delete(id);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.DELETE_LINE, id);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.DELETE_LINE, id);
   }
 
   /**
@@ -120,16 +125,20 @@ export default class GraphModel {
    * Update the line data.
    */
   UpdateLine(lineData) {
-    const {
-      id, type, legend, color, visible, datas, func, dotNum
-    } = lineData;
+    const { id, type, legend, color, visible, datas, func, dotNum } = lineData;
 
     if (this.lineDatas.has(id)) {
-      this.lineDatas.get(id).Update(type, legend, color, visible, datas, func, dotNum);
+      this.lineDatas
+        .get(id)
+        .Update(type, legend, color, visible, datas, func, dotNum);
     } else {
-      this.lineDatas.set(id, new LineData(type, legend, color, visible, datas, func, dotNum));
+      this.lineDatas.set(
+        id,
+        new LineData(type, legend, color, visible, datas, func, dotNum)
+      );
     }
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.UPDATE_LINE, id);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.UPDATE_LINE, id);
   }
 
   /**
@@ -154,12 +163,14 @@ export default class GraphModel {
 
   SetTitleColor(color) {
     this.config.titleColor = color;
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_COLOR);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_COLOR);
   }
 
   SetTitleLocation(location) {
     this.config.titleLocation = location;
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_LOCATION);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_LOCATION);
   }
 
   /**
@@ -170,12 +181,14 @@ export default class GraphModel {
    */
   ShowGrid(show) {
     this.config.gridVisible = show;
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_VISIBLE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_VISIBLE);
   }
 
   SetGridColor(color) {
     this.config.gridColor = color;
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_COLOR);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_COLOR);
   }
 
   /**
@@ -186,17 +199,20 @@ export default class GraphModel {
    */
   ShowBorder(show) {
     this.config.borderVisible = show;
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_VISIBLE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_VISIBLE);
   }
 
   SetBorderColor(color) {
     this.config.borderColor = color;
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_COLOR);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_COLOR);
   }
 
   SetBorderWidth(width) {
     this.config.borderWidth = width;
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_WIDTH);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_WIDTH);
   }
 
   /**
@@ -207,17 +223,20 @@ export default class GraphModel {
    */
   ShowTics(show) {
     this.config.tics.SetVisible(show);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_VISIBLE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_VISIBLE);
   }
 
   SetTicsColor(color) {
     this.config.tics.SetColor(color);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_COLOR);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_COLOR);
   }
 
   SetTicsValue(value) {
     this.config.tics.SetValue(value);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_VALUE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_VALUE);
   }
 
   /**
@@ -228,27 +247,32 @@ export default class GraphModel {
    */
   ShowAxisXLabel(show) {
     this.config.axisX.SetVisible(show);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_VISIBLE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_VISIBLE);
   }
 
   SetAxisXLabel(label) {
     this.config.axisX.SetLabel(label);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_LABEL);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_LABEL);
   }
 
   SetAxisXLabelLocation(location) {
     this.config.axisX.SetLocation(location);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_LOCATION);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_LOCATION);
   }
 
   SetAxisXLabelColor(color) {
     this.config.axisX.SetColor(color);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_COLOR);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_COLOR);
   }
 
   SetAxisXRange(range) {
     this.config.axisX.SetRange(range);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_RANGE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_RANGE);
   }
 
   /**
@@ -259,27 +283,32 @@ export default class GraphModel {
    */
   ShowAxisYLabel(show) {
     this.config.axisY.SetVisible(show);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_VISIBLE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_VISIBLE);
   }
 
   SetAxisYLabel(label) {
     this.config.axisY.SetLabel(label);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_LABEL);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_LABEL);
   }
 
   SetAxisYLabelLocation(location) {
     this.config.axisY.SetLocation(location);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_LOCATION);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_LOCATION);
   }
 
   SetAxisYLabelColor(color) {
     this.config.axisY.SetColor(color);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_COLOR);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_COLOR);
   }
 
   SetAxisYRange(range) {
     this.config.axisY.SetRange(range);
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_RANGE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_RANGE);
   }
 
   /**
@@ -290,6 +319,7 @@ export default class GraphModel {
    */
   ShowTable(show) {
     this.config.tableVisible = show;
-    if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.TABLE_VISIBLE);
+    if (this.viewHandler)
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TABLE_VISIBLE);
   }
 }

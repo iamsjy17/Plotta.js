@@ -1,4 +1,4 @@
-const xy = x => x;
+const xy = (x) => x;
 const testData = {
   linedatas: [
     {
@@ -8,7 +8,7 @@ const testData = {
       color: '#55A8DE',
       visible: true,
       func: Math.cos,
-      dotNum: 1000
+      dotNum: 1000,
     },
     {
       id: 'line2',
@@ -17,7 +17,7 @@ const testData = {
       color: '#A2CCB6',
       visible: true,
       func: Math.sin,
-      dotNum: 1000
+      dotNum: 1000,
     },
     {
       id: 'line3',
@@ -26,7 +26,7 @@ const testData = {
       color: '#C94346',
       visible: true,
       func: xy,
-      dotNum: 1000
+      dotNum: 1000,
     },
     {
       id: 'line4',
@@ -35,7 +35,7 @@ const testData = {
       color: '#F7CE6F',
       visible: true,
       func: Math.sinh,
-      dotNum: 1000
+      dotNum: 1000,
     },
     {
       id: 'line5',
@@ -44,8 +44,8 @@ const testData = {
       color: '#9168F6',
       visible: true,
       func: Math.cosh,
-      dotNum: 1000
-    }
+      dotNum: 1000,
+    },
   ],
   config: {
     font: '',
@@ -53,26 +53,26 @@ const testData = {
     title: {
       location: 'center',
       color: '#666666',
-      text: 'Plotta.js'
+      text: 'Plotta.js',
     },
     grid: {
       type: '',
       visible: true,
-      color: '#888888'
+      color: '#888888',
     },
     border: {
       type: '',
       visible: true,
       color: '#DDDDDD',
-      width: 1
+      width: 1,
     },
     tics: {
       visible: true,
       color: '#888888',
       value: {
         x: 2,
-        y: 2
-      }
+        y: 2,
+      },
     },
     axis: {
       x: {
@@ -82,8 +82,8 @@ const testData = {
         location: 'center',
         range: {
           start: -10,
-          end: 10
-        }
+          end: 10,
+        },
       },
       y: {
         visible: true,
@@ -92,14 +92,14 @@ const testData = {
         location: 'center',
         range: {
           start: -10,
-          end: 10
-        }
-      }
+          end: 10,
+        },
+      },
     },
     table: {
-      visible: true
-    }
-  }
+      visible: true,
+    },
+  },
 };
 export default testData;
 window.testData = testData;
