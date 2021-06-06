@@ -64,13 +64,15 @@ https://iamsjy17.github.io/plotta.js-page/
 
 Uncompressed file for development
 
-- https://iamsjy17.github.io/plotta.js-page/release/latest/dist/plotta.js
+- https://iamsjy17.github.io/plotta.js-page/release/latest/plotta.js
+- https://iamsjy17.github.io/plotta.js-page/release/[VERSION]/plotta.js
 
 #### Production
 
 Compressed file for Production
 
-- https://iamsjy17.github.io/plotta.js-page/release/latest/dist/plotta.min.js
+- https://iamsjy17.github.io/plotta.js-page/release/latest/plotta.min.js
+- https://iamsjy17.github.io/plotta.js-page/release/[VERSION]/plotta.min.js
 
 ## Install
 
