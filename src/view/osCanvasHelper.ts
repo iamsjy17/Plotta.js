@@ -1,7 +1,5 @@
-// eslint-disable-next-line import/no-unresolved
-
 /**
- * @name CanvasHelper
+ * @name OffscreenCanvasHelper
  * @type class
  * @property {Object} presentationCanvas
  * @property {Number} dpr Divice Pixel Ratio
@@ -13,7 +11,12 @@
  */
 
 export default class OffscreenCanvasHelper {
-  constructor(canvas, dpr) {
+  presentationCanvas: HTMLCanvasElement;
+  offscreenCanvas: OffscreenCanvas;
+  dpr: number;
+  worker: Worker;
+
+  constructor(canvas: HTMLCanvasElement, dpr: number) {
     this.presentationCanvas = canvas;
     this.offscreenCanvas = this.presentationCanvas.transferControlToOffscreen();
     this.dpr = dpr;
@@ -29,12 +32,10 @@ export default class OffscreenCanvasHelper {
 
   /**
    * @name Draw
-   * @type function
-   * @param {Object} drawData
    * @description
    * Pass DrawData to the Worker.
    */
-  Draw(drawData) {
+  Draw(drawData): void {
     this.worker.postMessage({
       drawData,
     });
