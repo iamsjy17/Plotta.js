@@ -29,7 +29,8 @@
     "prod": "webpack --config ./webpack.production.config",
     "lint": "npx eslint src/**/*.js",
     "lint:fix": "npx eslint --fix src/**/*.js",
-    "release": "standard-version"
+    "release": "standard-version",
+    "deptree": "npx depcruise --include-only '^src' --output-type dot src | dot -T svg > doc/dependencygraph.svg"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
@@ -40,6 +41,7 @@
     "@commitlint/config-conventional": "^12.1.4",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "dependency-cruiser": "^11.0.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-prettier": "^6.15.0",
