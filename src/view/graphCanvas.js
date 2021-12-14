@@ -14,7 +14,7 @@ import CanvasHelperFactory from './canvasHelperFactory';
 class GraphCanvas {
   constructor(canvas) {
     const dpr = window.devicePixelRatio || 1;
-    const { width, height } = canvas;
+    const {width, height} = canvas;
     // Scale up the size of the canvas.
     canvas.width = width * dpr;
     canvas.height = height * dpr;

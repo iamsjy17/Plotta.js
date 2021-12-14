@@ -1,7 +1,7 @@
 import DrawHelper from './drawHelper';
 
-self.onmessage = (event) => {
-  const { canvas, dpr, drawData } = event.data;
+self.onmessage = event => {
+  const {canvas, dpr, drawData} = event.data;
   if (canvas) {
     self.canvas = canvas;
     self.ctx = canvas.getContext('2d');

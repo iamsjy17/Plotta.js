@@ -22,7 +22,7 @@ const DrawHelper = {};
  * Default fontSize : 20px, textAlign : Center, textBaseline : middle
  */
 DrawHelper.DrawTitle = function (ctx, font, title) {
-  const { text, color, position } = title;
+  const {text, color, position} = title;
   ctx.save();
   ctx.font = `20px ${font}`;
   ctx.textAlign = 'center';
@@ -46,21 +46,12 @@ DrawHelper.DrawLegends = function (ctx, font, legendRect, legendDatas) {
   ctx.textBaseline = 'top';
   const rectSize = 15;
   const margin = 5;
-  legendDatas.forEach((legendData) => {
-    const { color, legend, point } = legendData;
+  legendDatas.forEach(legendData => {
+    const {color, legend, point} = legendData;
     ctx.save();
-    ctx.fillText(
-      legend,
-      legendRect.x + point.x + rectSize + margin,
-      legendRect.y + point.y
-    );
+    ctx.fillText(legend, legendRect.x + point.x + rectSize + margin, legendRect.y + point.y);
     if (color) ctx.fillStyle = color;
-    ctx.fillRect(
-      legendRect.x + point.x,
-      legendRect.y + point.y,
-      rectSize,
-      rectSize
-    );
+    ctx.fillRect(legendRect.x + point.x, legendRect.y + point.y, rectSize, rectSize);
     ctx.restore();
   });
   ctx.restore();
@@ -74,7 +65,7 @@ DrawHelper.DrawLegends = function (ctx, font, legendRect, legendDatas) {
  * Default fontSize : 14px, textAlign : Center, textBaseline : middle
  */
 DrawHelper.DrawAxis = function (ctx, font, axis) {
-  const { xLabel, yLabel } = axis;
+  const {xLabel, yLabel} = axis;
 
   ctx.save();
   ctx.font = `14px ${font}`;
@@ -99,7 +90,7 @@ DrawHelper.DrawAxis = function (ctx, font, axis) {
  * @type function
  */
 DrawHelper.DrawBorder = function (ctx, rect, border) {
-  const { visible, type, color, width } = border;
+  const {visible, type, color, width} = border;
 
   if (!visible) return;
 
@@ -118,8 +109,8 @@ DrawHelper.DrawBorder = function (ctx, rect, border) {
  * Default lineWidth : 0.3px
  */
 DrawHelper.DrawGrid = function (ctx, width, height, grid, tics) {
-  const { xTics, yTics } = tics;
-  const { visible, type, color } = grid;
+  const {xTics, yTics} = tics;
+  const {visible, type, color} = grid;
   if (!visible) return;
 
   ctx.save();
@@ -151,7 +142,7 @@ DrawHelper.DrawGrid = function (ctx, width, height, grid, tics) {
  * Default lineWidth : 0.3px, textAlign : center, textBaseline : middle, ticSize : 10px
  */
 DrawHelper.DrawTics = function (ctx, width, height, tics) {
-  const { visible, color, xTics, yTics } = tics;
+  const {visible, color, xTics, yTics} = tics;
 
   if (!visible) return;
 
@@ -212,8 +203,8 @@ DrawHelper.DrawLines = function (ctx, graphRect, lineDatas) {
   const region = new Path2D();
   region.rect(graphRect.x, graphRect.y, graphRect.w, graphRect.h);
   ctx.clip(region, 'evenodd');
-  lineDatas.forEach((lineData) => {
-    const { points, color } = lineData;
+  lineDatas.forEach(lineData => {
+    const {points, color} = lineData;
     ctx.strokeStyle = color;
     let isStart = true;
     let yCriticalPoint = points[0].y;
@@ -247,24 +238,9 @@ DrawHelper.DrawLines = function (ctx, graphRect, lineDatas) {
  * Default fillAlpha : 0.5, fillColor : white, LineColor : #999999
  */
 DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
-  const {
-    visible,
-    selectedTic,
-    colors,
-    legends,
-    legendWidth,
-    datas,
-  } = tableData;
+  const {visible, selectedTic, colors, legends, legendWidth, datas} = tableData;
 
-  if (
-    !visible ||
-    isNaN(selectedTic) ||
-    !colors ||
-    !legends ||
-    !legendWidth ||
-    !datas
-  )
-    return;
+  if (!visible || isNaN(selectedTic) || !colors || !legends || !legendWidth || !datas) return;
 
   const rectSize = 15;
   const margin = 4;
@@ -291,10 +267,10 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
   const tableWidth = tableColumnPos[2] - tableColumnPos[0];
   let tablePoint = null;
   if (selectedTicData.canvasPos.x > centerPosX) {
-    tableColumnPos = tableColumnPos.map((pos) => pos - tableWidth - 40);
-    tablePoint = { x: tableColumnPos[2], y: tableRowPos[0] };
+    tableColumnPos = tableColumnPos.map(pos => pos - tableWidth - 40);
+    tablePoint = {x: tableColumnPos[2], y: tableRowPos[0]};
   } else {
-    tablePoint = { x: tableColumnPos[0], y: tableRowPos[0] };
+    tablePoint = {x: tableColumnPos[0], y: tableRowPos[0]};
   }
 
   ctx.save();
@@ -325,43 +301,17 @@ DrawHelper.DrawTable = function (ctx, font, graphRect, tableData) {
   ctx.stroke();
   ctx.restore();
 
-  ctx.fillText(
-    `${selectedTic}`,
-    tableColumnPos[0] + margin,
-    tableRowPos[0] + margin
-  );
+  ctx.fillText(`${selectedTic}`, tableColumnPos[0] + margin, tableRowPos[0] + margin);
   for (let i = 0; i < selectedTicData.length; i++) {
     ctx.save();
-    ctx.fillText(
-      `${legends[i]}`,
-      tableColumnPos[0] + rectSize + margin * 3,
-      tableRowPos[i + 1] + margin
-    );
-    ctx.fillText(
-      `${selectedTicData[i].dataPos.toFixed(3)}`,
-      tableColumnPos[1] + margin,
-      tableRowPos[i + 1] + margin
-    );
+    ctx.fillText(`${legends[i]}`, tableColumnPos[0] + rectSize + margin * 3, tableRowPos[i + 1] + margin);
+    ctx.fillText(`${selectedTicData[i].dataPos.toFixed(3)}`, tableColumnPos[1] + margin, tableRowPos[i + 1] + margin);
     ctx.fillStyle = colors[i];
-    ctx.fillRect(
-      tableColumnPos[0] + margin,
-      tableRowPos[i + 1] + margin,
-      rectSize,
-      rectSize
-    );
+    ctx.fillRect(tableColumnPos[0] + margin, tableRowPos[i + 1] + margin, rectSize, rectSize);
 
-    if (
-      selectedTicData[i].canvasPos >= graphRect.y &&
-      selectedTicData[i].canvasPos <= graphRect.y + graphRect.h
-    ) {
+    if (selectedTicData[i].canvasPos >= graphRect.y && selectedTicData[i].canvasPos <= graphRect.y + graphRect.h) {
       ctx.beginPath();
-      ctx.arc(
-        selectedTicData.canvasPos.x,
-        selectedTicData[i].canvasPos,
-        4,
-        0,
-        Math.PI * 2
-      );
+      ctx.arc(selectedTicData.canvasPos.x, selectedTicData[i].canvasPos, 4, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.restore();
