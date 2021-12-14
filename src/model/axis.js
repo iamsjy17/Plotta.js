@@ -1,4 +1,4 @@
-import { IsObject } from '../util';
+import {IsObject} from '../util';
 
 /**
  * @name Axis
@@ -27,9 +27,7 @@ export default class Axis {
     this.color = color || 'black';
     this.location = location || 'center';
     this.range =
-      IsObject(range) &&
-      typeof range.start === 'number' &&
-      typeof range.end === 'number'
+      IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
         ? {
             start: range.start,
             end: range.end,
@@ -55,9 +53,7 @@ export default class Axis {
     this.color = color || 'black';
     this.location = location || 'center';
     this.range =
-      IsObject(range) &&
-      typeof range.start === 'number' &&
-      typeof range.end === 'number'
+      IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
         ? {
             start: range.start,
             end: range.end,
@@ -84,9 +80,7 @@ export default class Axis {
 
   SetRange(range) {
     this.range =
-      IsObject(range) &&
-      typeof range.start === 'number' &&
-      typeof range.end === 'number'
+      IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
         ? {
             start: range.start,
             end: range.end,

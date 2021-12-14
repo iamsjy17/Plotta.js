@@ -1,6 +1,6 @@
 import GraphCanvas from './graphCanvas';
 import ViewModel from './viewModel';
-import { UPDATE_TYPE } from '../util';
+import {UPDATE_TYPE} from '../util';
 
 /**
  * @name Plotta
@@ -62,7 +62,7 @@ export default class GraphView {
       frameTick = true;
       requestAnimationFrame(() => {
         frameTick = false;
-        const mousePos = { x: e.offsetX, y: e.offsetY };
+        const mousePos = {x: e.offsetX, y: e.offsetY};
         if (!this.viewModel || !this.viewModel.IsInGraph(mousePos)) return;
         switch (e.type) {
           case 'keydown': {
@@ -81,8 +81,7 @@ export default class GraphView {
             break;
           }
           case 'mousemove': {
-            if (!this.graphCanvas || !this.modelHandler || !this.viewModel)
-              return;
+            if (!this.graphCanvas || !this.modelHandler || !this.viewModel) return;
             const newTic = this.viewModel.GetNewTic(mousePos);
             if (newTic.result) {
               this.UpdateViewModel(UPDATE_TYPE.NEW_TIC, newTic.selectedTic);
@@ -148,28 +147,22 @@ export default class GraphView {
     }.bind(this);
 
     const keyboardEventList = ['keydown', 'keyup', 'keypress'];
-    const mouseEventList = [
-      'click',
-      'dbclick',
-      'mousemove',
-      'mousedown',
-      'mouseup',
-    ];
+    const mouseEventList = ['click', 'dbclick', 'mousemove', 'mousedown', 'mouseup'];
     const wheelEventList = ['wheel'];
     const eventList = [];
 
     if (_type & EVENT_TYPE.KEYBOARD) {
-      keyboardEventList.forEach((event) => {
+      keyboardEventList.forEach(event => {
         eventList.push(event);
       });
     }
     if (_type & EVENT_TYPE.MOUSE) {
-      mouseEventList.forEach((event) => {
+      mouseEventList.forEach(event => {
         eventList.push(event);
       });
     }
     if (_type & EVENT_TYPE.WHEEL) {
-      wheelEventList.forEach((event) => {
+      wheelEventList.forEach(event => {
         eventList.push(event);
       });
     }
@@ -202,11 +195,7 @@ export default class GraphView {
     if (this.viewModel) {
       this.viewModel.InvalidateModel(updateType, value);
     } else {
-      this.viewModel = new ViewModel(
-        this.modelHandler.GetModel(),
-        this.canvasWidth,
-        this.canvasHeight
-      );
+      this.viewModel = new ViewModel(this.modelHandler.GetModel(), this.canvasWidth, this.canvasHeight);
     }
     requestAnimationFrame(this.Render.bind(this));
   }

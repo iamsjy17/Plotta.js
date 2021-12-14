@@ -52,10 +52,7 @@ pf.currentBrowser = (function () {
 })();
 
 pf.IsAvailableOffScreen = (function () {
-  return (
-    pf.currentPlaform === pf.PLATFORM_TYPE.BROWSER &&
-    pf.currentBrowser === pf.BROWSER_TYPE.CHROME
-  );
+  return pf.currentPlaform === pf.PLATFORM_TYPE.BROWSER && pf.currentBrowser === pf.BROWSER_TYPE.CHROME;
 })();
 
 export default pf;

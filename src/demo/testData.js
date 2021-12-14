@@ -1,4 +1,4 @@
-const xy = (x) => x;
+const xy = x => x;
 const testData = {
   linedatas: [
     {

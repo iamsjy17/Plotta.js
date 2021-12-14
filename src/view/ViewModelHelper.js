@@ -202,7 +202,7 @@ const ViewModelHelper = (() => {
      * @Description
      * Change the Canvas Point to Data Point.
      */
-    CanvasPoint2DataPoint({ x, y }) {
+    CanvasPoint2DataPoint({x, y}) {
       const graphPoint = this.CanvasPoint2GraphPoint(x, y);
       if (graphPoint) return this.GraphPoint2DataPoint(graphPoint);
       return null;
@@ -228,16 +228,12 @@ const ViewModelHelper = (() => {
      * @Description
      * Change the Graph Point to Data Point.
      */
-    GraphPoint2DataPoint({ x, y }) {
+    GraphPoint2DataPoint({x, y}) {
       if (typeof x !== 'number' || typeof y !== 'number') return null;
 
       const dataPoint = {};
-      dataPoint.x =
-        (x / this.graphRect.w) * this.axisX.range.value +
-        this.axisX.range.start;
-      dataPoint.y =
-        (y / this.graphRect.h) * this.axisY.range.value +
-        this.axisY.range.start;
+      dataPoint.x = (x / this.graphRect.w) * this.axisX.range.value + this.axisX.range.start;
+      dataPoint.y = (y / this.graphRect.h) * this.axisY.range.value + this.axisY.range.start;
 
       return dataPoint;
     }
@@ -261,12 +257,8 @@ const ViewModelHelper = (() => {
         return null;
 
       const graphPoint = {};
-      graphPoint.x =
-        ((x - this.axisX.range.start) / this.axisX.range.value) *
-        this.graphRect.w;
-      graphPoint.y =
-        ((y - this.axisY.range.start) / this.axisY.range.value) *
-        this.graphRect.h;
+      graphPoint.x = ((x - this.axisX.range.start) / this.axisX.range.value) * this.graphRect.w;
+      graphPoint.y = ((y - this.axisY.range.start) / this.axisY.range.value) * this.graphRect.h;
 
       return graphPoint;
     }
@@ -297,18 +289,14 @@ const ViewModelHelper = (() => {
      * @Description
      * Change the Graph Point to Canvas Point.
      */
-    GraphPoint2CanvasPoint({ x, y }) {
+    GraphPoint2CanvasPoint({x, y}) {
       if (typeof x !== 'number' || typeof y !== 'number') return null;
 
       const canvasPoint = {};
       canvasPoint.x = this.graphRect.x + x;
       canvasPoint.y = this.graphRect.y + this.graphRect.h - y;
 
-      if (
-        canvasPoint.x > this.graphRect.x + this.graphRect.w ||
-        canvasPoint.x < this.graphRect.x
-      )
-        return null;
+      if (canvasPoint.x > this.graphRect.x + this.graphRect.w || canvasPoint.x < this.graphRect.x) return null;
 
       return canvasPoint;
     }
@@ -332,7 +320,7 @@ const ViewModelHelper = (() => {
     }
 
     GetLineData(lineData) {
-      const { type, legend, color, visible, datas, func, dotNum } = lineData;
+      const {type, legend, color, visible, datas, func, dotNum} = lineData;
 
       if (!visible) return null;
 
@@ -352,8 +340,8 @@ const ViewModelHelper = (() => {
           if (canvasPoint) points.push(canvasPoint);
         }
       } else if (typeof datas === 'object' && datas.length) {
-        datas.forEach((point) => {
-          ({ x, y } = point);
+        datas.forEach(point => {
+          ({x, y} = point);
           if (typeof x !== 'number') x = NaN;
           if (typeof y !== 'number') y = NaN;
           canvasPoint = this.DataPoint2CanvasPoint(x, y);
@@ -361,7 +349,7 @@ const ViewModelHelper = (() => {
         });
       }
 
-      return { points, color };
+      return {points, color};
     }
 
     /**
@@ -392,8 +380,8 @@ const ViewModelHelper = (() => {
       ctx.font = `14px ${this.font}`;
 
       lineDatas.forEach((value, index) => {
-        const { legend, color, visible } = value;
-        const point = { x: 0, y: 0 };
+        const {legend, color, visible} = value;
+        const point = {x: 0, y: 0};
 
         if (!visible) return;
 
@@ -409,13 +397,12 @@ const ViewModelHelper = (() => {
         point.x = lineWidth - curLegendWidth;
         point.y = legendRect.h - lineHeight;
 
-        legendDatas.push({ legend, color, point });
+        legendDatas.push({legend, color, point});
       });
 
       ctx.restore();
       this.legendRect = legendRect;
-      this.graphRect.h =
-        this.canvasHeight - (TOP_OFFSET + BOTTOM_OFFSET + this.legendRect.h);
+      this.graphRect.h = this.canvasHeight - (TOP_OFFSET + BOTTOM_OFFSET + this.legendRect.h);
       this.legendRect.y = this.graphRect.y + this.graphRect.h + BOTTOM_OFFSET;
 
       return legendDatas;
@@ -436,7 +423,7 @@ const ViewModelHelper = (() => {
 
       const ticsArray = Object.keys(datas)
         .map(Number)
-        .filter((tic) => !isNaN(tic))
+        .filter(tic => !isNaN(tic))
         .sort((a, b) => a - b);
 
       const binarySearch = function (arr, value) {
@@ -447,9 +434,7 @@ const ViewModelHelper = (() => {
         }
 
         if (value < arr[mid + 1] && value > arr[mid]) {
-          return Math.abs(value - arr[mid]) < Math.abs(value - arr[mid + 1])
-            ? arr[mid]
-            : arr[mid + 1];
+          return Math.abs(value - arr[mid]) < Math.abs(value - arr[mid + 1]) ? arr[mid] : arr[mid + 1];
         }
 
         if (arr[mid] < value && arr.length > 1) {
@@ -485,8 +470,8 @@ const ViewModelHelper = (() => {
       const ctx = c.getContext('2d');
       ctx.font = `14px ${this.font}`;
 
-      lineDatas.forEach((value) => {
-        const { type, legend, color, visible, datas, func, dotNum } = value;
+      lineDatas.forEach(value => {
+        const {type, legend, color, visible, datas, func, dotNum} = value;
 
         if (!visible) return;
         index++;
@@ -494,8 +479,7 @@ const ViewModelHelper = (() => {
         let y;
 
         curlegendWidth = ctx.measureText(legend).width;
-        legendWidth =
-          legendWidth > curlegendWidth ? legendWidth : curlegendWidth;
+        legendWidth = legendWidth > curlegendWidth ? legendWidth : curlegendWidth;
 
         if (!tableDatas.legends) tableDatas.legends = [];
         if (!tableDatas.colors) tableDatas.colors = [];
@@ -512,12 +496,12 @@ const ViewModelHelper = (() => {
             y = func(x * (this.axisX.type === 'PI' ? Math.PI : 1));
             if (typeof x !== 'number') x = NaN;
             if (typeof y !== 'number') y = NaN;
-            ticDatas.push({ x, y });
+            ticDatas.push({x, y});
             x += tic;
           }
 
           ticDatas.forEach((point, idx, array) => {
-            ({ x, y } = point);
+            ({x, y} = point);
             if (typeof x !== 'number') x = NaN;
             if (typeof y !== 'number') y = NaN;
 
@@ -533,7 +517,7 @@ const ViewModelHelper = (() => {
           });
         } else if (typeof datas === 'object' && datas.length) {
           datas.forEach((point, idx, array) => {
-            ({ x, y } = point);
+            ({x, y} = point);
             if (typeof x !== 'number') x = NaN;
             if (typeof y !== 'number') y = NaN;
 
@@ -554,17 +538,13 @@ const ViewModelHelper = (() => {
       let valueWidth = 0;
       let curValueWidth = 0;
       const tics = Object.keys(tableDatas.datas);
-      tics.forEach((tic) => {
-        tableDatas.datas[tic].forEach((value) => {
+      tics.forEach(tic => {
+        tableDatas.datas[tic].forEach(value => {
           curValueWidth = ctx.measureText(value.dataPos.toFixed(3)).width;
           valueWidth = valueWidth > curValueWidth ? valueWidth : curValueWidth;
         });
-        const array = tableDatas.datas[tic].filter((cur) => {
-          if (
-            cur.dataPos >= this.axisY.range.start &&
-            cur.dataPos <= this.axisY.range.end
-          )
-            return true;
+        const array = tableDatas.datas[tic].filter(cur => {
+          if (cur.dataPos >= this.axisY.range.start && cur.dataPos <= this.axisY.range.end) return true;
           return false;
         });
         if (array.length > 0) {

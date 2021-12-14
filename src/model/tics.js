@@ -1,4 +1,4 @@
-import { IsObject } from '../util';
+import {IsObject} from '../util';
 
 /**
  * @name Tics

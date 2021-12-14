@@ -32,12 +32,7 @@ export default class CanvasHelper {
    */
   Draw(drawData) {
     DrawHelper.Draw(this.backgroundContext, drawData);
-    this.presentationContext.clearRect(
-      0,
-      0,
-      this.presentationCanvas.width,
-      this.presentationCanvas.height
-    );
+    this.presentationContext.clearRect(0, 0, this.presentationCanvas.width, this.presentationCanvas.height);
     this.presentationContext.drawImage(this.backgroundCanvas, 0, 0);
   }
 }
