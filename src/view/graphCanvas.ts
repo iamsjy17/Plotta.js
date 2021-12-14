@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import CanvasHelper from './canvasHelper';
 import CanvasHelperFactory from './canvasHelperFactory';
 
 /**
@@ -12,24 +13,29 @@ import CanvasHelperFactory from './canvasHelperFactory';
  */
 
 class GraphCanvas {
+  canvasHelper: CanvasHelper;
+
   constructor(canvas) {
     const dpr = window.devicePixelRatio || 1;
     const {width, height} = canvas;
     // Scale up the size of the canvas.
     canvas.width = width * dpr;
     canvas.height = height * dpr;
+
     this.canvasHelper = CanvasHelperFactory.Create(canvas, dpr);
   }
 
   /**
    * @name Draw
-   * @type function
-   * @param {Object} drawData ViewModel.DrawData
    * @description
    * Call the Draw function of the registered CanvasHelper.
    */
-  Draw(drawData) {
-    if (drawData) this.canvasHelper.Draw(drawData);
+  Draw(drawData): void {
+    if (!drawData) {
+      return;
+    }
+
+    this.canvasHelper.Draw(drawData);
   }
 }
 
