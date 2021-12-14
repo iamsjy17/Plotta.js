@@ -1,4 +1,4 @@
-import {IsObject} from '../util';
+import Util from '../util';
 import Axis from './axis';
 import Tics from './tics';
 
@@ -223,38 +223,38 @@ const GraphConfig = (() => {
      */
 
     Init(config) {
-      if (!IsObject(config)) return;
+      if (!Util.IsObject(config)) return;
 
       this.font = config.font;
       this.legendVisible = config.legendVisible;
 
-      if (IsObject(config.title)) {
+      if (Util.IsObject(config.title)) {
         this.title = config.title.text;
         this.titleColor = config.title.color;
         this.titleLocation = config.title.location;
       }
 
-      if (IsObject(config.grid)) {
+      if (Util.IsObject(config.grid)) {
         this.gridType = config.grid.type;
         this.gridVisible = config.grid.visible;
         this.gridColor = config.grid.color;
       }
 
-      if (IsObject(config.border)) {
+      if (Util.IsObject(config.border)) {
         this.borderType = config.border.type;
         this.borderVisible = config.border.visible;
         this.borderColor = config.border.color;
         this.borderWidth = config.border.width;
       }
 
-      if (IsObject(config.axis)) {
-        if (IsObject(config.axis.x)) {
+      if (Util.IsObject(config.axis)) {
+        if (Util.IsObject(config.axis.x)) {
           const {visible, type, label, color, location, range} = config.axis.x;
 
           if (this.axisX) this.axisX.SetData(visible, type, label, color, location, range);
           else this.axisX = new Axis(visible, type, label, color, location, range);
         }
-        if (IsObject(config.axis.y)) {
+        if (Util.IsObject(config.axis.y)) {
           const {visible, label, color, location, range} = config.axis.y;
 
           if (this.axisY) {
@@ -264,14 +264,14 @@ const GraphConfig = (() => {
           }
         }
       }
-      if (IsObject(config.tics)) {
+      if (Util.IsObject(config.tics)) {
         const {type, visible, color, value} = config.tics;
 
         if (this.tics) this.tics.SetData(type, visible, color, value);
         else this.tics = new Tics(type, visible, color, value);
       }
 
-      if (IsObject(config.table)) {
+      if (Util.IsObject(config.table)) {
         const {visible} = config.table;
 
         this.tableVisible = config.table.visible;

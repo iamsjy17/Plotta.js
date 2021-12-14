@@ -35,6 +35,7 @@
     "no-underscore-dangle": 0,
     "no-bitwise": 0,
     "import/no-webpack-loader-syntax": 0,
-    "import/no-extraneous-dependencies": 0
+    "import/no-extraneous-dependencies": 0,
+    "import/extensions": 0
   }
 }
