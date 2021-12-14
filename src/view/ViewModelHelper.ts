@@ -37,6 +37,41 @@ const GetLocationRatio = function (location) {
   return ratio;
 };
 
+/**
+ * @name ViewModelHelper
+ * @type class
+ * @property {String} font
+ * @property {Object} axisX
+ * @property {Object} axisY
+ * @property {Number} canvasWidth
+ * @property {Number} canvasHeight
+ * @property {Object} graphRect graph area in canvas
+ * @property {Object} legendRect legend area in canvas
+ * @param {String} font
+ * @param {Object} axisX
+ * @param {Object} axisY
+ * @param {Number} canvasWidth
+ * @param {Number} canvasHeight
+ *
+ * See function description
+ * @method GetGraphRect
+ * @method GetLegendRect
+ * @method GetTitlePos
+ * @method GetAxisXPos
+ * @method GetAxisYPos
+ * @method GetxTics
+ * @method GetyTics
+ * @method CanvasPoint2DataPoint
+ * @method DataPoint2CanvasPoint
+ * @method GraphPoint2DataPoint
+ * @method DataPoint2GraphPoint
+ * @method CanvasPoint2GraphPoint
+ * @method GraphPoint2CanvasPoint
+ * @method GetLineDatas
+ * @method GetLegendDatas
+ * @method GetSelectedTic
+ * @method GetTableDatas
+ */
 export default class ViewModelHelper {
   font: string;
   axisX: any;
