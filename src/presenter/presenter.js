@@ -1,5 +1,3 @@
-import {IsObject} from '../util';
-
 /**
  * @name Presenter
  * @type class

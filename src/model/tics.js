@@ -1,4 +1,4 @@
-import {IsObject} from '../util';
+import Util from '../util';
 
 /**
  * @name Tics
@@ -22,7 +22,7 @@ export default class Tics {
     this.color = color || 'black';
 
     this.value =
-      IsObject(value) && value.x && value.y
+      Util.IsObject(value) && value.x && value.y
         ? {
             x: value.x,
             y: value.y,
@@ -44,7 +44,7 @@ export default class Tics {
     this.visible = typeof visible === 'boolean' ? visible : this.visible;
     this.color = color || this.color;
     this.value =
-      IsObject(value) && value.x && value.y
+      Util.IsObject(value) && value.x && value.y
         ? {
             x: value.x,
             y: value.y,
@@ -62,7 +62,7 @@ export default class Tics {
 
   SetValue(value) {
     this.value =
-      IsObject(value) && value.x && value.y
+      Util.IsObject(value) && value.x && value.y
         ? {
             x: value.x,
             y: value.y,

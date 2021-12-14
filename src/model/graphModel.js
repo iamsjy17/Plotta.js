@@ -1,6 +1,7 @@
 import Config from './config';
 import LineData from './lineData';
-import {IsObject, UPDATE_TYPE} from '../util';
+import Util from '../util';
+import {UPDATE_TYPE} from '../const';
 
 /**
  * @name GraphModel
@@ -40,7 +41,7 @@ export default class GraphModel {
    * Initializes the graphModel with the input dataSet.
    */
   InitModel(dataSet) {
-    if (!IsObject(dataSet)) return;
+    if (!Util.IsObject(dataSet)) return;
 
     dataSet.linedatas.length &&
       dataSet.linedatas.forEach(item => {
@@ -49,7 +50,7 @@ export default class GraphModel {
         this.lineDatas.set(id, new LineData(type, legend, color, visible, datas, func, dotNum));
       });
 
-    if (IsObject(dataSet.config)) {
+    if (Util.IsObject(dataSet.config)) {
       this.config && this.config.Init(dataSet.config);
     }
   }
@@ -65,7 +66,7 @@ export default class GraphModel {
    * Updates the graphModel with the input dataSet.
    */
   UpdateModel(dataSet) {
-    if (!IsObject(dataSet)) return;
+    if (!Util.IsObject(dataSet)) return;
 
     if (Object.prototype.hasOwnProperty.call(dataSet, 'linedatas')) {
       this.lineDatas.clear();
@@ -75,7 +76,7 @@ export default class GraphModel {
       });
     }
 
-    if (IsObject(dataSet.config)) {
+    if (Util.IsObject(dataSet.config)) {
       this.config && this.config.Init(dataSet.config);
     }
     if (this.viewHandler) this.viewHandler.UpdateViewModel();

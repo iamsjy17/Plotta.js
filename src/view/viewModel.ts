@@ -1,6 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable no-console */
-import {UPDATE_TYPE, IsObject} from '../util';
+import {UPDATE_TYPE} from '../const';
 import ViewModelHelper from './ViewModelHelper';
 
 /**
@@ -33,7 +31,14 @@ import ViewModelHelper from './ViewModelHelper';
  * @method InvalidateModel
  */
 export default class ViewModel {
-  constructor(graphModel, width, height) {
+  graphModel: any;
+  canvasWidth: number;
+  canvasHeight: number;
+  invalidated: boolean;
+  drawData: any;
+  viewModelHelper: ViewModelHelper;
+
+  constructor(graphModel: any, width: number, height: number) {
     this.graphModel = graphModel;
     this.canvasWidth = width;
     this.canvasHeight = height;
@@ -91,58 +96,54 @@ export default class ViewModel {
     this.invalidated = true;
   }
 
-  /**
-   * @name GetDrawData
-   * @type function
-   * @return {Object} drawData
-   */
   GetDrawData() {
     return this.drawData;
   }
 
   /**
    * @name IsInGraph
-   * @type function
-   * @return {Boolean}
    * @Description
    * Returns true if the mouse is in the graph area.
    */
-  IsInGraph(mousePos) {
+  IsInGraph(mousePos): boolean {
     const graphRect = this.viewModelHelper.GetGraphRect();
     if (
       mousePos.x <= graphRect.x + graphRect.w &&
       mousePos.x >= graphRect.x &&
       mousePos.y <= graphRect.y + graphRect.h &&
       mousePos.y >= graphRect.y
-    )
+    ) {
       return true;
+    }
     return false;
   }
 
   /**
    * @name GetNewTic
-   * @type function
-   * @return {Boolean, Number} result, newTic
    * @Description
    * If a new tick is selected, update drawdata's selected tic and change viewmodel to invalidated state. And returns true.
    */
   GetNewTic(mousePos) {
     const selectedTic = this.viewModelHelper.GetSelectedTic(mousePos, this.drawData.tableData.datas);
+
     if (this.drawData.tableData.selectedTic !== selectedTic) {
       return {result: true, selectedTic};
     }
+
     return {result: false, selectedTic: null};
   }
 
   /**
    * @name Init
-   * @type function
    * @Description
    * Update the viewmodel using the current graph model.
    * The viewmodel is data that can be drawn directly using the canvas coordinate system.
    */
-  Init() {
-    if (!this.graphModel) return;
+  Init(): void {
+    if (!this.graphModel) {
+      return;
+    }
+
     const {
       font,
       legendVisible,

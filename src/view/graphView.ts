@@ -1,4 +1,4 @@
-import {UPDATE_TYPE} from '../util';
+import {UPDATE_TYPE} from '../const';
 import GraphCanvas from './graphCanvas';
 import ViewModel from './viewModel';
 
