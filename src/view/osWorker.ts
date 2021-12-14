@@ -2,16 +2,18 @@ import DrawHelper from './drawHelper';
 
 self.onmessage = event => {
   const {canvas, dpr, drawData} = event.data;
+  const _self = self as any;
+
   if (canvas) {
-    self.canvas = canvas;
-    self.ctx = canvas.getContext('2d');
+    _self.canvas = canvas;
+    _self.ctx = canvas.getContext('2d');
   }
 
   if (dpr) {
-    self.ctx.scale(dpr, dpr);
+    _self?.ctx?.scale(dpr, dpr);
   }
 
   if (drawData) {
-    DrawHelper.Draw(self.ctx, drawData);
+    DrawHelper.Draw(_self?.ctx, drawData);
   }
 };
