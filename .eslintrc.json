@@ -1,5 +1,28 @@
 {
-  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "env": {
+    "browser": true,
+    "amd": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "rules": {
     "no-plusplus": 0,
     "no-unused-expressions": 0,
@@ -13,10 +36,5 @@
     "no-bitwise": 0,
     "import/no-webpack-loader-syntax": 0,
     "import/no-extraneous-dependencies": 0
-  },
-  "env": {
-    "browser": true,
-    "amd": true,
-    "node": true
   }
 }
