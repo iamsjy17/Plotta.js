@@ -1,12 +1,12 @@
 /**
  * @name OffscreenCanvasHelper
  * @type class
- * @property {Object} presentationCanvas
- * @property {Number} dpr Divice Pixel Ratio
- * @property {Object} offscreenCanvas
- * @property {Object} worker Worker for OffscreenCanvas
- * @param {Object} canvas canvas Element
- * @param {Number} dpr Divice Pixel Ratio
+ * @property {HTMLCanvasElement} presentationCanvas
+ * @property {OffscreenCanvas} offscreenCanvas
+ * @property {number} dpr Divice Pixel Ratio
+ * @property {Worker} worker Worker for OffscreenCanvas
+ * @param {HTMLCanvasElement} canvas canvas Element
+ * @param {number} dpr Divice Pixel Ratio
  * @method Draw
  */
 

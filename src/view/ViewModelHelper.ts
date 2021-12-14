@@ -40,18 +40,18 @@ const GetLocationRatio = function (location) {
 /**
  * @name ViewModelHelper
  * @type class
- * @property {String} font
+ * @property {string} font
  * @property {Object} axisX
  * @property {Object} axisY
- * @property {Number} canvasWidth
- * @property {Number} canvasHeight
- * @property {Object} graphRect graph area in canvas
- * @property {Object} legendRect legend area in canvas
- * @param {String} font
+ * @property {number} canvasWidth
+ * @property {number} canvasHeight
+ * @property {Rect} graphRect graph area in canvas
+ * @property {Rect} legendRect legend area in canvas
+ * @param {string} font
  * @param {Object} axisX
  * @param {Object} axisY
- * @param {Number} canvasWidth
- * @param {Number} canvasHeight
+ * @param {number} canvasWidth
+ * @param {number} canvasHeight
  *
  * See function description
  * @method GetGraphRect
