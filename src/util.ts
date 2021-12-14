@@ -1,9 +1,6 @@
-/**
- * @param {Object} obj
- * @return {Boolean}
- */
-
-export const IsObject = obj => obj && typeof obj === 'object';
+export const IsObject = (obj: object): Boolean => {
+  return obj && typeof obj === 'object';
+};
 export const UPDATE_TYPE = {
   NEW_LINE: 0,
   DELETE_LINE: 1,
@@ -31,5 +28,5 @@ export const UPDATE_TYPE = {
   AXISY_COLOR: 23,
   AXISY_RANGE: 24,
   TABLE_VISIBLE: 25,
-  NEW_TIC: 26
+  NEW_TIC: 26,
 };
