@@ -1,19 +1,15 @@
-/**
- * @name Presenter
- * @type class
- * @property {Object} GraphModel
- * @property {Object} GraphView
- *
- */
 export default class Presenter {
+  GraphModel: any;
+  GraphView: any;
+
   constructor(graphModel, graphView) {
     this.GraphModel = graphModel;
     this.GraphView = graphView;
+
     this.GraphModel.SetViewHandler(this._getviewHandler());
     this.GraphView.SetModelHandler(this._getModelHandler());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getviewHandler() {
     return {
       UpdateViewModel: function (updateType, value) {
@@ -22,7 +18,6 @@ export default class Presenter {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getModelHandler() {
     return {
       GetModel: function () {
