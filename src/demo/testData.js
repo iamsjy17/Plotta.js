@@ -1,4 +1,4 @@
-const xy = (x) => x;
+const xy = x => x;
 const testData = {
   linedatas: [
     {
@@ -53,7 +53,7 @@ const testData = {
     title: {
       location: 'center',
       color: '#666666',
-      text: 'Plotta.js',
+      text: 'Plotta.ts',
     },
     grid: {
       type: '',

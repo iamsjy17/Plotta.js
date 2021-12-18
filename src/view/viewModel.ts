@@ -1,6 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable no-console */
-import { UPDATE_TYPE, IsObject } from '../util';
+import {UPDATE_TYPE} from '../const';
 import ViewModelHelper from './ViewModelHelper';
 
 /**
@@ -33,7 +31,14 @@ import ViewModelHelper from './ViewModelHelper';
  * @method InvalidateModel
  */
 export default class ViewModel {
-  constructor(graphModel, width, height) {
+  graphModel: any;
+  canvasWidth: number;
+  canvasHeight: number;
+  invalidated: boolean;
+  drawData: any;
+  viewModelHelper: ViewModelHelper;
+
+  constructor(graphModel: any, width: number, height: number) {
     this.graphModel = graphModel;
     this.canvasWidth = width;
     this.canvasHeight = height;
@@ -91,61 +96,54 @@ export default class ViewModel {
     this.invalidated = true;
   }
 
-  /**
-   * @name GetDrawData
-   * @type function
-   * @return {Object} drawData
-   */
   GetDrawData() {
     return this.drawData;
   }
 
   /**
    * @name IsInGraph
-   * @type function
-   * @return {Boolean}
    * @Description
    * Returns true if the mouse is in the graph area.
    */
-  IsInGraph(mousePos) {
+  IsInGraph(mousePos): boolean {
     const graphRect = this.viewModelHelper.GetGraphRect();
     if (
       mousePos.x <= graphRect.x + graphRect.w &&
       mousePos.x >= graphRect.x &&
       mousePos.y <= graphRect.y + graphRect.h &&
       mousePos.y >= graphRect.y
-    )
+    ) {
       return true;
+    }
     return false;
   }
 
   /**
    * @name GetNewTic
-   * @type function
-   * @return {Boolean, Number} result, newTic
    * @Description
    * If a new tick is selected, update drawdata's selected tic and change viewmodel to invalidated state. And returns true.
    */
   GetNewTic(mousePos) {
-    const selectedTic = this.viewModelHelper.GetSelectedTic(
-      mousePos,
-      this.drawData.tableData.datas
-    );
+    const selectedTic = this.viewModelHelper.GetSelectedTic(mousePos, this.drawData.tableData.datas);
+
     if (this.drawData.tableData.selectedTic !== selectedTic) {
-      return { result: true, selectedTic };
+      return {result: true, selectedTic};
     }
-    return { result: false, selectedTic: null };
+
+    return {result: false, selectedTic: null};
   }
 
   /**
    * @name Init
-   * @type function
    * @Description
    * Update the viewmodel using the current graph model.
    * The viewmodel is data that can be drawn directly using the canvas coordinate system.
    */
-  Init() {
-    if (!this.graphModel) return;
+  Init(): void {
+    if (!this.graphModel) {
+      return;
+    }
+
     const {
       font,
       legendVisible,
@@ -164,21 +162,13 @@ export default class ViewModel {
       tics,
       tableVisible,
     } = this.graphModel.config;
-    this.viewModelHelper = new ViewModelHelper(
-      font,
-      axisX,
-      axisY,
-      this.canvasWidth,
-      this.canvasHeight
-    );
+    this.viewModelHelper = new ViewModelHelper(font, axisX, axisY, this.canvasWidth, this.canvasHeight);
 
     this.drawData.canvasWidth = this.canvasWidth;
     this.drawData.canvasHeight = this.canvasHeight;
 
     // LegendDatas
-    this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(
-      this.graphModel.lineDatas
-    );
+    this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
 
     // ViewRect
     this.drawData.graphRect = this.viewModelHelper.GetGraphRect();
@@ -188,9 +178,7 @@ export default class ViewModel {
     this.drawData.font = font;
     this.drawData.title.text = title;
     this.drawData.title.color = titleColor;
-    this.drawData.title.position = this.viewModelHelper.GetTitlePos(
-      titleLocation
-    );
+    this.drawData.title.position = this.viewModelHelper.GetTitlePos(titleLocation);
 
     // Border
     this.drawData.border.visible = borderVisible;
@@ -207,17 +195,13 @@ export default class ViewModel {
     this.drawData.axis.xLabel.visible = axisX.visible;
     this.drawData.axis.xLabel.text = axisX.label;
     this.drawData.axis.xLabel.color = axisX.color;
-    this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(
-      axisX.location
-    );
+    this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(axisX.location);
 
     // AxisY
     this.drawData.axis.yLabel.visible = axisY.visible;
     this.drawData.axis.yLabel.text = axisY.label;
     this.drawData.axis.yLabel.color = axisY.color;
-    this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(
-      axisY.location
-    );
+    this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(axisY.location);
 
     // Tics
     this.drawData.tics.visible = tics.visible;
@@ -226,15 +210,10 @@ export default class ViewModel {
     this.drawData.tics.yTics = this.viewModelHelper.GetyTics(tics.value.y);
 
     // LineDatas
-    this.drawData.lineDatas = this.viewModelHelper.GetLineDatas(
-      this.graphModel.lineDatas
-    );
+    this.drawData.lineDatas = this.viewModelHelper.GetLineDatas(this.graphModel.lineDatas);
 
     // tableDatas
-    const tableDatas = this.viewModelHelper.GetTableDatas(
-      this.graphModel.lineDatas,
-      tics.value.x
-    );
+    const tableDatas = this.viewModelHelper.GetTableDatas(this.graphModel.lineDatas, tics.value.x);
     if (tableDatas) {
       this.drawData.tableData.visible = tableVisible;
       this.drawData.tableData.colors = tableDatas.colors;
@@ -263,9 +242,7 @@ export default class ViewModel {
         // Update Rect, Tics, Table, Lines, Axis, Legends
 
         // LegendDatas
-        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(
-          this.graphModel.lineDatas
-        );
+        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
 
         // Rect
         this.drawData.graphRect = this.viewModelHelper.GetGraphRect();
@@ -274,29 +251,16 @@ export default class ViewModel {
         if (updateType === UPDATE_TYPE.DELETE_LINE) {
           this.drawData.lineDatas.delete(value);
         } else {
-          this.drawData.lineDatas.set(
-            value,
-            this.viewModelHelper.GetLineData(
-              this.graphModel.lineDatas.get(value)
-            )
-          );
+          this.drawData.lineDatas.set(value, this.viewModelHelper.GetLineData(this.graphModel.lineDatas.get(value)));
         }
 
         // Tics
-        this.drawData.tics.xTics = this.viewModelHelper.GetxTics(
-          this.graphModel.config.tics.value.x
-        );
-        this.drawData.tics.yTics = this.viewModelHelper.GetyTics(
-          this.graphModel.config.tics.value.y
-        );
+        this.drawData.tics.xTics = this.viewModelHelper.GetxTics(this.graphModel.config.tics.value.x);
+        this.drawData.tics.yTics = this.viewModelHelper.GetyTics(this.graphModel.config.tics.value.y);
 
         // Axis Position
-        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(
-          this.graphModel.config.axisX.location
-        );
-        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(
-          this.graphModel.config.axisY.location
-        );
+        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(this.graphModel.config.axisX.location);
+        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(this.graphModel.config.axisY.location);
 
         // TableDatas
         const tableDatas = this.viewModelHelper.GetTableDatas(
@@ -318,9 +282,7 @@ export default class ViewModel {
         this.viewModelHelper.font = this.graphModel.config.font;
 
         // legendDatas
-        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(
-          this.graphModel.lineDatas
-        );
+        this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
 
         // tableDatas
         const tableDatas = this.viewModelHelper.GetTableDatas(
@@ -343,9 +305,7 @@ export default class ViewModel {
         this.drawData.title.color = this.graphModel.config.titleColor;
         break;
       case UPDATE_TYPE.TITLE_LOCATION:
-        this.drawData.title.position = this.viewModelHelper.GetTitlePos(
-          this.graphModel.config.titleLocation
-        );
+        this.drawData.title.position = this.viewModelHelper.GetTitlePos(this.graphModel.config.titleLocation);
         break;
       case UPDATE_TYPE.GRID_VISIBLE:
         this.drawData.grid.visible = this.graphModel.config.gridVisible;
@@ -375,9 +335,7 @@ export default class ViewModel {
         this.drawData.axis.xLabel.text = this.graphModel.config.axisX.label;
         break;
       case UPDATE_TYPE.AXISX_LOCATION:
-        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(
-          this.graphModel.config.axisX.location
-        );
+        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(this.graphModel.config.axisX.location);
         break;
       case UPDATE_TYPE.AXISX_COLOR:
         this.drawData.axis.xLabel.color = this.graphModel.config.axisX.color;
@@ -389,9 +347,7 @@ export default class ViewModel {
         this.drawData.axis.yLabel.text = this.graphModel.config.axisY.label;
         break;
       case UPDATE_TYPE.AXISY_LOCATION:
-        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(
-          this.graphModel.config.axisY.location
-        );
+        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(this.graphModel.config.axisY.location);
         break;
       case UPDATE_TYPE.AXISY_COLOR:
         this.drawData.axis.yLabel.color = this.graphModel.config.axisY.color;

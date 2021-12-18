@@ -1,0 +1,12 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/tsc",
+    "noImplicitAny": false,
+    "module": "es6",
+    "target": "es5",
+    "sourceRoot": "/src",
+    "sourceMap": true,
+    "moduleResolution": "node"
+  }
+}

@@ -1,7 +1,6 @@
 import GraphModel from './model/graphModel';
 import GraphView from './view/graphView';
 import Presenter from './presenter/presenter';
-import { IsObject } from './util';
 
 /**
  * @name Plotta
@@ -60,7 +59,7 @@ import { IsObject } from './util';
  *   title: {
  *     location: 'center',
  *     color: '#666666',
- *     text: 'Plotta.js'
+ *     text: 'Plotta.ts'
  *   },
  *   grid: {
  *     type: '',
@@ -112,6 +111,10 @@ import { IsObject } from './util';
  */
 
 export default class Plotta {
+  GraphModel: GraphModel;
+  GraphView: GraphView;
+  Presenter: Presenter;
+
   constructor(canvas, dataSet) {
     this.GraphModel = new GraphModel(dataSet);
     this.GraphView = new GraphView(canvas);
@@ -120,7 +123,6 @@ export default class Plotta {
 
   /**
    * @name UpdateGraph
-   * @type function
    * @Description
    * Update all graph data.
    */
@@ -130,7 +132,6 @@ export default class Plotta {
 
   /**
    * @name AddLine
-   * @type function
    * @Description
    * Add New Line.
    */
@@ -148,7 +149,6 @@ export default class Plotta {
 
   /**
    * @name UpdateLine
-   * @type function
    * @Description
    * Update the line data.
    */
@@ -156,17 +156,12 @@ export default class Plotta {
     this.GraphModel.UpdateLine(lineData);
   }
 
-  /**
-   * @name Font
-   * @type function
-   */
   SetFont(font) {
     this.GraphModel.SetFont(font);
   }
 
   /**
    * @name Title
-   * @type function
    * @Description
    * Title text, color, location
    */
@@ -184,7 +179,6 @@ export default class Plotta {
 
   /**
    * @name Grid
-   * @type function
    * @Description
    * Grid show, color
    */
@@ -198,7 +192,6 @@ export default class Plotta {
 
   /**
    * @name Border
-   * @type function
    * @Description
    * Border show, color, width
    */
@@ -216,7 +209,6 @@ export default class Plotta {
 
   /**
    * @name Tics
-   * @type function
    * @Description
    * Tics show, x-y value, color
    */
@@ -234,7 +226,6 @@ export default class Plotta {
 
   /**
    * @name X-Axis
-   * @type function
    * @Description
    * xlable show, label, location, color
    */
@@ -256,7 +247,6 @@ export default class Plotta {
 
   /**
    * @name Y-Axis
-   * @type function
    * @Description
    * ylabel show, label, location, color
    */
@@ -278,7 +268,6 @@ export default class Plotta {
 
   /**
    * @name ShowTable
-   * @type function
    * @Description
    * Table On/Off
    */
@@ -290,17 +279,21 @@ export default class Plotta {
    * @name SaveAsPDF
    * @type function
    */
+  // eslint-disable-next-line class-methods-use-this
   SaveAsPDF() {
-    this.GraphView.SaveAsPDF();
+    // TODO:
+    // this.GraphView.SaveAsPDF();
   }
 
   /**
    * @name SaveAsImage
    * @type function
    */
+  // eslint-disable-next-line class-methods-use-this
   SaveAsImage() {
-    this.GraphView.SaveAsImage();
+    // TODO:
+    // this.GraphView.SaveAsImage();
   }
 }
 
-window.Plotta = Plotta;
+(window as any).Plotta = Plotta;

@@ -1,6 +1,6 @@
+import {UPDATE_TYPE} from '../const';
 import GraphCanvas from './graphCanvas';
 import ViewModel from './viewModel';
-import { UPDATE_TYPE } from '../util';
 
 /**
  * @name Plotta
@@ -23,7 +23,13 @@ import { UPDATE_TYPE } from '../util';
  */
 
 export default class GraphView {
-  constructor(canvas) {
+  canvasWidth: number;
+  canvasHeight: number;
+  graphCanvas: GraphCanvas;
+  viewModel: any;
+  modelHandler: any;
+
+  constructor(canvas: HTMLCanvasElement) {
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
     this.graphCanvas = new GraphCanvas(canvas);
@@ -43,8 +49,10 @@ export default class GraphView {
    * @param {Object} targetEl Target Element
    * @param {Number} type Event Type
    */
-  BindEvent(targetEl, type) {
-    if (!targetEl) return;
+  BindEvent(targetEl?: any, type?: any) {
+    if (!targetEl) {
+      return;
+    }
 
     const EVENT_TYPE = {
       KEYBOARD: 1,
@@ -58,12 +66,17 @@ export default class GraphView {
 
     let frameTick = false;
     const EventDispatcher = function (e) {
-      if (frameTick) return;
+      if (frameTick) {
+        return;
+      }
       frameTick = true;
       requestAnimationFrame(() => {
         frameTick = false;
-        const mousePos = { x: e.offsetX, y: e.offsetY };
-        if (!this.viewModel || !this.viewModel.IsInGraph(mousePos)) return;
+        const mousePos = {x: e.offsetX, y: e.offsetY};
+        if (!this.viewModel || !this.viewModel.IsInGraph(mousePos)) {
+          return;
+        }
+
         switch (e.type) {
           case 'keydown': {
             break;
@@ -81,12 +94,16 @@ export default class GraphView {
             break;
           }
           case 'mousemove': {
-            if (!this.graphCanvas || !this.modelHandler || !this.viewModel)
+            if (!this.graphCanvas || !this.modelHandler || !this.viewModel) {
               return;
+            }
+
             const newTic = this.viewModel.GetNewTic(mousePos);
+
             if (newTic.result) {
               this.UpdateViewModel(UPDATE_TYPE.NEW_TIC, newTic.selectedTic);
             }
+
             break;
           }
           case 'mousedown': {
@@ -148,28 +165,22 @@ export default class GraphView {
     }.bind(this);
 
     const keyboardEventList = ['keydown', 'keyup', 'keypress'];
-    const mouseEventList = [
-      'click',
-      'dbclick',
-      'mousemove',
-      'mousedown',
-      'mouseup',
-    ];
+    const mouseEventList = ['click', 'dbclick', 'mousemove', 'mousedown', 'mouseup'];
     const wheelEventList = ['wheel'];
     const eventList = [];
 
     if (_type & EVENT_TYPE.KEYBOARD) {
-      keyboardEventList.forEach((event) => {
+      keyboardEventList.forEach(event => {
         eventList.push(event);
       });
     }
     if (_type & EVENT_TYPE.MOUSE) {
-      mouseEventList.forEach((event) => {
+      mouseEventList.forEach(event => {
         eventList.push(event);
       });
     }
     if (_type & EVENT_TYPE.WHEEL) {
-      wheelEventList.forEach((event) => {
+      wheelEventList.forEach(event => {
         eventList.push(event);
       });
     }
@@ -181,7 +192,6 @@ export default class GraphView {
 
   /**
    * @name UpdateModel
-   * @type function
    * @Description
    * Update the graph model. Only for properties that exist in the delivered dataSet
    */
@@ -191,37 +201,37 @@ export default class GraphView {
 
   /**
    * @name UpdateViewModel
-   * @type function
    * @Description
    * If there is no ViewModel, create a new model,
    * and if there is a ViewModel, update the ViewModel to the current graph model.
    * + Render Count++;
    */
-  UpdateViewModel(updateType, value) {
-    if (!this.graphCanvas || !this.modelHandler) return;
+  UpdateViewModel(updateType?: any, value?: any): void {
+    if (!this.graphCanvas || !this.modelHandler) {
+      return;
+    }
+
     if (this.viewModel) {
       this.viewModel.InvalidateModel(updateType, value);
     } else {
-      this.viewModel = new ViewModel(
-        this.modelHandler.GetModel(),
-        this.canvasWidth,
-        this.canvasHeight
-      );
+      this.viewModel = new ViewModel(this.modelHandler.GetModel(), this.canvasWidth, this.canvasHeight);
     }
+
     requestAnimationFrame(this.Render.bind(this));
   }
 
   /**
    * @name Render
-   * @type function
    * @Description
    * If the ViewModel is in the Invalidated state
    * and there is a RenderStack that is not drawn, draw it.
    */
-  Render() {
-    if (this.viewModel.invalidated) {
-      this.graphCanvas.Draw(this.viewModel.GetDrawData());
-      this.viewModel.invalidated = false;
+  Render(): void {
+    if (!this.viewModel.invalidated) {
+      return;
     }
+
+    this.graphCanvas.Draw(this.viewModel.GetDrawData());
+    this.viewModel.invalidated = false;
   }
 }

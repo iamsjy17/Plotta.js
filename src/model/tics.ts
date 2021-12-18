@@ -1,4 +1,4 @@
-import { IsObject } from '../util';
+import Util from '../util';
 
 /**
  * @name Tics
@@ -16,13 +16,17 @@ import { IsObject } from '../util';
  * @method SetValue
  */
 export default class Tics {
-  constructor(type, visible, color, value) {
+  type: string;
+  visible: boolean;
+  color: string;
+  value: {x: any; y: any};
+
+  constructor(type?: string, visible?: boolean, color?: string, value?: any) {
     this.type = type || 'number';
     this.visible = typeof visible === 'boolean' ? visible : true;
     this.color = color || 'black';
-
     this.value =
-      IsObject(value) && value.x && value.y
+      Util.IsObject(value) && value.x && value.y
         ? {
             x: value.x,
             y: value.y,
@@ -35,16 +39,15 @@ export default class Tics {
 
   /**
    * @name SetData
-   * @type function
    * @Description
    * Update Tic datas.
    */
-  SetData(type, visible, color, value) {
+  SetData(type, visible, color, value): void {
     this.type = type || this.type;
     this.visible = typeof visible === 'boolean' ? visible : this.visible;
     this.color = color || this.color;
     this.value =
-      IsObject(value) && value.x && value.y
+      Util.IsObject(value) && value.x && value.y
         ? {
             x: value.x,
             y: value.y,
@@ -52,17 +55,17 @@ export default class Tics {
         : this.value;
   }
 
-  SetVisible(visible) {
+  SetVisible(visible): void {
     this.visible = typeof visible === 'boolean' ? visible : this.visible;
   }
 
-  SetColor(color) {
+  SetColor(color): void {
     this.color = color || this.color;
   }
 
-  SetValue(value) {
+  SetValue(value): void {
     this.value =
-      IsObject(value) && value.x && value.y
+      Util.IsObject(value) && value.x && value.y
         ? {
             x: value.x,
             y: value.y,

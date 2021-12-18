@@ -1,35 +1,29 @@
-import { IsObject } from '../util';
-
-/**
- * @name Axis
- * @type class
- * @property {Boolean} visible default visible : true
- * @property {String} type default type : Number
- * @property {String} label
- * @property {String} color default color : black
- * @property {String} location default location : center
- * @property {Object} range start, end, value
- *
- * See function description
- * @method SetData
- * @method SetVisible
- * @method SetLabel
- * @method SetColor
- * @method SetLocation
- * @method SetRange
- */
+import Util from '../util';
 
 export default class Axis {
-  constructor(visible, type, label, color, location, range) {
+  get Start() {
+    return this.range.start;
+  }
+
+  get End() {
+    return this.range.end;
+  }
+
+  visible: boolean;
+  type: string;
+  label: string;
+  color: string;
+  location: string;
+  range: {start: any; end: any; value: number};
+
+  constructor(visible?: boolean, type?: string, label?: string, color?: string, location?: string, range?: any) {
     this.visible = typeof visible === 'boolean' ? visible : true;
     this.type = typeof type === 'string' ? type : 'Number';
     this.label = label || '';
     this.color = color || 'black';
     this.location = location || 'center';
     this.range =
-      IsObject(range) &&
-      typeof range.start === 'number' &&
-      typeof range.end === 'number'
+      Util.IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
         ? {
             start: range.start,
             end: range.end,
@@ -44,20 +38,17 @@ export default class Axis {
 
   /**
    * @name SetData
-   * @type function
    * @Description
    * Update Axis Datas
    */
-  SetData(visible, type, label, color, location, range) {
+  SetData(visible, type, label, color, location, range): void {
     this.visible = typeof visible === 'boolean' ? visible : this.visible;
     this.type = type || this.type;
     this.label = label || this.label;
     this.color = color || 'black';
     this.location = location || 'center';
     this.range =
-      IsObject(range) &&
-      typeof range.start === 'number' &&
-      typeof range.end === 'number'
+      Util.IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
         ? {
             start: range.start,
             end: range.end,
@@ -66,40 +57,30 @@ export default class Axis {
         : this.range;
   }
 
-  SetVisible(visible) {
+  SetVisible(visible): void {
     this.visible = typeof visible === 'boolean' ? visible : this.visible;
   }
 
-  SetLabel(label) {
+  SetLabel(label): void {
     this.label = label || this.label;
   }
 
-  SetColor(color) {
+  SetColor(color): void {
     this.color = color || 'black';
   }
 
-  SetLocation(location) {
+  SetLocation(location): void {
     this.location = location || 'center';
   }
 
-  SetRange(range) {
+  SetRange(range): void {
     this.range =
-      IsObject(range) &&
-      typeof range.start === 'number' &&
-      typeof range.end === 'number'
+      Util.IsObject(range) && typeof range.start === 'number' && typeof range.end === 'number'
         ? {
             start: range.start,
             end: range.end,
             value: Math.abs(range.end - range.start),
           }
         : this.range;
-  }
-
-  get Start() {
-    return this.range.start;
-  }
-
-  get End() {
-    return this.range.End;
   }
 }
