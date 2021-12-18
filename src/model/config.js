@@ -223,7 +223,9 @@ const GraphConfig = (() => {
      */
 
     Init(config) {
-      if (!Util.IsObject(config)) return;
+      if (!Util.IsObject(config)) {
+        return;
+      }
 
       this.font = config.font;
       this.legendVisible = config.legendVisible;
