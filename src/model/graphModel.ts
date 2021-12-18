@@ -1,7 +1,7 @@
-import Config from './config';
 import LineData from './lineData';
 import Util from '../util';
 import {UPDATE_TYPE} from '../const';
+import GraphConfig from './config';
 
 /**
  * @name GraphModel
@@ -18,25 +18,26 @@ import {UPDATE_TYPE} from '../const';
  */
 
 export default class GraphModel {
+  Invalidated: boolean;
+  lineDatas: Map<any, any>;
+  config: GraphConfig;
+  viewHandler: any;
+
   constructor(dataSet) {
     this.Invalidated = true;
     this.lineDatas = new Map();
-    this.config = new Config();
-    this.InitModel(dataSet);
+    this.config = new GraphConfig();
     this.viewHandler = null;
+
+    this.InitModel(dataSet);
   }
 
-  /**
-   * @name SetViewHandler
-   * @type function
-   */
   SetViewHandler(viewHandler) {
     this.viewHandler = viewHandler;
   }
 
   /**
    * @name InitModel
-   * @type function
    * @Description
    * Initializes the graphModel with the input dataSet.
    */
@@ -58,10 +59,8 @@ export default class GraphModel {
   // ViewUpdate Methods
   // ViewModelUpdate
   // If there are parameters, update the part of viewmodel, or update the whole viewmodel.
-
   /**
    * @name UpdateModel
-   * @type function
    * @Description
    * Updates the graphModel with the input dataSet.
    */
@@ -84,7 +83,6 @@ export default class GraphModel {
 
   /**
    * @name AddLine
-   * @type function
    * @Description
    * Add New Line.
    */
@@ -99,10 +97,6 @@ export default class GraphModel {
     return true;
   }
 
-  /**
-   * @name DeleteLine
-   * @type function
-   */
   DeleteLine(id) {
     this.lineDatas.delete(id);
     if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.DELETE_LINE, id);
@@ -110,7 +104,6 @@ export default class GraphModel {
 
   /**
    * @name UpdateLine
-   * @type function
    * @Description
    * Update the line data.
    */
@@ -125,10 +118,6 @@ export default class GraphModel {
     if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.UPDATE_LINE, id);
   }
 
-  /**
-   * @name Font
-   * @type function
-   */
   SetFont(font) {
     this.config.font = font;
     if (this.viewHandler) this.viewHandler.UpdateViewModel(UPDATE_TYPE.FONT);
@@ -136,7 +125,6 @@ export default class GraphModel {
 
   /**
    * @name Title
-   * @type function
    * @Description
    * Title text, color, location
    */
@@ -157,7 +145,6 @@ export default class GraphModel {
 
   /**
    * @name Grid
-   * @type function
    * @Description
    * Grid show, color
    */
@@ -173,7 +160,6 @@ export default class GraphModel {
 
   /**
    * @name Border
-   * @type function
    * @Description
    * Border show, color, width
    */
@@ -194,7 +180,6 @@ export default class GraphModel {
 
   /**
    * @name Tics
-   * @type function
    * @Description
    * Tics show, x-y value, color
    */
@@ -215,7 +200,6 @@ export default class GraphModel {
 
   /**
    * @name X-Label
-   * @type function
    * @Description
    * xlable show, label, location, color
    */
@@ -246,7 +230,6 @@ export default class GraphModel {
 
   /**
    * @name Y-Label
-   * @type function
    * @Description
    * ylabel show, label, location, color
    */
@@ -277,7 +260,6 @@ export default class GraphModel {
 
   /**
    * @name ShowTable
-   * @type function
    * @Description
    * Table On/Off
    */
