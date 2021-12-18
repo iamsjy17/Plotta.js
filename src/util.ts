@@ -1,4 +1,4 @@
-const IsObject = (obj: object): Boolean => {
+const IsObject = (obj: object): boolean => {
   return obj && typeof obj === 'object';
 };
 

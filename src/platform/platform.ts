@@ -1,27 +1,23 @@
-const PLATFORM_TYPE = {
-  NODE: 0,
-  BROWSER: 1,
-};
+enum PLATFORM_TYPE {
+  NODE = 0,
+  BROWSER = 1,
+}
 
-const BROWSER_TYPE = {
-  LAZY: 0,
-  CHROME: 1,
-  IE: 2,
-  IE_11: 3,
-  EDGE: 4,
-  SAFARI: 5,
-  FIREFOX: 6,
-};
+enum BROWSER_TYPE {
+  LAZY = 0,
+  CHROME = 1,
+  IE = 2,
+  IE_11 = 3,
+  EDGE = 4,
+  SAFARI = 5,
+  FIREFOX = 6,
+}
 
-const currentPlatform = getCurrentPlaform();
-const currentBrowser = getCurrentBrowser();
-const isAvailableOffScreen = currentPlatform === PLATFORM_TYPE.BROWSER && currentBrowser === BROWSER_TYPE.CHROME;
-
-function getCurrentPlaform() {
+function getCurrentPlaform(): PLATFORM_TYPE {
   return PLATFORM_TYPE.BROWSER;
 }
 
-function getCurrentBrowser() {
+function getCurrentBrowser(): BROWSER_TYPE {
   const agt = navigator.userAgent.toLowerCase();
   const name = navigator.appName;
   let type = BROWSER_TYPE.LAZY;
@@ -42,6 +38,10 @@ function getCurrentBrowser() {
 
   return type;
 }
+
+const currentPlatform = getCurrentPlaform();
+const currentBrowser = getCurrentBrowser();
+const isAvailableOffScreen = currentPlatform === PLATFORM_TYPE.BROWSER && currentBrowser === BROWSER_TYPE.CHROME;
 
 export default {
   PLATFORM_TYPE,
