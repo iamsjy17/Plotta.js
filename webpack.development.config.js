@@ -1,8 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
 const config = {
   entry: {
-    plotta: ['@babel/polyfill', './src/plotta.js'],
+    plotta: ['@babel/polyfill', './src/plotta.ts'],
     testData: ['./src/demo/testData.js'],
   },
   output: {
