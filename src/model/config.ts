@@ -2,29 +2,6 @@ import Util from '../util';
 import Axis from './axis';
 import Tics from './tics';
 
-/**
- * @name GraphModel
- * @type class
- * @property {String} FONT
- * @property {Boolean} LEGEND_VISIBLE
- * @property {String} TITLE
- * @property {String} TITLE_COLOR
- * @property {String} TITLE_LOCATION
- * @property {Boolean} GRID_VISIBLE
- * @property {String} GRID_TYPE
- * @property {String} GRID_COLOR
- * @property {Boolean} BORDER_VISIBLE
- * @property {String} BORDER_TYPE
- * @property {String} BORDER_COLOR
- * @property {Number} BORDER_WIDTH
- * @property {Object} AXIS_X instance of Axis
- * @property {Object} AXIS_Y instance of Axis
- * @property {Object} TICS instance of Tics
- * @property {Boolean} TABLE_VISIBLE
- *
- * See function description
- * @method Init
- */
 const GraphConfig = (() => {
   const FONT = Symbol('Font');
   const LEGEND_VISIBLE = Symbol('LegendVisible');
@@ -43,6 +20,29 @@ const GraphConfig = (() => {
   const TICS = Symbol('Tics');
   const TABLE_VISIBLE = Symbol('TableVisible');
 
+  /**
+   * @name GraphConfig
+   * @type class
+   * @property {String} FONT
+   * @property {Boolean} LEGEND_VISIBLE
+   * @property {String} TITLE
+   * @property {String} TITLE_COLOR
+   * @property {String} TITLE_LOCATION
+   * @property {Boolean} GRID_VISIBLE
+   * @property {String} GRID_TYPE
+   * @property {String} GRID_COLOR
+   * @property {Boolean} BORDER_VISIBLE
+   * @property {String} BORDER_TYPE
+   * @property {String} BORDER_COLOR
+   * @property {Number} BORDER_WIDTH
+   * @property {Object} AXIS_X instance of Axis
+   * @property {Object} AXIS_Y instance of Axis
+   * @property {Object} TICS instance of Tics
+   * @property {Boolean} TABLE_VISIBLE
+   *
+   * See function description
+   * @method Init
+   */
   class GraphConfig {
     constructor(config) {
       this[FONT] = "'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -217,7 +217,6 @@ const GraphConfig = (() => {
 
     /**
      * @name Init
-     * @type function
      * @Description
      * Init, Update the config data with the input dataSet.
      */

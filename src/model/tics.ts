@@ -21,7 +21,7 @@ export default class Tics {
   color: string;
   value: {x: any; y: any};
 
-  constructor(type: string, visible: boolean, color: string, value: any) {
+  constructor(type?: string, visible?: boolean, color?: string, value?: any) {
     this.type = type || 'number';
     this.visible = typeof visible === 'boolean' ? visible : true;
     this.color = color || 'black';
