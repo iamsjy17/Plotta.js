@@ -16,7 +16,7 @@ export default class Axis {
   location: string;
   range: {start: any; end: any; value: number};
 
-  constructor(visible: boolean, type: string, label: string, color: string, location: string, range: any) {
+  constructor(visible?: boolean, type?: string, label?: string, color?: string, location?: string, range?: any) {
     this.visible = typeof visible === 'boolean' ? visible : true;
     this.type = typeof type === 'string' ? type : 'Number';
     this.label = label || '';
