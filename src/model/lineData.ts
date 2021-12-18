@@ -1,33 +1,34 @@
 import Util from '../util';
 
-/**
- * @name Axis
- * @type class
- * @property {String} type
- * @property {String} legend
- * @property {String} color
- * @property {Boolean} visible default visible : true
- * @property {Array} datas
- * @property {Function} func
- * @property {Number} dotNum
- *
- * See function description
- * @method Update
- */
 export default class LineData {
-  constructor(type, legend, color, visible, datas, func, dotNum) {
-    this.type = type || '';
-    this.legend = legend || '';
-    this.color = color || '';
+  type: string;
+  legend: string;
+  color: string;
+  visible: boolean;
+  datas: any[];
+  func: () => void;
+  dotNum: number;
+
+  constructor(
+    type?: string,
+    legend?: string,
+    color?: string,
+    visible?: boolean,
+    datas?: any[],
+    func?: () => void,
+    dotNum?: number
+  ) {
+    this.type = type ?? '';
+    this.legend = legend ?? '';
+    this.color = color ?? '';
     this.visible = typeof visible === 'boolean' ? visible : true;
     this.datas = Util.IsObject(datas) && datas.length ? datas : [];
     this.func = typeof func === 'function' ? func : null;
-    this.dotNum = dotNum || 0;
+    this.dotNum = dotNum ?? 0;
   }
 
   /**
    * @name Update
-   * @type function
    * @Description
    * Update LindeDatas
    */
