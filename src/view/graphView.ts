@@ -48,7 +48,7 @@ export default class GraphView {
     this.BindEvent(canvas);
   }
 
-  SetModelHandler(modelHandler: ModelHandler) {
+  SetModelHandler(modelHandler: ModelHandler): void {
     this.modelHandler = modelHandler;
     this.UpdateViewModel();
   }
@@ -57,7 +57,7 @@ export default class GraphView {
    * @name BindEvent
    * @param {HTMLCanvasElement} canvasEl Target Element
    */
-  BindEvent(canvasEl?: HTMLCanvasElement, type?: EVENT_TYPE) {
+  BindEvent(canvasEl?: HTMLCanvasElement, type?: EVENT_TYPE): void {
     if (!canvasEl) {
       return;
     }
@@ -142,21 +142,6 @@ export default class GraphView {
               break;
             }
 
-            const graphConfig = {
-              axisX: {
-                range: {
-                  start: rangeX.start - ticsX,
-                  end: rangeX.end + ticsX,
-                },
-              },
-              axisY: {
-                range: {
-                  start: rangeY.start - ticsY,
-                  end: rangeY.end + ticsY,
-                },
-              },
-            };
-
             graphModel.SetAxisXRange({
               start: rangeX.start - ticsX,
               end: rangeX.end + ticsX,
@@ -208,7 +193,7 @@ export default class GraphView {
    * @Description
    * Update the graph model. Only for properties that exist in the delivered dataSet
    */
-  UpdateModel(lineDatas?: LineData[], graphConfig?: Partial<GraphConfig>) {
+  UpdateModel(lineDatas?: LineData[], graphConfig?: Partial<GraphConfig>): void {
     this.modelHandler.UpdateModel(lineDatas, graphConfig);
   }
 
