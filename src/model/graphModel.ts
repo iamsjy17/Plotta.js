@@ -28,7 +28,7 @@ export default class GraphModel {
    * @Description
    * Update the part of viewmodel, or update the whole viewmodel.
    */
-  UpdateModel(lineDatas?: LineData[], graphConfig?: Partial<GraphConfig>): void {
+  UpdateModel(lineDatas?: LineData[], graphConfig?: Partial<GraphConfig>, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
@@ -47,12 +47,12 @@ export default class GraphModel {
       isUpdated = true;
     }
 
-    if (isUpdated) {
+    if (isUpdated && updateView !== false) {
       this.viewHandler.UpdateViewModel();
     }
   }
 
-  AddLine(lineData: LineData): void {
+  AddLine(lineData: LineData, updateView?: boolean): void {
     const {id, type, legend, color, visible, datas, func, dotNum} = lineData;
 
     if (this.lineDatas.has(id) || !this.viewHandler) {
@@ -60,19 +60,25 @@ export default class GraphModel {
     }
 
     this.lineDatas.set(id, new LineData(id, type, legend, color, visible, datas, func, dotNum));
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.NEW_LINE, id);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.NEW_LINE, id);
+    }
   }
 
-  DeleteLine(id: string): void {
+  DeleteLine(id: string, updateView?: boolean): void {
     if (!this.lineDatas.has(id) || !this.viewHandler) {
       return;
     }
 
     this.lineDatas.delete(id);
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.DELETE_LINE, id);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.DELETE_LINE, id);
+    }
   }
 
-  UpdateLine(lineData: LineData): void {
+  UpdateLine(lineData: LineData, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
@@ -85,16 +91,21 @@ export default class GraphModel {
       this.lineDatas.set(id, new LineData(id, type, legend, color, visible, datas, func, dotNum));
     }
 
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.UPDATE_LINE, id);
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.UPDATE_LINE, id);
+    }
   }
 
-  SetFont(font: string): void {
+  SetFont(font: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.font = font;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.FONT);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.FONT);
+    }
   }
 
   /**
@@ -102,31 +113,40 @@ export default class GraphModel {
    * @Description
    * Title text, color, location
    */
-  SetTitle(title: string): void {
+  SetTitle(title: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.title = title;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE);
+    }
   }
 
-  SetTitleColor(color: string): void {
+  SetTitleColor(color: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.titleColor = color;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_COLOR);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_COLOR);
+    }
   }
 
-  SetTitleLocation(location: HorizontalAlignType): void {
+  SetTitleLocation(location: HorizontalAlignType, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.titleLocation = location;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_LOCATION);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_LOCATION);
+    }
   }
 
   /**
@@ -134,22 +154,28 @@ export default class GraphModel {
    * @Description
    * Grid show, color
    */
-  ShowGrid(show: boolean): void {
+  ShowGrid(show: boolean, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.gridVisible = show;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_VISIBLE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_VISIBLE);
+    }
   }
 
-  SetGridColor(color: string): void {
+  SetGridColor(color: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.gridColor = color;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_COLOR);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_COLOR);
+    }
   }
 
   /**
@@ -157,31 +183,40 @@ export default class GraphModel {
    * @Description
    * Border show, color, width
    */
-  ShowBorder(show: boolean): void {
+  ShowBorder(show: boolean, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.borderVisible = show;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_VISIBLE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_VISIBLE);
+    }
   }
 
-  SetBorderColor(color: string): void {
+  SetBorderColor(color: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.borderColor = color;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_COLOR);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_COLOR);
+    }
   }
 
-  SetBorderWidth(width: number): void {
+  SetBorderWidth(width: number, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.borderWidth = width;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_WIDTH);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_WIDTH);
+    }
   }
 
   /**
@@ -189,31 +224,40 @@ export default class GraphModel {
    * @Description
    * Tics show, x-y value, color
    */
-  ShowTics(show: boolean): void {
+  ShowTics(show: boolean, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.tics.visible = show;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_VISIBLE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_VISIBLE);
+    }
   }
 
-  SetTicsColor(color: string): void {
+  SetTicsColor(color: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.tics.color = color;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_COLOR);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_COLOR);
+    }
   }
 
-  SetTicsValue(value: TicsValue): void {
+  SetTicsValue(value: TicsValue, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.tics.value = value;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_VALUE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TICS_VALUE);
+    }
   }
 
   /**
@@ -221,43 +265,55 @@ export default class GraphModel {
    * @Description
    * AxisX show, label, location, color
    */
-  ShowAxisXLabel(show: boolean): void {
+  ShowAxisXLabel(show: boolean, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.axisX.visible = show;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_VISIBLE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_VISIBLE);
+    }
   }
 
-  SetAxisXLabel(label: string): void {
+  SetAxisXLabel(label: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.axisX.label = label;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_LABEL);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_LABEL);
+    }
   }
 
-  SetAxisXLabelLocation(location: HorizontalAlignType): void {
+  SetAxisXLabelLocation(location: HorizontalAlignType, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.axisX.location = location;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_LOCATION);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_LOCATION);
+    }
   }
 
-  SetAxisXLabelColor(color: string): void {
+  SetAxisXLabelColor(color: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.axisX.color = color;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_COLOR);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_COLOR);
+    }
   }
 
-  SetAxisXRange(range: AxisRange): void {
+  SetAxisXRange(range: AxisRange, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
@@ -268,7 +324,9 @@ export default class GraphModel {
       value: Math.abs(range.end - range.start),
     };
 
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_RANGE);
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_RANGE);
+    }
   }
 
   /**
@@ -276,43 +334,55 @@ export default class GraphModel {
    * @Description
    * AxisY show, label, location, color
    */
-  ShowAxisYLabel(show: boolean): void {
+  ShowAxisYLabel(show: boolean, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.axisY.visible = show;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_VISIBLE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_VISIBLE);
+    }
   }
 
-  SetAxisYLabel(label: string): void {
+  SetAxisYLabel(label: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.axisY.label = label;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_LABEL);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_LABEL);
+    }
   }
 
-  SetAxisYLabelLocation(location: VerticalAlignType): void {
+  SetAxisYLabelLocation(location: VerticalAlignType, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.axisY.location = location;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_LOCATION);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_LOCATION);
+    }
   }
 
-  SetAxisYLabelColor(color: string): void {
+  SetAxisYLabelColor(color: string, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.axisY.color = color;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_COLOR);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_COLOR);
+    }
   }
 
-  SetAxisYRange(range: AxisRange): void {
+  SetAxisYRange(range: AxisRange, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
@@ -322,7 +392,10 @@ export default class GraphModel {
       end: range.end,
       value: Math.abs(range.end - range.start),
     };
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_RANGE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_RANGE);
+    }
   }
 
   /**
@@ -330,13 +403,16 @@ export default class GraphModel {
    * @Description
    * Table On/Off
    */
-  ShowTable(show: boolean): void {
+  ShowTable(show: boolean, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }
 
     this.config.tableVisible = show;
-    this.viewHandler.UpdateViewModel(UPDATE_TYPE.TABLE_VISIBLE);
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TABLE_VISIBLE);
+    }
   }
 
   /**

@@ -142,10 +142,13 @@ export default class GraphView {
               break;
             }
 
-            graphModel.SetAxisXRange({
-              start: rangeX.start - ticsX,
-              end: rangeX.end + ticsX,
-            });
+            graphModel.SetAxisXRange(
+              {
+                start: rangeX.start - ticsX,
+                end: rangeX.end + ticsX,
+              },
+              false
+            );
 
             graphModel.SetAxisYRange({
               start: rangeY.start - ticsY,
