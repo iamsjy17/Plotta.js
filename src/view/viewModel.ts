@@ -1,12 +1,64 @@
-import {UPDATE_TYPE} from '../const';
+import {HorizontalAlignType, Point, UPDATE_TYPE, VerticalAlignType} from '../model/const';
+import GraphModel from '../model/graphModel';
+import {DrawData} from './const';
 import ViewModelHelper from './ViewModelHelper';
+
+const InitialDrawData: DrawData = {
+  font: '',
+  title: {
+    text: '',
+    color: 'black',
+    position: null,
+  },
+  border: {
+    visible: true,
+    type: 'solid',
+    color: '',
+    width: 1,
+  },
+  grid: {
+    visible: true,
+    type: 'solid',
+    color: '',
+  },
+  axis: {
+    xLabel: {
+      visible: true,
+      text: '',
+      color: 'black',
+      position: null,
+    },
+    yLabel: {
+      visible: true,
+      text: '',
+      color: 'black',
+      position: null,
+    },
+  },
+  tics: {
+    visible: true,
+    color: 'black',
+    xTics: null,
+    yTics: null,
+  },
+  lineDatas: null,
+  legendDatas: null,
+  tableData: {
+    visible: true,
+    selectedTic: NaN,
+    colors: [],
+    legends: [],
+    datas: [],
+    legendWidth: 0,
+  },
+};
 
 /**
  * @name ViewModel
  * @type class
- * @property {Object} graphModel
- * @property {Number} canvasWidth
- * @property {Number} canvasHeight
+ * @property {GraphModel} graphModel
+ * @property {number} canvasWidth
+ * @property {number} canvasHeight
  * @property {Object} drawData
  * @property {String} drawData.font default Helvetica Neue', Helvetica, Arial, sans-serif
  * @property {Object} drawData.title default color : black
@@ -17,11 +69,11 @@ import ViewModelHelper from './ViewModelHelper';
  * @property {Object} drawData.lineDatas
  * @property {Object} drawData.legendDatas
  * @property {Object} drawData.tableData
- * @property {Boolean} Invalidated
- * @property {Object} ViewModelHelper Calc DataPos to ViewPos(Canvas Pos), Calc ViewPos(Canvas Pos) to DataPos
- * @param {Object} graphModel
- * @param {Number} width canvasWidth
- * @param {Number} height canvasHeight
+ * @property {boolean} Invalidated
+ * @property {ViewModelHelper} ViewModelHelper Calc DataPos to ViewPos(Canvas Pos), Calc ViewPos(Canvas Pos) to DataPos
+ * @param {GraphModel} graphModel
+ * @param {number} width canvasWidth
+ * @param {number} height canvasHeight
  *
  * See function description
  * @method GetDrawData
@@ -31,66 +83,18 @@ import ViewModelHelper from './ViewModelHelper';
  * @method InvalidateModel
  */
 export default class ViewModel {
-  graphModel: any;
+  graphModel: GraphModel;
   canvasWidth: number;
   canvasHeight: number;
   invalidated: boolean;
-  drawData: any;
+  drawData: DrawData;
   viewModelHelper: ViewModelHelper;
 
-  constructor(graphModel: any, width: number, height: number) {
+  constructor(graphModel: GraphModel, width: number, height: number) {
     this.graphModel = graphModel;
     this.canvasWidth = width;
     this.canvasHeight = height;
-    this.drawData = {
-      font: '',
-      title: {
-        text: '',
-        color: 'black',
-        position: null,
-      },
-      border: {
-        visible: true,
-        type: '',
-        color: '',
-        width: 1,
-        rect: null,
-      },
-      grid: {
-        visible: true,
-        type: '',
-        color: '',
-      },
-      axis: {
-        xLabel: {
-          visible: true,
-          text: '',
-          color: 'black',
-          position: null,
-        },
-        yLabel: {
-          visible: true,
-          text: '',
-          color: 'black',
-          position: null,
-        },
-      },
-      tics: {
-        visible: true,
-        color: 'black',
-        xTics: null,
-        yTics: null,
-      },
-      lineDatas: null,
-      legendDatas: null,
-      tableData: {
-        visible: true,
-        selectedTic: NaN,
-        colors: [],
-        legends: [],
-        datas: [],
-      },
-    };
+    this.drawData = InitialDrawData;
 
     this.Init();
     this.invalidated = true;
@@ -105,8 +109,9 @@ export default class ViewModel {
    * @Description
    * Returns true if the mouse is in the graph area.
    */
-  IsInGraph(mousePos): boolean {
+  IsInGraph(mousePos: Point): boolean {
     const graphRect = this.viewModelHelper.GetGraphRect();
+
     if (
       mousePos.x <= graphRect.x + graphRect.w &&
       mousePos.x >= graphRect.x &&
@@ -115,6 +120,7 @@ export default class ViewModel {
     ) {
       return true;
     }
+
     return false;
   }
 
@@ -123,14 +129,14 @@ export default class ViewModel {
    * @Description
    * If a new tick is selected, update drawdata's selected tic and change viewmodel to invalidated state. And returns true.
    */
-  GetNewTic(mousePos) {
+  GetNewTic(mousePos: Point): {result: boolean; selectedTic: number} {
     const selectedTic = this.viewModelHelper.GetSelectedTic(mousePos, this.drawData.tableData.datas);
 
     if (this.drawData.tableData.selectedTic !== selectedTic) {
       return {result: true, selectedTic};
     }
 
-    return {result: false, selectedTic: null};
+    return {result: false, selectedTic: NaN};
   }
 
   /**
@@ -162,6 +168,7 @@ export default class ViewModel {
       tics,
       tableVisible,
     } = this.graphModel.config;
+
     this.viewModelHelper = new ViewModelHelper(font, axisX, axisY, this.canvasWidth, this.canvasHeight);
 
     this.drawData.canvasWidth = this.canvasWidth;
@@ -195,13 +202,13 @@ export default class ViewModel {
     this.drawData.axis.xLabel.visible = axisX.visible;
     this.drawData.axis.xLabel.text = axisX.label;
     this.drawData.axis.xLabel.color = axisX.color;
-    this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(axisX.location);
+    this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(axisX.location as HorizontalAlignType);
 
     // AxisY
     this.drawData.axis.yLabel.visible = axisY.visible;
     this.drawData.axis.yLabel.text = axisY.label;
     this.drawData.axis.yLabel.color = axisY.color;
-    this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(axisY.location);
+    this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(axisY.location as VerticalAlignType);
 
     // Tics
     this.drawData.tics.visible = tics.visible;
@@ -213,7 +220,8 @@ export default class ViewModel {
     this.drawData.lineDatas = this.viewModelHelper.GetLineDatas(this.graphModel.lineDatas);
 
     // tableDatas
-    const tableDatas = this.viewModelHelper.GetTableDatas(this.graphModel.lineDatas, tics.value.x);
+    const tableDatas = this.viewModelHelper.GetTableData(this.graphModel.lineDatas, tics.value.x);
+
     if (tableDatas) {
       this.drawData.tableData.visible = tableVisible;
       this.drawData.tableData.colors = tableDatas.colors;
@@ -228,12 +236,14 @@ export default class ViewModel {
 
   /**
    * @name InvalidateModel
-   * @type function
    * @description
    * Update the viewmodel using the current graph model. Then change viewmodel to invalidated state.
    */
-  InvalidateModel(updateType, value) {
-    if (!this.graphModel) return;
+  InvalidateModel(updateType: UPDATE_TYPE, value?: any): void {
+    if (!this.graphModel) {
+      return;
+    }
+
     switch (updateType) {
       case UPDATE_TYPE.NEW_LINE:
       case UPDATE_TYPE.UPDATE_LINE:
@@ -259,11 +269,15 @@ export default class ViewModel {
         this.drawData.tics.yTics = this.viewModelHelper.GetyTics(this.graphModel.config.tics.value.y);
 
         // Axis Position
-        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(this.graphModel.config.axisX.location);
-        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(this.graphModel.config.axisY.location);
+        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(
+          this.graphModel.config.axisX.location as HorizontalAlignType
+        );
+        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(
+          this.graphModel.config.axisY.location as VerticalAlignType
+        );
 
         // TableDatas
-        const tableDatas = this.viewModelHelper.GetTableDatas(
+        const tableDatas = this.viewModelHelper.GetTableData(
           this.graphModel.lineDatas,
           this.graphModel.config.tics.value.x
         );
@@ -285,7 +299,7 @@ export default class ViewModel {
         this.drawData.legendDatas = this.viewModelHelper.GetLegendDatas(this.graphModel.lineDatas);
 
         // tableDatas
-        const tableDatas = this.viewModelHelper.GetTableDatas(
+        const tableDatas = this.viewModelHelper.GetTableData(
           this.graphModel.lineDatas,
           this.graphModel.config.tics.value.x
         );
@@ -335,7 +349,9 @@ export default class ViewModel {
         this.drawData.axis.xLabel.text = this.graphModel.config.axisX.label;
         break;
       case UPDATE_TYPE.AXISX_LOCATION:
-        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(this.graphModel.config.axisX.location);
+        this.drawData.axis.xLabel.position = this.viewModelHelper.GetAxisXPos(
+          this.graphModel.config.axisX.location as HorizontalAlignType
+        );
         break;
       case UPDATE_TYPE.AXISX_COLOR:
         this.drawData.axis.xLabel.color = this.graphModel.config.axisX.color;
@@ -347,7 +363,9 @@ export default class ViewModel {
         this.drawData.axis.yLabel.text = this.graphModel.config.axisY.label;
         break;
       case UPDATE_TYPE.AXISY_LOCATION:
-        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(this.graphModel.config.axisY.location);
+        this.drawData.axis.yLabel.position = this.viewModelHelper.GetAxisYPos(
+          this.graphModel.config.axisY.location as VerticalAlignType
+        );
         break;
       case UPDATE_TYPE.AXISY_COLOR:
         this.drawData.axis.yLabel.color = this.graphModel.config.axisY.color;

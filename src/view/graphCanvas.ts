@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import CanvasHelper from './canvasHelper';
 import CanvasHelperFactory from './canvasHelperFactory';
+import {DrawData} from './const';
 
 /**
  * @name Plotta
@@ -15,7 +16,7 @@ import CanvasHelperFactory from './canvasHelperFactory';
 class GraphCanvas {
   canvasHelper: CanvasHelper;
 
-  constructor(canvas) {
+  constructor(canvas: HTMLCanvasElement) {
     const dpr = window.devicePixelRatio || 1;
     const {width, height} = canvas;
     // Scale up the size of the canvas.
@@ -30,7 +31,7 @@ class GraphCanvas {
    * @description
    * Call the Draw function of the registered CanvasHelper.
    */
-  Draw(drawData): void {
+  Draw(drawData: DrawData): void {
     if (!drawData) {
       return;
     }

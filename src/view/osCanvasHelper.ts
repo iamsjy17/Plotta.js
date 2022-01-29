@@ -1,3 +1,5 @@
+import {DrawData} from './const';
+
 /**
  * @name OffscreenCanvasHelper
  * @type class
@@ -35,7 +37,7 @@ export default class OffscreenCanvasHelper {
    * @description
    * Pass DrawData to the Worker.
    */
-  Draw(drawData): void {
+  Draw(drawData: DrawData): void {
     this.worker.postMessage({
       drawData,
     });

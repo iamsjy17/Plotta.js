@@ -1,21 +1,14 @@
-interface Rect {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-interface Pos {
-  x: number;
-  y: number;
-}
+import {Axis} from '../model/axis';
+import {HorizontalAlignType, Point, Rect, VerticalAlignType} from '../model/const';
+import {LineData} from '../model/lineData';
+import {DrawLineData, LegendData, PosData, TableData, TicData} from './const';
 
 const LEFT_OFFSET = 80;
 const RIGHT_OFFSET = 20;
 const TOP_OFFSET = 80;
 const BOTTOM_OFFSET = 70;
 
-const GetLocationRatio = function (location) {
+const GetLocationRatio = function (location: HorizontalAlignType | VerticalAlignType): number {
   let ratio = 50;
   const _location = location.toLowerCase();
 
@@ -41,17 +34,12 @@ const GetLocationRatio = function (location) {
  * @name ViewModelHelper
  * @type class
  * @property {string} font
- * @property {Object} axisX
- * @property {Object} axisY
+ * @property {Axis} axisX
+ * @property {Axis} axisY
  * @property {number} canvasWidth
  * @property {number} canvasHeight
  * @property {Rect} graphRect graph area in canvas
  * @property {Rect} legendRect legend area in canvas
- * @param {string} font
- * @param {Object} axisX
- * @param {Object} axisY
- * @param {number} canvasWidth
- * @param {number} canvasHeight
  *
  * See function description
  * @method GetGraphRect
@@ -70,18 +58,18 @@ const GetLocationRatio = function (location) {
  * @method GetLineDatas
  * @method GetLegendDatas
  * @method GetSelectedTic
- * @method GetTableDatas
+ * @method GettableData
  */
 export default class ViewModelHelper {
   font: string;
-  axisX: any;
-  axisY: any;
+  axisX: Axis;
+  axisY: Axis;
   canvasWidth: number;
   canvasHeight: number;
   graphRect: Rect;
   legendRect?: Rect;
 
-  constructor(font: string, axisX: any, axisY: any, canvasWidth: number, canvasHeight: number) {
+  constructor(font: string, axisX: Axis, axisY: Axis, canvasWidth: number, canvasHeight: number) {
     this.font = font;
     this.axisX = axisX;
     this.axisY = axisY;
@@ -121,7 +109,7 @@ export default class ViewModelHelper {
    * X : Depend On Location info
    * left 20, center 50, right 80 (ratio)
    */
-  GetTitlePos(location): Pos {
+  GetTitlePos(location: HorizontalAlignType | VerticalAlignType): Point {
     const ratio = GetLocationRatio(location);
     return {x: this.graphRect.x + (this.graphRect.w * ratio) / 100, y: TOP_OFFSET / 2};
   }
@@ -133,7 +121,7 @@ export default class ViewModelHelper {
    * X : Depend On Location info
    * left 20, center 50, right 80 (ratio)
    */
-  GetAxisXPos(location): Pos {
+  GetAxisXPos(location: HorizontalAlignType): Point {
     const ratio = GetLocationRatio(location);
     return {
       x: this.graphRect.x + (this.graphRect.w * ratio) / 100,
@@ -148,7 +136,7 @@ export default class ViewModelHelper {
    * Y : Depend On Location info
    * top 20, middle 50, bottom 80 (ratio)
    */
-  GetAxisYPos(location): Pos {
+  GetAxisYPos(location: VerticalAlignType): Point {
     const ratio = GetLocationRatio(location);
     return {
       x: this.graphRect.x - 50,
@@ -161,14 +149,13 @@ export default class ViewModelHelper {
    * @Description
    * Gets the tics contained in the x-axis range
    */
-  GetxTics(ticValue) {
-    const tics = [];
+  GetxTics(ticValue: number): TicData[] {
+    const tics: TicData[] = [];
     let _ticValue = this.axisX.range.start;
     let tic = null;
 
     while (_ticValue <= this.axisX.range.end) {
-      tic = this.DataPoint2CanvasPoint(_ticValue, this.axisY.range.start);
-      tic.value = _ticValue;
+      tic = {...this.DataPoint2CanvasPoint(_ticValue, this.axisY.range.start), value: _ticValue};
       tics.push(tic);
       _ticValue += ticValue;
     }
@@ -181,18 +168,17 @@ export default class ViewModelHelper {
    * @Description
    * Gets the tics contained in the y-axis range
    */
-  GetyTics(ticValue) {
+  GetyTics(ticValue: number): TicData[] {
     if (ticValue <= 0) {
       return null;
     }
 
-    const tics = [];
+    const tics: TicData[] = [];
     let _ticValue = this.axisY.range.start;
     let tic = null;
 
     while (_ticValue <= this.axisY.range.end) {
-      tic = this.DataPoint2CanvasPoint(this.axisX.range.start, _ticValue);
-      tic.value = _ticValue;
+      tic = {...this.DataPoint2CanvasPoint(this.axisX.range.start, _ticValue), value: _ticValue};
       tics.push(tic);
       _ticValue += ticValue;
     }
@@ -202,25 +188,25 @@ export default class ViewModelHelper {
 
   /**
    * @name CanvasPoint2DataPoint
-   * @type function
-   * @return {Object}
    * @Description
    * Change the Canvas Point to Data Point.
    */
-  CanvasPoint2DataPoint({x, y}) {
+  CanvasPoint2DataPoint({x, y}: Point): Point | null {
     const graphPoint = this.CanvasPoint2GraphPoint(x, y);
-    if (graphPoint) return this.GraphPoint2DataPoint(graphPoint);
-    return null;
+
+    if (!graphPoint) {
+      return null;
+    }
+
+    return this.GraphPoint2DataPoint(graphPoint);
   }
 
   /**
    * @name DataPoint2CanvasPoint
-   * @type function
-   * @return {Object}
    * @Description
    * Change the Data Point to Canvas Point.
    */
-  DataPoint2CanvasPoint(x, y): Pos | null {
+  DataPoint2CanvasPoint(x: number, y: number): Point | null {
     const graphPoint = this.DataPoint2GraphPoint(x, y);
 
     if (!graphPoint) {
@@ -235,7 +221,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Graph Point to Data Point.
    */
-  GraphPoint2DataPoint({x, y}): Pos | null {
+  GraphPoint2DataPoint({x, y}: Point): Point | null {
     if (typeof x !== 'number' || typeof y !== 'number') {
       return null;
     }
@@ -251,7 +237,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Data Point to Graph Point.
    */
-  DataPoint2GraphPoint(x, y): Pos | null {
+  DataPoint2GraphPoint(x: number, y: number): Point | null {
     if (
       !this.axisX.range ||
       !this.axisY.range ||
@@ -274,7 +260,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Canvas Point to Graph Point.
    */
-  CanvasPoint2GraphPoint(x, y): Pos | null {
+  CanvasPoint2GraphPoint(x: number, y: number): Point | null {
     if (typeof x !== 'number' || typeof y !== 'number') {
       return null;
     }
@@ -296,7 +282,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Graph Point to Canvas Point.
    */
-  GraphPoint2CanvasPoint({x, y}): Pos | null {
+  GraphPoint2CanvasPoint({x, y}: Point): Point | null {
     if (typeof x !== 'number' || typeof y !== 'number') {
       return null;
     }
@@ -319,7 +305,7 @@ export default class ViewModelHelper {
    * If the type is 'func', get the result value y of the function.
    * convert the x and y values to Canvas Pos.
    */
-  GetLineDatas(lineDatas) {
+  GetLineDatas(lineDatas: Map<string, LineData>): Map<string, DrawLineData> {
     const _lineDatas = new Map();
 
     lineDatas.forEach((value, key) => {
@@ -329,8 +315,8 @@ export default class ViewModelHelper {
     return _lineDatas;
   }
 
-  GetLineData(lineData) {
-    const {type, legend, color, visible, datas, func, dotNum} = lineData;
+  GetLineData(lineData: LineData): DrawLineData {
+    const {type, color, visible, datas, func, dotNum} = lineData;
 
     if (!visible) {
       return null;
@@ -392,8 +378,8 @@ export default class ViewModelHelper {
    * Default Font Size : 14px,
    * Decreases the height of the GraphRect by the height of the calculated LegendRect.
    */
-  GetLegendDatas(lineDatas) {
-    const legendDatas = [];
+  GetLegendDatas(lineDatas: Map<string, LineData>): LegendData[] {
+    const legendDatas: LegendData[] = [];
     const lineHeight = 30;
     const defaultLegendWidth = 30;
     const legendRect = {
@@ -410,7 +396,7 @@ export default class ViewModelHelper {
     ctx.save();
     ctx.font = `14px ${this.font}`;
 
-    lineDatas.forEach((value, index) => {
+    lineDatas.forEach(value => {
       const {legend, color, visible} = value;
       const point = {x: 0, y: 0};
 
@@ -446,12 +432,10 @@ export default class ViewModelHelper {
 
   /**
    * @name GetSelectedTic
-   * @type function
-   * @return {Number}
    * @Description
    * Gets the value of the Tic where the mouse cursor is located.
    */
-  GetSelectedTic(mousePos, datas) {
+  GetSelectedTic(mousePos: Point, datas: PosData[]): number {
     if (mousePos == null || datas == null) {
       return NaN;
     }
@@ -467,7 +451,7 @@ export default class ViewModelHelper {
       .filter(tic => !isNaN(tic))
       .sort((a, b) => a - b);
 
-    const binarySearch = function (arr, value) {
+    const binarySearch = function (arr: number[], value: number): number {
       const mid = Math.floor(arr.length / 2);
 
       if (value === arr[mid]) {
@@ -493,19 +477,17 @@ export default class ViewModelHelper {
   }
 
   /**
-   * @name GetTableDatas
-   * @type function
-   * @return {Object}
+   * @name GetTableData
    * @Description
    * The y values of each line corresponding to the current x value are converted to table information.
    * The table information includes the width of each column.
    */
-  GetTableDatas(lineDatas, tic) {
-    if (!lineDatas || lineDatas.length === 0) {
+  GetTableData(lineDatas: Map<string, LineData>, tic: number): TableData | null {
+    if (!lineDatas || lineDatas.size === 0) {
       return null;
     }
 
-    const tableDatas: {legends?: any; colors?: any; datas?: any; legendWidth?: any} = {};
+    const tableData: TableData = {};
     let index = -1;
     let legendWidth = 0;
     let curlegendWidth = 0;
@@ -513,8 +495,8 @@ export default class ViewModelHelper {
     const ctx = c.getContext('2d');
     ctx.font = `14px ${this.font}`;
 
-    lineDatas.forEach(value => {
-      const {type, legend, color, visible, datas, func, dotNum} = value;
+    lineDatas.forEach(lineData => {
+      const {type, legend, color, visible, datas, func, dotNum} = lineData;
 
       if (!visible) {
         return;
@@ -527,20 +509,20 @@ export default class ViewModelHelper {
       curlegendWidth = ctx.measureText(legend).width;
       legendWidth = legendWidth > curlegendWidth ? legendWidth : curlegendWidth;
 
-      if (!tableDatas.legends) {
-        tableDatas.legends = [];
+      if (!tableData.legends) {
+        tableData.legends = [];
       }
 
-      if (!tableDatas.colors) {
-        tableDatas.colors = [];
+      if (!tableData.colors) {
+        tableData.colors = [];
       }
 
-      if (!tableDatas.datas) {
-        tableDatas.datas = [];
+      if (!tableData.datas) {
+        tableData.datas = [];
       }
 
-      tableDatas.legends[index] = legend;
-      tableDatas.colors[index] = color;
+      tableData.legends[index] = legend;
+      tableData.colors[index] = color;
 
       if (type === 'func' && typeof func === 'function') {
         x = this.axisX.range.start;
@@ -561,7 +543,7 @@ export default class ViewModelHelper {
           x += tic;
         }
 
-        ticDatas.forEach((point, idx, array) => {
+        ticDatas.forEach(point => {
           ({x, y} = point);
 
           if (typeof x !== 'number') {
@@ -572,11 +554,11 @@ export default class ViewModelHelper {
             y = NaN;
           }
 
-          if (!tableDatas.datas[x]) {
-            tableDatas.datas[x] = [];
+          if (!tableData.datas[x]) {
+            tableData.datas[x] = {length: 0};
           }
 
-          tableDatas.datas[x][index] = {
+          tableData.datas[x][index] = {
             dataPos: y,
             canvasPos: this.DataPoint2CanvasPoint(0, y).y,
           };
@@ -595,11 +577,11 @@ export default class ViewModelHelper {
             y = NaN;
           }
 
-          if (!tableDatas.datas[x]) {
-            tableDatas.datas[x] = [];
+          if (!tableData.datas[x]) {
+            tableData.datas[x] = {length: 0};
           }
 
-          tableDatas.datas[x][index] = {
+          tableData.datas[x][index] = {
             dataPos: y,
             canvasPos: this.DataPoint2CanvasPoint(0, y).y,
           };
@@ -607,21 +589,23 @@ export default class ViewModelHelper {
       }
     });
 
-    if (!tableDatas.datas || tableDatas.datas.length === 0) {
+    if (!tableData.datas || tableData.datas.length === 0) {
       return null;
     }
 
     let valueWidth = 0;
     let curValueWidth = 0;
-    const tics = Object.keys(tableDatas.datas);
+    const tics = Object.keys(tableData.datas);
 
     tics.forEach(tic => {
-      tableDatas.datas[tic].forEach(value => {
+      const x = Number(tic);
+
+      Array.prototype.forEach.call(tableData.datas[x], (value: {dataPos: number}) => {
         curValueWidth = ctx.measureText(value.dataPos.toFixed(3)).width;
         valueWidth = valueWidth > curValueWidth ? valueWidth : curValueWidth;
       });
 
-      const array = tableDatas.datas[tic].filter(cur => {
+      const array = Array.prototype.filter.call(tableData.datas[x], (cur: {dataPos: number}) => {
         if (cur.dataPos >= this.axisY.range.start && cur.dataPos <= this.axisY.range.end) {
           return true;
         }
@@ -630,19 +614,20 @@ export default class ViewModelHelper {
       });
 
       if (array.length > 0) {
-        tableDatas.datas[tic].canvasPos = this.DataPoint2CanvasPoint(
-          parseInt(tic, 10),
-          array.reduce((acc, cur) => {
+        tableData.datas[x].canvasPos = this.DataPoint2CanvasPoint(
+          x,
+          array.reduce((acc: {dataPos: number}, cur: {dataPos: number}) => {
             acc.dataPos += cur.dataPos;
             return acc;
           }).dataPos / array.length
         );
 
-        tableDatas.datas[tic].width = valueWidth;
+        tableData.datas[x].width = valueWidth;
       }
     });
 
-    tableDatas.legendWidth = legendWidth;
-    return tableDatas;
+    tableData.legendWidth = legendWidth;
+
+    return tableData;
   }
 }
