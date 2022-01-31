@@ -49,5 +49,5 @@ export const initialConfig: GraphConfig = {
   tableVisible: true,
   axisX: {...initialAxis, label: 'x', location: 'center'},
   axisY: {...initialAxis, label: 'y', location: 'middle'},
-  tics: new Tics(),
+  tics: {type: 'number', visible: true, color: 'black', value: {x: 1, y: 1}},
 };

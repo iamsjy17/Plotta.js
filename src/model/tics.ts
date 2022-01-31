@@ -1,28 +1,10 @@
-export interface TicsValue {
-  x: number;
-  y: number;
-}
+import {Point} from './const';
 
 export type TicsType = 'number';
 
-export class Tics {
+export interface Tics {
   type: TicsType;
   visible: boolean;
   color: string;
-  value: TicsValue;
-
-  constructor(
-    type: TicsType = 'number',
-    visible = true,
-    color = 'black',
-    value = {
-      x: 1,
-      y: 1,
-    }
-  ) {
-    this.type = type || 'number';
-    this.visible = typeof visible === 'boolean' ? visible : true;
-    this.color = color || 'black';
-    this.value = value;
-  }
+  value: Point;
 }
