@@ -1,6 +1,6 @@
 import GraphModel from '../model/graphModel';
 import GraphView from '../view/graphView';
-import {UPDATE_TYPE} from '../model/const';
+import {UPDATE_TYPE} from '../model/model';
 import {LineData} from '../model/lineData';
 import {GraphConfig} from '../model/config';
 

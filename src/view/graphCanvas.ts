@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import CanvasHelper from './canvasHelper';
 import CanvasHelperFactory from './canvasHelperFactory';
-import {DrawData} from './const';
+import {ViewModel} from './viewModel';
 
 /**
  * @name Plotta
@@ -12,7 +12,6 @@ import {DrawData} from './const';
  * See function description
  * @method Draw
  */
-
 class GraphCanvas {
   canvasHelper: CanvasHelper;
 
@@ -31,12 +30,12 @@ class GraphCanvas {
    * @description
    * Call the Draw function of the registered CanvasHelper.
    */
-  Draw(drawData: DrawData): void {
-    if (!drawData) {
+  Draw(viewModel: ViewModel): void {
+    if (!viewModel) {
       return;
     }
 
-    this.canvasHelper.Draw(drawData);
+    this.canvasHelper.Draw(viewModel);
   }
 }
 

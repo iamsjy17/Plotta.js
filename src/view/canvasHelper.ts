@@ -1,4 +1,4 @@
-import {DrawData} from './const';
+import {ViewModel} from './viewModel';
 import DrawHelper from './drawHelper';
 
 export default class CanvasHelper {
@@ -21,8 +21,8 @@ export default class CanvasHelper {
     this.backgroundContext.scale(this.dpr, this.dpr);
   }
 
-  Draw(drawData: DrawData): void {
-    DrawHelper.Draw(this.backgroundContext, drawData);
+  Draw(viewModel: ViewModel): void {
+    DrawHelper.Draw(this.backgroundContext, viewModel);
     this.presentationContext.clearRect(0, 0, this.presentationCanvas.width, this.presentationCanvas.height);
     this.presentationContext.drawImage(this.backgroundCanvas, 0, 0);
   }

@@ -1,5 +1,5 @@
 import Util from '../util';
-import {Point} from './const';
+import {Point} from './model';
 
 export type DataType = 'func' | 'data';
 

@@ -3,17 +3,16 @@ import GraphView from './view/graphView';
 import Presenter from './presenter/presenter';
 import {GraphConfig} from './model/config';
 import {LineData} from './model/lineData';
-import {HorizontalAlignType, VerticalAlignType} from './model/const';
-import {TicsValue} from './model/tics';
+import {HorizontalAlignType, Point, VerticalAlignType} from './model/model';
 
 /**
  * @name Plotta
  * @type class
- * @property {Object} GraphModel
- * @property {Object} GraphView
- * @property {Object} Presenter
+ * @property {GraphModel} GraphModel
+ * @property {GraphView} GraphView
+ * @property {Presenter} Presenter
  *
- * @param {Object} canvas canvas Element
+ * @param {HTMLCanvasElement} canvas canvas Element
  * @param {Object} dataSet data Object
  *
  * @method UpdateGraph
@@ -223,7 +222,7 @@ export default class Plotta {
     this.GraphModel.SetTicsColor(color);
   }
 
-  SetTicsValue(value: TicsValue): void {
+  SetTicsValue(value: Point): void {
     this.GraphModel.SetTicsValue(value);
   }
 

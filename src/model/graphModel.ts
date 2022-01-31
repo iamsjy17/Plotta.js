@@ -1,8 +1,7 @@
 import {LineData} from './lineData';
 import {GraphConfig, initialConfig} from './config';
-import {HorizontalAlignType, UPDATE_TYPE, VerticalAlignType} from './const';
+import {HorizontalAlignType, Point, UPDATE_TYPE, VerticalAlignType} from './model';
 import {AxisRange} from './axis';
-import {TicsValue} from './tics';
 import {ViewHandler} from '../presenter/presenter';
 
 export default class GraphModel {
@@ -248,7 +247,7 @@ export default class GraphModel {
     }
   }
 
-  SetTicsValue(value: TicsValue, updateView?: boolean): void {
+  SetTicsValue(value: Point, updateView?: boolean): void {
     if (!this.viewHandler) {
       return;
     }

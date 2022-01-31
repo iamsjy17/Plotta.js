@@ -1,50 +1,74 @@
-import {Axis} from '../model/axis';
-import {HorizontalAlignType, Point, Rect, VerticalAlignType} from '../model/const';
+import {HorizontalAlignType, Point, Rect, UPDATE_TYPE, VerticalAlignType} from '../model/model';
+import GraphModel from '../model/graphModel';
 import {LineData} from '../model/lineData';
-import {DrawLineData, LegendData, PosData, TableData, TicData} from './const';
+import {DrawLineData, LegendData, PosData, TableData, TicData, ViewModel} from './viewModel';
+import {Axis} from '../model/axis';
 
-const LEFT_OFFSET = 80;
-const RIGHT_OFFSET = 20;
-const TOP_OFFSET = 80;
-const BOTTOM_OFFSET = 70;
-
-const GetLocationRatio = function (location: HorizontalAlignType | VerticalAlignType): number {
-  let ratio = 50;
-  const _location = location.toLowerCase();
-
-  switch (_location) {
-    case 'left':
-    case 'top':
-      ratio = 20;
-      break;
-    case 'right':
-    case 'bottom':
-      ratio = 80;
-      break;
-    case 'center':
-    case 'middle':
-    default:
-      break;
-  }
-
-  return ratio;
+const initialViewModel: ViewModel = {
+  font: '',
+  title: {
+    text: '',
+    color: 'black',
+    position: null,
+  },
+  border: {
+    visible: true,
+    type: 'solid',
+    color: '',
+    width: 1,
+  },
+  grid: {
+    visible: true,
+    type: 'solid',
+    color: '',
+  },
+  axis: {
+    xLabel: {
+      visible: true,
+      text: '',
+      color: 'black',
+      position: null,
+    },
+    yLabel: {
+      visible: true,
+      text: '',
+      color: 'black',
+      position: null,
+    },
+  },
+  tics: {
+    visible: true,
+    color: 'black',
+    xTics: null,
+    yTics: null,
+  },
+  lineDatas: null,
+  legendDatas: null,
+  tableData: {
+    visible: true,
+    selectedTic: NaN,
+    colors: [],
+    legends: [],
+    datas: [],
+    legendWidth: 0,
+  },
 };
 
 /**
  * @name ViewModelHelper
  * @type class
- * @property {string} font
- * @property {Axis} axisX
- * @property {Axis} axisY
+ * @property {GraphModel} graphModel
  * @property {number} canvasWidth
  * @property {number} canvasHeight
- * @property {Rect} graphRect graph area in canvas
- * @property {Rect} legendRect legend area in canvas
+ * @property {boolean} Invalidated
+ * @property {ViewModel} viewModel
  *
  * See function description
- * @method GetGraphRect
- * @method GetLegendRect
- * @method GetTitlePos
+ * @method GetViewModel
+ * @method IsInGraph
+ * @method IsNewTic
+ * @method Init
+ * @method InvalidateModel
  * @method GetAxisXPos
  * @method GetAxisYPos
  * @method GetxTics
@@ -58,48 +82,399 @@ const GetLocationRatio = function (location: HorizontalAlignType | VerticalAlign
  * @method GetLineDatas
  * @method GetLegendDatas
  * @method GetSelectedTic
- * @method GettableData
+ * @method GetTableData
  */
 export default class ViewModelHelper {
-  font: string;
-  axisX: Axis;
-  axisY: Axis;
+  private static GetLocationRatio(location: HorizontalAlignType | VerticalAlignType): number {
+    let ratio = 50;
+    const _location = location.toLowerCase();
+
+    switch (_location) {
+      case 'left':
+      case 'top':
+        ratio = 20;
+        break;
+      case 'right':
+      case 'bottom':
+        ratio = 80;
+        break;
+      case 'center':
+      case 'middle':
+      default:
+        break;
+    }
+
+    return ratio;
+  }
+
+  private static LEFT_OFFSET = 80;
+  private static RIGHT_OFFSET = 20;
+  private static TOP_OFFSET = 80;
+  private static BOTTOM_OFFSET = 70;
+
+  private get axisX(): Axis {
+    return this.graphModel.config.axisX;
+  }
+
+  private get axisY(): Axis {
+    return this.graphModel.config.axisY;
+  }
+
+  graphModel: GraphModel;
   canvasWidth: number;
   canvasHeight: number;
+
+  invalidated: boolean;
+  viewModel: ViewModel;
   graphRect: Rect;
   legendRect?: Rect;
 
-  constructor(font: string, axisX: Axis, axisY: Axis, canvasWidth: number, canvasHeight: number) {
-    this.font = font;
-    this.axisX = axisX;
-    this.axisY = axisY;
+  constructor(graphModel: GraphModel, canvasWidth: number, canvasHeight: number) {
+    this.graphModel = graphModel;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
+
+    this.invalidated = true;
+    this.viewModel = initialViewModel;
     this.graphRect = {
-      x: LEFT_OFFSET,
-      y: TOP_OFFSET,
-      w: this.canvasWidth - (LEFT_OFFSET + RIGHT_OFFSET),
-      h: this.canvasHeight - (TOP_OFFSET + BOTTOM_OFFSET),
+      x: ViewModelHelper.LEFT_OFFSET,
+      y: ViewModelHelper.TOP_OFFSET,
+      w: this.canvasWidth - (ViewModelHelper.LEFT_OFFSET + ViewModelHelper.RIGHT_OFFSET),
+      h: this.canvasHeight - (ViewModelHelper.TOP_OFFSET + ViewModelHelper.BOTTOM_OFFSET),
     };
+
+    this.Init();
+  }
+
+  GetViewModel() {
+    return this.viewModel;
   }
 
   /**
-   * @name GetGraphRect
+   * @name IsInGraph
    * @Description
-   * graph area in canvas
-   * GraphHeight = CanvasHeight - LegendHeight - Margins
+   * Returns true if the mouse is in the graph area.
    */
-  GetGraphRect(): Rect {
-    return this.graphRect;
+  IsInGraph(mousePos: Point): boolean {
+    if (
+      mousePos.x <= this.graphRect.x + this.graphRect.w &&
+      mousePos.x >= this.graphRect.x &&
+      mousePos.y <= this.graphRect.y + this.graphRect.h &&
+      mousePos.y >= this.graphRect.y
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
-   * @name GetLegendRect
+   * @name GetNewTic
    * @Description
-   * legend area in canvas
+   * If a new tick is selected, update viewModel's selected tic and change viewmodel to invalidated state. And returns true.
    */
-  GetLegendRect(): Rect {
-    return this.legendRect;
+  GetNewTic(mousePos: Point): {result: boolean; selectedTic: number} {
+    const selectedTic = this.GetSelectedTic(mousePos, this.viewModel.tableData.datas);
+
+    if (this.viewModel.tableData.selectedTic !== selectedTic) {
+      return {result: true, selectedTic};
+    }
+
+    return {result: false, selectedTic: NaN};
+  }
+
+  /**
+   * @name Init
+   * @Description
+   * Update the viewmodel using the current graph model.
+   * The viewmodel is data that can be drawn directly using the canvas coordinate system.
+   */
+  Init(): void {
+    if (!this.graphModel) {
+      return;
+    }
+
+    const {
+      font,
+      legendVisible,
+      title,
+      titleColor,
+      titleLocation,
+      gridType,
+      gridVisible,
+      gridColor,
+      borderType,
+      borderVisible,
+      borderColor,
+      borderWidth,
+      axisX,
+      axisY,
+      tics,
+      tableVisible,
+    } = this.graphModel.config;
+
+    this.viewModel.canvasWidth = this.canvasWidth;
+    this.viewModel.canvasHeight = this.canvasHeight;
+
+    // LegendDatas
+    this.viewModel.legendDatas = this.GetLegendDatas();
+
+    // ViewRect
+    this.viewModel.graphRect = this.graphRect;
+    this.viewModel.legendRect = this.legendRect;
+
+    // Title
+    this.viewModel.font = font;
+    this.viewModel.title.text = title;
+    this.viewModel.title.color = titleColor;
+    this.viewModel.title.position = this.GetTitlePos(titleLocation);
+
+    // Border
+    this.viewModel.border.visible = borderVisible;
+    this.viewModel.border.type = borderType;
+    this.viewModel.border.color = borderColor;
+    this.viewModel.border.width = borderWidth;
+
+    // Grid
+    this.viewModel.grid.visible = gridVisible;
+    this.viewModel.grid.type = gridType;
+    this.viewModel.grid.color = gridColor;
+
+    // AxisX
+    this.viewModel.axis.xLabel.visible = axisX.visible;
+    this.viewModel.axis.xLabel.text = axisX.label;
+    this.viewModel.axis.xLabel.color = axisX.color;
+    this.viewModel.axis.xLabel.position = this.GetAxisXPos(axisX.location as HorizontalAlignType);
+
+    // AxisY
+    this.viewModel.axis.yLabel.visible = axisY.visible;
+    this.viewModel.axis.yLabel.text = axisY.label;
+    this.viewModel.axis.yLabel.color = axisY.color;
+    this.viewModel.axis.yLabel.position = this.GetAxisYPos(axisY.location as VerticalAlignType);
+
+    // Tics
+    this.viewModel.tics.visible = tics.visible;
+    this.viewModel.tics.color = tics.color;
+    this.viewModel.tics.xTics = this.GetxTics();
+    this.viewModel.tics.yTics = this.GetyTics();
+
+    // LineDatas
+    this.viewModel.lineDatas = this.GetLineDatas(this.graphModel.lineDatas);
+
+    // tableDatas
+    const tableDatas = this.GetTableData(this.graphModel.lineDatas, tics.value.x);
+
+    if (tableDatas) {
+      this.viewModel.tableData.visible = tableVisible;
+      this.viewModel.tableData.colors = tableDatas.colors;
+      this.viewModel.tableData.legends = tableDatas.legends;
+      this.viewModel.tableData.legendWidth = tableDatas.legendWidth;
+      this.viewModel.tableData.datas = tableDatas.datas;
+    } else {
+      this.viewModel.tableData.legendWidth = 0;
+      this.viewModel.tableData.datas = null;
+    }
+  }
+
+  /**
+   * @name InvalidateModel
+   * @description
+   * Update the viewmodel using the current graph model. Then change viewmodel to invalidated state.
+   */
+  InvalidateModel(updateType: UPDATE_TYPE, value?: any): void {
+    if (!this.graphModel) {
+      return;
+    }
+
+    switch (updateType) {
+      case UPDATE_TYPE.NEW_LINE:
+      case UPDATE_TYPE.UPDATE_LINE:
+      case UPDATE_TYPE.DELETE_LINE: {
+        // value : id;
+        // Update Rect, Tics, Table, Lines, Axis, Legends
+
+        // LegendDatas
+        this.viewModel.legendDatas = this.GetLegendDatas();
+
+        // Rect
+        this.viewModel.graphRect = this.graphRect;
+        this.viewModel.legendRect = this.legendRect;
+
+        if (updateType === UPDATE_TYPE.DELETE_LINE) {
+          this.viewModel.lineDatas.delete(value);
+        } else {
+          this.viewModel.lineDatas.set(value, this.GetLineData(this.graphModel.lineDatas.get(value)));
+        }
+
+        // Tics
+        this.viewModel.tics.xTics = this.GetxTics();
+        this.viewModel.tics.yTics = this.GetyTics();
+
+        // Axis Position
+        this.viewModel.axis.xLabel.position = this.GetAxisXPos(this.axisX.location as HorizontalAlignType);
+        this.viewModel.axis.yLabel.position = this.GetAxisYPos(this.axisY.location as VerticalAlignType);
+
+        // TableDatas
+        const tableDatas = this.GetTableData(this.graphModel.lineDatas, this.graphModel.config.tics.value.x);
+        if (tableDatas) {
+          this.viewModel.tableData.legendWidth = tableDatas.legendWidth;
+          this.viewModel.tableData.datas = tableDatas.datas;
+        } else {
+          this.viewModel.tableData.legendWidth = 0;
+          this.viewModel.tableData.datas = null;
+        }
+        break;
+      }
+      case UPDATE_TYPE.FONT: {
+        // Update Font Table, Legends
+        this.viewModel.font = this.graphModel.config.font;
+
+        // legendDatas
+        this.viewModel.legendDatas = this.GetLegendDatas();
+
+        // tableDatas
+        const tableDatas = this.GetTableData(this.graphModel.lineDatas, this.graphModel.config.tics.value.x);
+        if (tableDatas) {
+          this.viewModel.tableData.legendWidth = tableDatas.legendWidth;
+          this.viewModel.tableData.datas = tableDatas.datas;
+        } else {
+          this.viewModel.tableData.legendWidth = 0;
+          this.viewModel.tableData.datas = null;
+        }
+        break;
+      }
+      case UPDATE_TYPE.TITLE:
+        this.viewModel.title.text = this.graphModel.config.title;
+        break;
+      case UPDATE_TYPE.TITLE_COLOR:
+        this.viewModel.title.color = this.graphModel.config.titleColor;
+        break;
+      case UPDATE_TYPE.TITLE_LOCATION:
+        this.viewModel.title.position = this.GetTitlePos(this.graphModel.config.titleLocation);
+        break;
+      case UPDATE_TYPE.GRID_VISIBLE:
+        this.viewModel.grid.visible = this.graphModel.config.gridVisible;
+        break;
+      case UPDATE_TYPE.GRID_COLOR:
+        this.viewModel.grid.color = this.graphModel.config.gridColor;
+        break;
+      case UPDATE_TYPE.BORDER_VISIBLE:
+        this.viewModel.border.visible = this.graphModel.config.borderVisible;
+        break;
+      case UPDATE_TYPE.BORDER_COLOR:
+        this.viewModel.border.color = this.graphModel.config.borderColor;
+        break;
+      case UPDATE_TYPE.BORDER_WIDTH:
+        this.viewModel.border.width = this.graphModel.config.borderWidth;
+        break;
+      case UPDATE_TYPE.TICS_VISIBLE:
+        this.viewModel.tics.visible = this.graphModel.config.tics.visible;
+        break;
+      case UPDATE_TYPE.TICS_COLOR:
+        this.viewModel.tics.color = this.graphModel.config.tics.color;
+        break;
+      case UPDATE_TYPE.AXISX_VISIBLE:
+        this.viewModel.axis.xLabel.visible = this.graphModel.config.axisX.visible;
+        break;
+      case UPDATE_TYPE.AXISX_LABEL:
+        this.viewModel.axis.xLabel.text = this.graphModel.config.axisX.label;
+        break;
+      case UPDATE_TYPE.AXISX_LOCATION:
+        this.viewModel.axis.xLabel.position = this.GetAxisXPos(
+          this.graphModel.config.axisX.location as HorizontalAlignType
+        );
+        break;
+      case UPDATE_TYPE.AXISX_COLOR:
+        this.viewModel.axis.xLabel.color = this.graphModel.config.axisX.color;
+        break;
+      case UPDATE_TYPE.AXISY_VISIBLE:
+        this.viewModel.axis.yLabel.visible = this.graphModel.config.axisY.visible;
+        break;
+      case UPDATE_TYPE.AXISY_LABEL:
+        this.viewModel.axis.yLabel.text = this.graphModel.config.axisY.label;
+        break;
+      case UPDATE_TYPE.AXISY_LOCATION:
+        this.viewModel.axis.yLabel.position = this.GetAxisYPos(
+          this.graphModel.config.axisY.location as VerticalAlignType
+        );
+        break;
+      case UPDATE_TYPE.AXISY_COLOR:
+        this.viewModel.axis.yLabel.color = this.graphModel.config.axisY.color;
+        break;
+      case UPDATE_TYPE.NEW_TIC:
+        this.viewModel.tableData.selectedTic = value;
+        break;
+      case UPDATE_TYPE.AXISX_RANGE:
+      case UPDATE_TYPE.TICS_VALUE:
+      case UPDATE_TYPE.AXISY_RANGE:
+      default:
+        this.Init();
+        break;
+    }
+    this.invalidated = true;
+  }
+
+  /**
+   * @name GetLegendDatas
+   * @Description
+   * Get Legend Data Using Line Data.
+   * Default Font Size : 14px,
+   * Decreases the height of the GraphRect by the height of the calculated LegendRect.
+   */
+  private GetLegendDatas(): LegendData[] {
+    const legendDatas: LegendData[] = [];
+    const lineHeight = 30;
+    const defaultLegendWidth = 30;
+    const legendRect = {
+      x: this.graphRect.x,
+      y: this.graphRect.y + this.graphRect.h + ViewModelHelper.BOTTOM_OFFSET,
+      w: this.graphRect.w,
+      h: 0,
+    };
+    const c = document.createElement('canvas');
+    const ctx = c.getContext('2d');
+
+    let lineWidth = 0;
+    let curLegendWidth = 0;
+
+    ctx.save();
+
+    ctx.font = `14px ${this.graphModel.config.font}`;
+
+    this.graphModel.lineDatas.forEach(value => {
+      const {legend, color, visible} = value;
+      const point = {x: 0, y: 0};
+
+      if (!visible) {
+        return;
+      }
+
+      if (legendRect.h === 0) {
+        legendRect.h = lineHeight;
+      }
+
+      curLegendWidth = defaultLegendWidth + ctx.measureText(legend).width;
+      lineWidth += curLegendWidth;
+
+      if (lineWidth > legendRect.w) {
+        legendRect.h += lineHeight;
+        lineWidth = curLegendWidth;
+      }
+
+      point.x = lineWidth - curLegendWidth;
+      point.y = legendRect.h - lineHeight;
+
+      legendDatas.push({legend, color, point});
+    });
+
+    ctx.restore();
+
+    this.legendRect = legendRect;
+    this.graphRect.h =
+      this.canvasHeight - (ViewModelHelper.TOP_OFFSET + ViewModelHelper.BOTTOM_OFFSET + this.legendRect.h);
+    this.legendRect.y = this.graphRect.y + this.graphRect.h + ViewModelHelper.BOTTOM_OFFSET;
+
+    return legendDatas;
   }
 
   /**
@@ -109,9 +484,10 @@ export default class ViewModelHelper {
    * X : Depend On Location info
    * left 20, center 50, right 80 (ratio)
    */
-  GetTitlePos(location: HorizontalAlignType | VerticalAlignType): Point {
-    const ratio = GetLocationRatio(location);
-    return {x: this.graphRect.x + (this.graphRect.w * ratio) / 100, y: TOP_OFFSET / 2};
+  private GetTitlePos(location: HorizontalAlignType | VerticalAlignType): Point {
+    const ratio = ViewModelHelper.GetLocationRatio(location);
+
+    return {x: this.graphRect.x + (this.graphRect.w * ratio) / 100, y: ViewModelHelper.TOP_OFFSET / 2};
   }
 
   /**
@@ -121,8 +497,9 @@ export default class ViewModelHelper {
    * X : Depend On Location info
    * left 20, center 50, right 80 (ratio)
    */
-  GetAxisXPos(location: HorizontalAlignType): Point {
-    const ratio = GetLocationRatio(location);
+  private GetAxisXPos(location: HorizontalAlignType): Point {
+    const ratio = ViewModelHelper.GetLocationRatio(location);
+
     return {
       x: this.graphRect.x + (this.graphRect.w * ratio) / 100,
       y: this.graphRect.y + this.graphRect.h + 50,
@@ -136,8 +513,9 @@ export default class ViewModelHelper {
    * Y : Depend On Location info
    * top 20, middle 50, bottom 80 (ratio)
    */
-  GetAxisYPos(location: VerticalAlignType): Point {
-    const ratio = GetLocationRatio(location);
+  private GetAxisYPos(location: VerticalAlignType): Point {
+    const ratio = ViewModelHelper.GetLocationRatio(location);
+
     return {
       x: this.graphRect.x - 50,
       y: this.graphRect.y + (this.graphRect.h * ratio) / 100,
@@ -149,18 +527,28 @@ export default class ViewModelHelper {
    * @Description
    * Gets the tics contained in the x-axis range
    */
-  GetxTics(ticValue: number): TicData[] {
-    const tics: TicData[] = [];
+  private GetxTics(): TicData[] {
+    if (!this.graphModel?.config) {
+      return [];
+    }
+
+    const ticValue = this.graphModel?.config?.tics?.value?.x;
+
+    if (!this.axisX || !this.axisY || !ticValue || ticValue <= 0) {
+      return [];
+    }
+
+    const result: TicData[] = [];
     let _ticValue = this.axisX.range.start;
     let tic = null;
 
     while (_ticValue <= this.axisX.range.end) {
       tic = {...this.DataPoint2CanvasPoint(_ticValue, this.axisY.range.start), value: _ticValue};
-      tics.push(tic);
+      result.push(tic);
       _ticValue += ticValue;
     }
 
-    return tics;
+    return result;
   }
 
   /**
@@ -168,22 +556,29 @@ export default class ViewModelHelper {
    * @Description
    * Gets the tics contained in the y-axis range
    */
-  GetyTics(ticValue: number): TicData[] {
-    if (ticValue <= 0) {
-      return null;
+  private GetyTics(): TicData[] {
+    if (!this.graphModel?.config) {
+      return [];
     }
 
-    const tics: TicData[] = [];
+    const ticValue = this.graphModel?.config?.tics?.value?.y;
+
+    if (!this.axisX || !this.axisY || !ticValue || ticValue <= 0) {
+      return [];
+    }
+
+    const result: TicData[] = [];
+
     let _ticValue = this.axisY.range.start;
     let tic = null;
 
     while (_ticValue <= this.axisY.range.end) {
       tic = {...this.DataPoint2CanvasPoint(this.axisX.range.start, _ticValue), value: _ticValue};
-      tics.push(tic);
+      result.push(tic);
       _ticValue += ticValue;
     }
 
-    return tics;
+    return result;
   }
 
   /**
@@ -191,7 +586,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Canvas Point to Data Point.
    */
-  CanvasPoint2DataPoint({x, y}: Point): Point | null {
+  private CanvasPoint2DataPoint({x, y}: Point): Point | null {
     const graphPoint = this.CanvasPoint2GraphPoint(x, y);
 
     if (!graphPoint) {
@@ -206,7 +601,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Data Point to Canvas Point.
    */
-  DataPoint2CanvasPoint(x: number, y: number): Point | null {
+  private DataPoint2CanvasPoint(x: number, y: number): Point | null {
     const graphPoint = this.DataPoint2GraphPoint(x, y);
 
     if (!graphPoint) {
@@ -221,7 +616,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Graph Point to Data Point.
    */
-  GraphPoint2DataPoint({x, y}: Point): Point | null {
+  private GraphPoint2DataPoint({x, y}: Point): Point | null {
     if (typeof x !== 'number' || typeof y !== 'number') {
       return null;
     }
@@ -237,7 +632,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Data Point to Graph Point.
    */
-  DataPoint2GraphPoint(x: number, y: number): Point | null {
+  private DataPoint2GraphPoint(x: number, y: number): Point | null {
     if (
       !this.axisX.range ||
       !this.axisY.range ||
@@ -260,7 +655,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Canvas Point to Graph Point.
    */
-  CanvasPoint2GraphPoint(x: number, y: number): Point | null {
+  private CanvasPoint2GraphPoint(x: number, y: number): Point | null {
     if (typeof x !== 'number' || typeof y !== 'number') {
       return null;
     }
@@ -282,7 +677,7 @@ export default class ViewModelHelper {
    * @Description
    * Change the Graph Point to Canvas Point.
    */
-  GraphPoint2CanvasPoint({x, y}: Point): Point | null {
+  private GraphPoint2CanvasPoint({x, y}: Point): Point | null {
     if (typeof x !== 'number' || typeof y !== 'number') {
       return null;
     }
@@ -305,7 +700,7 @@ export default class ViewModelHelper {
    * If the type is 'func', get the result value y of the function.
    * convert the x and y values to Canvas Pos.
    */
-  GetLineDatas(lineDatas: Map<string, LineData>): Map<string, DrawLineData> {
+  private GetLineDatas(lineDatas: Map<string, LineData>): Map<string, DrawLineData> {
     const _lineDatas = new Map();
 
     lineDatas.forEach((value, key) => {
@@ -315,7 +710,7 @@ export default class ViewModelHelper {
     return _lineDatas;
   }
 
-  GetLineData(lineData: LineData): DrawLineData {
+  private GetLineData(lineData: LineData): DrawLineData {
     const {type, color, visible, datas, func, dotNum} = lineData;
 
     if (!visible) {
@@ -323,6 +718,7 @@ export default class ViewModelHelper {
     }
 
     const points = [];
+
     let x;
     let y;
     let canvasPoint = null;
@@ -372,70 +768,11 @@ export default class ViewModelHelper {
   }
 
   /**
-   * @name GetLegendDatas
-   * @Description
-   * Get Legend Data Using Line Data.
-   * Default Font Size : 14px,
-   * Decreases the height of the GraphRect by the height of the calculated LegendRect.
-   */
-  GetLegendDatas(lineDatas: Map<string, LineData>): LegendData[] {
-    const legendDatas: LegendData[] = [];
-    const lineHeight = 30;
-    const defaultLegendWidth = 30;
-    const legendRect = {
-      x: this.graphRect.x,
-      y: this.graphRect.y + this.graphRect.h + BOTTOM_OFFSET,
-      w: this.graphRect.w,
-      h: 0,
-    };
-    const c = document.createElement('canvas');
-    const ctx = c.getContext('2d');
-    let lineWidth = 0;
-    let curLegendWidth = 0;
-
-    ctx.save();
-    ctx.font = `14px ${this.font}`;
-
-    lineDatas.forEach(value => {
-      const {legend, color, visible} = value;
-      const point = {x: 0, y: 0};
-
-      if (!visible) {
-        return;
-      }
-
-      if (legendRect.h === 0) {
-        legendRect.h = lineHeight;
-      }
-
-      curLegendWidth = defaultLegendWidth + ctx.measureText(legend).width;
-      lineWidth += curLegendWidth;
-
-      if (lineWidth > legendRect.w) {
-        legendRect.h += lineHeight;
-        lineWidth = curLegendWidth;
-      }
-
-      point.x = lineWidth - curLegendWidth;
-      point.y = legendRect.h - lineHeight;
-
-      legendDatas.push({legend, color, point});
-    });
-
-    ctx.restore();
-    this.legendRect = legendRect;
-    this.graphRect.h = this.canvasHeight - (TOP_OFFSET + BOTTOM_OFFSET + this.legendRect.h);
-    this.legendRect.y = this.graphRect.y + this.graphRect.h + BOTTOM_OFFSET;
-
-    return legendDatas;
-  }
-
-  /**
    * @name GetSelectedTic
    * @Description
    * Gets the value of the Tic where the mouse cursor is located.
    */
-  GetSelectedTic(mousePos: Point, datas: PosData[]): number {
+  private GetSelectedTic(mousePos: Point, datas: PosData[]): number {
     if (mousePos == null || datas == null) {
       return NaN;
     }
@@ -482,18 +819,20 @@ export default class ViewModelHelper {
    * The y values of each line corresponding to the current x value are converted to table information.
    * The table information includes the width of each column.
    */
-  GetTableData(lineDatas: Map<string, LineData>, tic: number): TableData | null {
+  private GetTableData(lineDatas: Map<string, LineData>, tic: number): TableData | null {
     if (!lineDatas || lineDatas.size === 0) {
       return null;
     }
 
-    const tableData: TableData = {};
     let index = -1;
     let legendWidth = 0;
     let curlegendWidth = 0;
+
+    const tableData: TableData = {};
     const c = document.createElement('canvas');
     const ctx = c.getContext('2d');
-    ctx.font = `14px ${this.font}`;
+
+    ctx.font = `14px ${this.graphModel.config.font}`;
 
     lineDatas.forEach(lineData => {
       const {type, legend, color, visible, datas, func, dotNum} = lineData;
@@ -595,6 +934,7 @@ export default class ViewModelHelper {
 
     let valueWidth = 0;
     let curValueWidth = 0;
+
     const tics = Object.keys(tableData.datas);
 
     tics.forEach(tic => {

@@ -1,9 +1,9 @@
 import {GraphConfig} from '../model/config';
-import {UPDATE_TYPE} from '../model/const';
+import {UPDATE_TYPE} from '../model/model';
 import {LineData} from '../model/lineData';
 import {ModelHandler} from '../presenter/presenter';
 import GraphCanvas from './graphCanvas';
-import ViewModel from './viewModel';
+import ViewModelHelper from './viewModelHelper';
 
 enum EVENT_TYPE {
   KEYBOARD = 1,
@@ -31,19 +31,18 @@ enum EVENT_TYPE {
  * @method Render
  *
  */
-
 export default class GraphView {
   canvasWidth: number;
   canvasHeight: number;
   graphCanvas: GraphCanvas;
-  viewModel?: ViewModel;
+  viewModelHelper?: ViewModelHelper;
   modelHandler?: ModelHandler;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvasWidth = canvas.width;
     this.canvasHeight = canvas.height;
     this.graphCanvas = new GraphCanvas(canvas);
-    this.viewModel = null;
+    this.viewModelHelper = null;
     this.modelHandler = null;
     this.BindEvent(canvas);
   }
@@ -81,7 +80,7 @@ export default class GraphView {
         frameTick = false;
         const mousePos = {x: e.offsetX, y: e.offsetY};
 
-        if (!this.viewModel || !this.viewModel.IsInGraph(mousePos)) {
+        if (!this.viewModelHelper || !this.viewModelHelper.IsInGraph(mousePos)) {
           return;
         }
 
@@ -102,11 +101,11 @@ export default class GraphView {
             break;
           }
           case 'mousemove': {
-            if (!this.graphCanvas || !this.modelHandler || !this.viewModel) {
+            if (!this.graphCanvas || !this.modelHandler || !this.viewModelHelper) {
               return;
             }
 
-            const newTic = this.viewModel.GetNewTic(mousePos);
+            const newTic = this.viewModelHelper.GetNewTic(mousePos);
 
             if (newTic.result) {
               this.UpdateViewModel(UPDATE_TYPE.NEW_TIC, newTic.selectedTic);
@@ -212,10 +211,10 @@ export default class GraphView {
       return;
     }
 
-    if (this.viewModel) {
-      this.viewModel.InvalidateModel(updateType, value);
+    if (this.viewModelHelper) {
+      this.viewModelHelper.InvalidateModel(updateType, value);
     } else {
-      this.viewModel = new ViewModel(this.modelHandler.GetModel(), this.canvasWidth, this.canvasHeight);
+      this.viewModelHelper = new ViewModelHelper(this.modelHandler.GetModel(), this.canvasWidth, this.canvasHeight);
     }
 
     requestAnimationFrame(this.Render.bind(this));
@@ -228,11 +227,11 @@ export default class GraphView {
    * and there is a RenderStack that is not drawn, draw it.
    */
   Render(): void {
-    if (!this.viewModel.invalidated) {
+    if (!this.viewModelHelper.invalidated) {
       return;
     }
 
-    this.graphCanvas.Draw(this.viewModel.GetDrawData());
-    this.viewModel.invalidated = false;
+    this.graphCanvas.Draw(this.viewModelHelper.viewModel);
+    this.viewModelHelper.invalidated = false;
   }
 }

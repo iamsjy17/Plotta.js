@@ -1,4 +1,4 @@
-import {Point} from './const';
+import {Point} from './model';
 
 export type TicsType = 'number';
 

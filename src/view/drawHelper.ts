@@ -1,15 +1,15 @@
-import {Rect} from '../model/const';
+import {Rect} from '../model/model';
 import {
   AxisLabelData,
   BorderData,
-  DrawData,
+  ViewModel,
   DrawLineData,
   GridData,
   LegendData,
   TableData,
   TicsData,
   TitleData,
-} from './const';
+} from './viewModel';
 
 function DrawTitle(ctx: CanvasRenderingContext2D, font: string, title: TitleData): void {
   const {text, color, position} = title;
@@ -321,7 +321,7 @@ function DrawTable(ctx: CanvasRenderingContext2D, font: string, graphRect: Rect,
   ctx.restore();
 }
 
-function Draw(ctx: CanvasRenderingContext2D, drawData: DrawData) {
+function Draw(ctx: CanvasRenderingContext2D, viewModel: ViewModel) {
   const {
     font,
     title,
@@ -336,7 +336,7 @@ function Draw(ctx: CanvasRenderingContext2D, drawData: DrawData) {
     canvasHeight,
     graphRect,
     legendRect,
-  } = drawData;
+  } = viewModel;
 
   ctx.font = `12px ${font}`;
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);

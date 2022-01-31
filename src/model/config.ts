@@ -1,5 +1,5 @@
 import {Axis} from './axis';
-import {HorizontalAlignType, LineType} from './const';
+import {HorizontalAlignType, LineType} from './model';
 import {Tics} from './tics';
 
 export interface GraphConfig {

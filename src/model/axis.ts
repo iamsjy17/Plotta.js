@@ -1,4 +1,4 @@
-import {HorizontalAlignType, VerticalAlignType} from './const';
+import {HorizontalAlignType, VerticalAlignType} from './model';
 
 export interface AxisRange {
   start: number;
