@@ -1,4 +1,4 @@
-<p align="left"><img src="./img/plottajs_logo.png" width="80%"/></a></p>
+<p align="left"><img src="./doc/img/plottajs_logo.png" width="80%"/></a></p>
 
 ![npm version](https://img.shields.io/npm/v/plotta.js.svg) ![license](https://img.shields.io/npm/l/plotta.js.svg)
 <a href="https://www.npmjs.com/package/plotta.js"><img src="https://img.shields.io/npm/dt/plotta.js.svg" alt="Downloads"></a>
@@ -6,7 +6,7 @@
 `Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas.
 `Plotta.js` Renders using an HTML5 Canvas.
 
-<p align="left"><img src="./img/plotta_demo1.gif" /></a></p>
+<p align="left"><img src="./doc/img/plotta_demo1.gif" /></a></p>
 
 ## Features
 
@@ -85,12 +85,7 @@ $ npm install plotta.js
 ### HTML
 
 ```html
-<canvas
-  id="canvas"
-  width="700px"
-  height="700px"
-  style="width:700px; height:700px; border:1px solid #d3d3d3;"
-></canvas>
+<canvas id="canvas" width="700px" height="700px" style="width:700px; height:700px; border:1px solid #d3d3d3;"></canvas>
 ```
 
 ### Javascript
@@ -499,7 +494,7 @@ The `tick value` is the unit size of a tick on the x and y axes.
 ##### Example
 
 ```js
-Plotta.SetTicsValue({ x: 2, y: 2 });
+Plotta.SetTicsValue({x: 2, y: 2});
 ```
 
 ### ShowAxisXLabel
