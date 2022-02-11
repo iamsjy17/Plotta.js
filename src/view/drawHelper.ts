@@ -1,4 +1,17 @@
-function DrawTitle(ctx, font, title) {
+import {Rect} from '../model/model';
+import {
+  AxisLabelData,
+  BorderData,
+  ViewModel,
+  DrawLineData,
+  GridData,
+  LegendData,
+  TableData,
+  TicsData,
+  TitleData,
+} from './viewModel';
+
+function DrawTitle(ctx: CanvasRenderingContext2D, font: string, title: TitleData): void {
   const {text, color, position} = title;
   ctx.save();
   ctx.font = `20px ${font}`;
@@ -13,7 +26,7 @@ function DrawTitle(ctx, font, title) {
   ctx.restore();
 }
 
-function DrawLegends(ctx, font, legendRect, legendDatas) {
+function DrawLegends(ctx: CanvasRenderingContext2D, font: string, legendRect: Rect, legendDatas: LegendData[]): void {
   ctx.save();
   ctx.font = `14px ${font}`;
   ctx.textAlign = 'left';
@@ -37,7 +50,7 @@ function DrawLegends(ctx, font, legendRect, legendDatas) {
   ctx.restore();
 }
 
-function DrawAxis(ctx, font, axis) {
+function DrawAxis(ctx: CanvasRenderingContext2D, font: string, axis: AxisLabelData): void {
   const {xLabel, yLabel} = axis;
 
   ctx.save();
@@ -67,8 +80,8 @@ function DrawAxis(ctx, font, axis) {
   ctx.restore();
 }
 
-function DrawBorder(ctx, rect, border) {
-  const {visible, type, color, width} = border;
+function DrawBorder(ctx: CanvasRenderingContext2D, rect: Rect, border: BorderData): void {
+  const {visible, color, width} = border;
 
   if (!visible) {
     return;
@@ -88,7 +101,7 @@ function DrawBorder(ctx, rect, border) {
   ctx.restore();
 }
 
-function DrawGrid(ctx, width, height, grid, tics) {
+function DrawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, grid: GridData, tics: TicsData): void {
   const {xTics, yTics} = tics;
   const {visible, type, color} = grid;
 
@@ -125,7 +138,7 @@ function DrawGrid(ctx, width, height, grid, tics) {
   ctx.restore();
 }
 
-function DrawTics(ctx, width, height, tics) {
+function DrawTics(ctx: CanvasRenderingContext2D, width: number, height: number, tics: TicsData): void {
   const {visible, color, xTics, yTics} = tics;
 
   if (!visible) {
@@ -146,7 +159,7 @@ function DrawTics(ctx, width, height, tics) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  xTics.forEach((tic, index, array) => {
+  xTics.forEach((tic, index) => {
     const yStart = tic.y + ticSize;
     let yEnd;
 
@@ -160,9 +173,9 @@ function DrawTics(ctx, width, height, tics) {
     ctx.moveTo(tic.x, yStart);
     ctx.lineTo(tic.x, yEnd);
     ctx.stroke();
-    ctx.fillText(tic.value, tic.x, tic.y + ticSize + ticValueMargin);
+    ctx.fillText(String(tic.value), tic.x, tic.y + ticSize + ticValueMargin);
   });
-  yTics.forEach((tic, index, array) => {
+  yTics.forEach((tic, index) => {
     const xStart = tic.x - ticSize;
     let xEnd;
 
@@ -176,12 +189,12 @@ function DrawTics(ctx, width, height, tics) {
     ctx.moveTo(xStart, tic.y);
     ctx.lineTo(xEnd, tic.y);
     ctx.stroke();
-    ctx.fillText(tic.value, tic.x - ticSize - ticValueMargin, tic.y);
+    ctx.fillText(String(tic.value), tic.x - ticSize - ticValueMargin, tic.y);
   });
   ctx.restore();
 }
 
-function DrawLines(ctx, graphRect, lineDatas) {
+function DrawLines(ctx: CanvasRenderingContext2D, graphRect: Rect, lineDatas: Map<string, DrawLineData>): void {
   ctx.save();
   ctx.lineWidth = 3;
   const region = new Path2D();
@@ -194,7 +207,7 @@ function DrawLines(ctx, graphRect, lineDatas) {
     let isStart = true;
     let yCriticalPoint = points[0].y;
 
-    points.forEach((point, index) => {
+    points.forEach(point => {
       if (point.y < graphRect.y) {
         yCriticalPoint = graphRect.y - 5;
       } else if (point.y > graphRect.y + graphRect.h) {
@@ -218,7 +231,7 @@ function DrawLines(ctx, graphRect, lineDatas) {
   ctx.restore();
 }
 
-function DrawTable(ctx, font, graphRect, tableData) {
+function DrawTable(ctx: CanvasRenderingContext2D, font: string, graphRect: Rect, tableData: TableData): void {
   const {visible, selectedTic, colors, legends, legendWidth, datas} = tableData;
 
   if (!visible || isNaN(selectedTic) || !colors || !legends || !legendWidth || !datas) return;
@@ -308,7 +321,7 @@ function DrawTable(ctx, font, graphRect, tableData) {
   ctx.restore();
 }
 
-function Draw(ctx, drawData) {
+function Draw(ctx: CanvasRenderingContext2D, viewModel: ViewModel) {
   const {
     font,
     title,
@@ -323,7 +336,7 @@ function Draw(ctx, drawData) {
     canvasHeight,
     graphRect,
     legendRect,
-  } = drawData;
+  } = viewModel;
 
   ctx.font = `12px ${font}`;
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);

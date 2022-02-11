@@ -1,30 +1,36 @@
 import Util from '../util';
+import {Point} from './model';
 
-export default class LineData {
-  type: string;
+export type DataType = 'func' | 'data';
+
+export class LineData {
+  id: string;
+  type: DataType;
   legend: string;
   color: string;
   visible: boolean;
-  datas: any[];
-  func: () => void;
+  datas: Point[];
+  func: (value: number) => void;
   dotNum: number;
 
   constructor(
-    type?: string,
-    legend?: string,
-    color?: string,
-    visible?: boolean,
-    datas?: any[],
-    func?: () => void,
-    dotNum?: number
+    id: string,
+    type: DataType = 'func',
+    legend = '',
+    color = 'black',
+    visible = true,
+    datas?: Point[],
+    func?: (value: number) => void,
+    dotNum = 0
   ) {
-    this.type = type ?? '';
-    this.legend = legend ?? '';
-    this.color = color ?? '';
-    this.visible = typeof visible === 'boolean' ? visible : true;
+    this.id = id;
+    this.type = type;
+    this.legend = legend;
+    this.color = color;
+    this.visible = visible;
     this.datas = Util.IsObject(datas) && datas.length ? datas : [];
     this.func = typeof func === 'function' ? func : null;
-    this.dotNum = dotNum ?? 0;
+    this.dotNum = dotNum;
   }
 
   /**
@@ -32,13 +38,45 @@ export default class LineData {
    * @Description
    * Update LindeDatas
    */
-  Update(type, legend, color, visible, datas, func, dotNum) {
-    this.type = type || this.type;
-    this.legend = legend || this.legend;
-    this.color = color || this.color;
-    this.visible = typeof visible === 'boolean' ? visible : this.visible;
-    this.datas = Util.IsObject(datas) && datas.length ? datas : this.datas;
-    this.func = typeof func === 'function' ? func : this.func;
-    this.dotNum = dotNum || this.dotNum;
+  Update(
+    type?: DataType,
+    legend?: string,
+    color?: string,
+    visible?: boolean,
+    datas?: Point[],
+    func?: (value: number) => void,
+    dotNum?: number
+  ) {
+    if (type !== undefined) {
+      this.type = type;
+    }
+
+    if (legend !== undefined) {
+      this.legend = legend;
+    }
+
+    if (color !== undefined) {
+      this.color = color;
+    }
+
+    if (visible !== undefined) {
+      this.visible = visible;
+    }
+
+    if (type !== undefined) {
+      this.type = type;
+    }
+
+    if (Util.IsObject(datas) && datas.length > 0) {
+      this.datas = datas;
+    }
+
+    if (func !== undefined) {
+      this.func = func;
+    }
+
+    if (dotNum !== undefined) {
+      this.dotNum = dotNum;
+    }
   }
 }

@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/tsc",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
     "sourceRoot": "/src",

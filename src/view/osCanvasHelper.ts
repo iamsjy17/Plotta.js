@@ -1,3 +1,5 @@
+import {ViewModel} from './viewModel';
+
 /**
  * @name OffscreenCanvasHelper
  * @type class
@@ -33,11 +35,11 @@ export default class OffscreenCanvasHelper {
   /**
    * @name Draw
    * @description
-   * Pass DrawData to the Worker.
+   * Pass ViewModel to the Worker.
    */
-  Draw(drawData): void {
+  Draw(viewModel: ViewModel): void {
     this.worker.postMessage({
-      drawData,
+      viewModel,
     });
   }
 }

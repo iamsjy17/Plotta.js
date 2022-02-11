@@ -1,31 +1,41 @@
-export default class Presenter {
-  GraphModel: any;
-  GraphView: any;
+import GraphModel from '../model/graphModel';
+import GraphView from '../view/graphView';
+import {UPDATE_TYPE} from '../model/model';
+import {LineData} from '../model/lineData';
+import {GraphConfig} from '../model/config';
 
-  constructor(graphModel, graphView) {
+export interface ViewHandler {
+  UpdateViewModel: (updateType?: UPDATE_TYPE, value?: any) => void;
+}
+
+export interface ModelHandler {
+  GetModel: () => GraphModel;
+  UpdateModel: (lineDatas?: LineData[], graphConfig?: Partial<GraphConfig>) => void;
+}
+
+export default class Presenter {
+  GraphModel: GraphModel;
+  GraphView: GraphView;
+
+  constructor(graphModel: GraphModel, graphView: GraphView) {
     this.GraphModel = graphModel;
     this.GraphView = graphView;
 
-    this.GraphModel.SetViewHandler(this._getviewHandler());
-    this.GraphView.SetModelHandler(this._getModelHandler());
+    this.GraphModel.SetViewHandler(this.getviewHandler());
+    this.GraphView.SetModelHandler(this.getModelHandler());
   }
 
-  _getviewHandler() {
+  private getviewHandler(): ViewHandler {
     return {
-      UpdateViewModel: function (updateType, value) {
-        this.GraphView.UpdateViewModel(updateType, value);
-      }.bind(this),
+      UpdateViewModel: (updateType: UPDATE_TYPE, value: any) => this.GraphView.UpdateViewModel(updateType, value),
     };
   }
 
-  _getModelHandler() {
+  private getModelHandler(): ModelHandler {
     return {
-      GetModel: function () {
-        return this.GraphModel;
-      }.bind(this),
-      UpdateModel: function (dataSet) {
-        this.GraphModel.UpdateModel(dataSet);
-      }.bind(this),
+      GetModel: () => this.GraphModel,
+      UpdateModel: (lineDatas?: LineData[], graphConfig?: GraphConfig) =>
+        this.GraphModel.UpdateModel(lineDatas, graphConfig),
     };
   }
 }

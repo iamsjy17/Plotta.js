@@ -1,6 +1,6 @@
 const xy = x => x;
 const testData = {
-  linedatas: [
+  lineDatas: [
     {
       id: 'line1',
       type: 'func',
@@ -74,26 +74,24 @@ const testData = {
         y: 2,
       },
     },
-    axis: {
-      x: {
-        visible: true,
-        label: 'X',
-        color: '#666666',
-        location: 'center',
-        range: {
-          start: -10,
-          end: 10,
-        },
+    axisX: {
+      visible: true,
+      label: 'X',
+      color: '#666666',
+      location: 'center',
+      range: {
+        start: -10,
+        end: 10,
       },
-      y: {
-        visible: true,
-        label: 'Y',
-        color: '#666666',
-        location: 'center',
-        range: {
-          start: -10,
-          end: 10,
-        },
+    },
+    axisY: {
+      visible: true,
+      label: 'Y',
+      color: '#666666',
+      location: 'middle',
+      range: {
+        start: -10,
+        end: 10,
       },
     },
     table: {
