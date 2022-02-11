@@ -22,7 +22,7 @@ Plotta.js supports Zoom In/Zoom Out, Data table.
 
 You can customize various properties such as axis, grid, font, title, tics, lineDatas, and colors.
 
-<p align="left"><img src="./img/plotta_demo2.gif" /></a></p>
+<p align="left"><img src="./doc/img/plotta_demo2.gif" /></a></p>
 
 ## Demo
 
