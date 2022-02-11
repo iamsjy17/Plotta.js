@@ -316,6 +316,7 @@ export default class ViewModelHelper {
 
         // TableDatas
         const tableDatas = this.GetTableData(this.graphModel.lineDatas, this.graphModel.config.tics.value.x);
+
         if (tableDatas) {
           this.viewModel.tableData.legendWidth = tableDatas.legendWidth;
           this.viewModel.tableData.datas = tableDatas.datas;
@@ -323,6 +324,7 @@ export default class ViewModelHelper {
           this.viewModel.tableData.legendWidth = 0;
           this.viewModel.tableData.datas = null;
         }
+
         break;
       }
       case UPDATE_TYPE.FONT: {
@@ -334,6 +336,7 @@ export default class ViewModelHelper {
 
         // tableDatas
         const tableDatas = this.GetTableData(this.graphModel.lineDatas, this.graphModel.config.tics.value.x);
+
         if (tableDatas) {
           this.viewModel.tableData.legendWidth = tableDatas.legendWidth;
           this.viewModel.tableData.datas = tableDatas.datas;
@@ -341,6 +344,7 @@ export default class ViewModelHelper {
           this.viewModel.tableData.legendWidth = 0;
           this.viewModel.tableData.datas = null;
         }
+
         break;
       }
       case UPDATE_TYPE.TITLE:

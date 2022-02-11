@@ -7,7 +7,7 @@ export interface LegendData {
 }
 
 export interface PosData {
-  [key: number]: {
+  [index: number]: {
     dataPos: number;
     canvasPos: number;
   };
