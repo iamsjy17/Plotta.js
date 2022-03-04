@@ -898,7 +898,9 @@ export default class ViewModelHelper {
           }
 
           if (!tableData.datas[x]) {
-            tableData.datas[x] = {length: 0};
+            tableData.datas[x] = {length: 1};
+          } else {
+            tableData.datas[x].length++;
           }
 
           tableData.datas[x][index] = {
@@ -921,7 +923,9 @@ export default class ViewModelHelper {
           }
 
           if (!tableData.datas[x]) {
-            tableData.datas[x] = {length: 0};
+            tableData.datas[x] = {length: 1};
+          } else {
+            tableData.datas[x].length++;
           }
 
           tableData.datas[x][index] = {
@@ -960,10 +964,13 @@ export default class ViewModelHelper {
       if (array.length > 0) {
         tableData.datas[x].canvasPos = this.DataPoint2CanvasPoint(
           x,
-          array.reduce((acc: {dataPos: number}, cur: {dataPos: number}) => {
-            acc.dataPos += cur.dataPos;
-            return acc;
-          }).dataPos / array.length
+          array.reduce(
+            (acc: {dataPos: number}, cur: {dataPos: number}) => {
+              acc.dataPos += cur.dataPos;
+              return acc;
+            },
+            {dataPos: 0}
+          ).dataPos / array.length
         );
 
         tableData.datas[x].width = valueWidth;
