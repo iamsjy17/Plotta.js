@@ -32,26 +32,6 @@ https://iamsjy17.github.io/plotta.js-page/
 
 1.1.1
 
-## RoadMap
-
-#### 1.0
-
-- April 2019, Initial Release
-- only supports Chrome and whale browsers.
-
-#### 1.1
-
-- Coming in July 2019
-- Added more documentation on usage and examples.
-- Supports all major browsers.
-
-#### 1.2
-
-- Coming in 2021
-- Feature: Line Types.(Dotted lines, stick lines, Bar etc.)
-- Feature: Add export related API(SaveAsImage, SaveAsPDF)
-- Feature: Move coordinate system by dragging mouse
-
 ## Browser Support
 
 | Chrome | Interner Exploer |  Edge  | Safari | FireFox | Whale  |
@@ -167,21 +147,22 @@ Provides APIs to control various properties.
 
 Update all graph data And only the properties of the dataSet object with the properties of the graph.
 
-> Plotta.UpdateGraph(dataSet);
+> Plotta.UpdateGraph(lineData, graphConfig);
 
 ##### Parameters
 
-|  Name   | Type   | Description        |
-| :-----: | ------ | ------------------ |
-| dataSet | Object | Data set to update |
+|    Name     | Type        | Description |
+| :---------: | ----------- | ----------- |
+|  lineDatas  | LineData[]  |             |
+| graphConfig | GraphConfig |             |
 
 ##### Example
 
 Update `line1`, gridVisible, gridColor, borderVisible, borderColor, borderWidth.
 
 ```js
-Plotta.UpdateGraph({
-  linedatas: [
+plotta.UpdateGraph(
+  [
     {
       id: 'line1',
       type: 'func',
@@ -192,18 +173,14 @@ Plotta.UpdateGraph({
       dotNum: 1000,
     },
   ],
-  config: {
-    grid: {
-      visible: true,
-      color: '#888888',
-    },
-    border: {
-      visible: true,
-      color: '#DDDDDD',
-      width: 1,
-    },
-  },
-});
+  {
+    gridVisible: true,
+    gridColor: '#888888',
+    borderVisible: true,
+    borderColor: '#DDDDDD',
+    borderWidth: 1,
+  }
+);
 ```
 
 ### AddLine
@@ -216,9 +193,9 @@ Add New Line. If it is an existing id, it is not added.
 
 ##### Parameters
 
-|   Name   | Type   | Description         |
-| :------: | ------ | ------------------- |
-| lineData | Object | LineData set to Add |
+|   Name   | Type     | Description         |
+| :------: | -------- | ------------------- |
+| lineData | LineData | LineData set to Add |
 
 ##### Example
 
