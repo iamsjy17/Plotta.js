@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <canvas
-      id="canvas"
-      width="700px"
-      height="700px"
-      style="width: 700px; height: 700px; border: 1px solid #d3d3d3"
+    <canvas id="canvas" width="700px" height="700px" style="width: 700px; height: 700px; border: 1px solid #d3d3d3"
       >Graph Test222</canvas
     >
     <script type="text/javascript" src="dist/dev/plotta.js"></script>
     <script type="text/javascript" src="dist/dev/testData.js"></script>
     <script>
       const canvas = document.getElementById('canvas');
-      var plotta = new Plotta(canvas, testData);
+      const plotta = new Plotta(canvas, testData);
     </script>
   </body>
 </html>

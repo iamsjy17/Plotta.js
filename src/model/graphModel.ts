@@ -52,16 +52,14 @@ export default class GraphModel {
   }
 
   AddLine(lineData: LineData, updateView?: boolean): void {
-    const {id, type, legend, color, visible, datas, func, dotNum} = lineData;
-
-    if (this.lineDatas.has(id) || !this.viewHandler) {
+    if (this.lineDatas.has(lineData.id) || !this.viewHandler) {
       return;
     }
 
-    this.lineDatas.set(id, new LineData(id, type, legend, color, visible, datas, func, dotNum));
+    this.lineDatas.set(lineData.id, lineData);
 
     if (updateView !== false) {
-      this.viewHandler.UpdateViewModel(UPDATE_TYPE.NEW_LINE, id);
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.NEW_LINE, lineData.id);
     }
   }
 
@@ -82,16 +80,10 @@ export default class GraphModel {
       return;
     }
 
-    const {id, type, legend, color, visible, datas, func, dotNum} = lineData;
-
-    if (this.lineDatas.has(id)) {
-      this.lineDatas.get(id).Update(type, legend, color, visible, datas, func, dotNum);
-    } else {
-      this.lineDatas.set(id, new LineData(id, type, legend, color, visible, datas, func, dotNum));
-    }
+    this.lineDatas.set(lineData.id, lineData);
 
     if (updateView !== false) {
-      this.viewHandler.UpdateViewModel(UPDATE_TYPE.UPDATE_LINE, id);
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.UPDATE_LINE, lineData.id);
     }
   }
 
@@ -424,10 +416,6 @@ export default class GraphModel {
       return;
     }
 
-    lineDatas.forEach(lineData => {
-      const {id, type, legend, color, visible, datas, func, dotNum} = lineData;
-
-      this.lineDatas.set(id, new LineData(id, type, legend, color, visible, datas, func, dotNum));
-    });
+    lineDatas.forEach(lineData => this.lineDatas.set(lineData.id, lineData));
   }
 }
