@@ -3,7 +3,6 @@ import {HorizontalAlignType, VerticalAlignType} from './model';
 export interface AxisRange {
   start: number;
   end: number;
-  value?: number;
 }
 
 export type AxisType = 'number' | 'PI';

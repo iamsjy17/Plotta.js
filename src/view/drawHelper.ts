@@ -12,7 +12,12 @@ import {
 } from './viewModel';
 
 function DrawTitle(ctx: CanvasRenderingContext2D, font: string, title: TitleData): void {
-  const {text, color, position} = title;
+  const {visible, text, color, position} = title;
+
+  if (!visible) {
+    return;
+  }
+
   ctx.save();
   ctx.font = `20px ${font}`;
   ctx.textAlign = 'center';
@@ -26,7 +31,13 @@ function DrawTitle(ctx: CanvasRenderingContext2D, font: string, title: TitleData
   ctx.restore();
 }
 
-function DrawLegends(ctx: CanvasRenderingContext2D, font: string, legendRect: Rect, legendDatas: LegendData[]): void {
+function DrawLegend(ctx: CanvasRenderingContext2D, font: string, legendRect: Rect, legendData: LegendData): void {
+  const {visible, legends} = legendData;
+
+  if (!visible) {
+    return;
+  }
+
   ctx.save();
   ctx.font = `14px ${font}`;
   ctx.textAlign = 'left';
@@ -34,10 +45,10 @@ function DrawLegends(ctx: CanvasRenderingContext2D, font: string, legendRect: Re
   const rectSize = 15;
   const margin = 5;
 
-  legendDatas.forEach(legendData => {
-    const {color, legend, point} = legendData;
+  legends.forEach(legend => {
+    const {color, name, point} = legend;
     ctx.save();
-    ctx.fillText(legend, legendRect.x + point.x + rectSize + margin, legendRect.y + point.y);
+    ctx.fillText(name, legendRect.x + point.x + rectSize + margin, legendRect.y + point.y);
 
     if (color) {
       ctx.fillStyle = color;
@@ -330,7 +341,7 @@ function Draw(ctx: CanvasRenderingContext2D, viewModel: ViewModel) {
     grid,
     tics,
     lineDatas,
-    legendDatas,
+    legendData,
     tableData,
     canvasWidth,
     canvasHeight,
@@ -347,13 +358,13 @@ function Draw(ctx: CanvasRenderingContext2D, viewModel: ViewModel) {
   DrawGrid(ctx, graphRect.w, graphRect.h, grid, tics);
   DrawAxis(ctx, font, axis);
   DrawLines(ctx, graphRect, lineDatas);
-  DrawLegends(ctx, font, legendRect, legendDatas);
+  DrawLegend(ctx, font, legendRect, legendData);
   DrawTable(ctx, font, graphRect, tableData);
 }
 
 export default {
   DrawTitle,
-  DrawLegends,
+  DrawLegend,
   DrawAxis,
   DrawBorder,
   DrawGrid,

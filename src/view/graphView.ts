@@ -130,14 +130,16 @@ export default class GraphView {
             const minYrange = ticsY * 3;
             const maxXrange = ticsX * 100;
             const maxYrange = ticsY * 100;
+            const axisXValue = Math.abs(rangeX.end - rangeX.start);
+            const axisYValue = Math.abs(rangeY.end - rangeY.start);
 
             if ((e as WheelEvent).deltaY <= 0) {
-              if (rangeX.value <= minXrange || rangeY.value <= minYrange) {
+              if (axisXValue <= minXrange || axisXValue <= minYrange) {
                 break;
               }
               ticsX *= -1; // ZoomOut
               ticsY *= -1; // ZoomOut
-            } else if (rangeX.value >= maxXrange || rangeY.value >= maxYrange) {
+            } else if (axisYValue >= maxXrange || axisYValue >= maxYrange) {
               break;
             }
 

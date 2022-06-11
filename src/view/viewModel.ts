@@ -1,9 +1,14 @@
 import {LineType, Point, Rect} from '../model/model';
 
-export interface LegendData {
-  legend: string;
+export interface Legend {
+  name: string;
   color: string;
   point: Point;
+}
+
+export interface LegendData {
+  visible: boolean;
+  legends: Legend[];
 }
 
 export interface PosData {
@@ -26,6 +31,7 @@ export interface TableData {
 }
 
 export interface TitleData {
+  visible: boolean;
   text: string;
   color: string;
   position: Point | null;
@@ -84,6 +90,6 @@ export interface ViewModel {
   axis: AxisLabelData;
   tics: TicsData;
   lineDatas: Map<string, DrawLineData>;
-  legendDatas: LegendData[];
+  legendData: LegendData;
   tableData: TableData;
 }

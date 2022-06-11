@@ -5,16 +5,18 @@ import {Tics} from './tics';
 export interface GraphConfig {
   font: string;
   legendVisible: boolean;
-  title: string;
-  titleColor: string;
-  titleLocation: HorizontalAlignType;
-  gridType: LineType;
-  gridVisible: boolean;
-  gridColor: string;
-  borderType: LineType;
-  borderVisible: boolean;
-  borderColor: string;
-  borderWidth: number;
+  title: {visible: boolean; text: string; color: string; location: HorizontalAlignType};
+  grid: {
+    visible: boolean;
+    type: LineType;
+    color: string;
+  };
+  border: {
+    visible: boolean;
+    type: LineType;
+    color: string;
+    width: number;
+  };
   tableVisible: boolean;
   axisX: Axis;
   axisY: Axis;
@@ -29,23 +31,29 @@ const initialAxis: Axis = {
   range: {
     start: -5,
     end: 5,
-    value: 10,
   },
 };
 
 export const initialConfig: GraphConfig = {
   font: "'Helvetica Neue', Helvetica, Arial, sans-serif",
   legendVisible: true,
-  title: 'Title',
-  titleColor: 'black',
-  titleLocation: 'center',
-  gridType: 'solid',
-  gridVisible: true,
-  gridColor: 'black',
-  borderType: 'solid',
-  borderVisible: true,
-  borderColor: 'black',
-  borderWidth: 0.3,
+  title: {
+    visible: true,
+    text: 'Title',
+    color: 'black',
+    location: 'center',
+  },
+  grid: {
+    visible: true,
+    type: 'solid',
+    color: 'black',
+  },
+  border: {
+    visible: true,
+    type: 'solid',
+    color: 'black',
+    width: 0.3,
+  },
   tableVisible: true,
   axisX: {...initialAxis, label: 'x', location: 'center'},
   axisY: {...initialAxis, label: 'y', location: 'middle'},

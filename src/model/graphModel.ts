@@ -10,10 +10,10 @@ export default class GraphModel {
   config: GraphConfig;
   viewHandler: ViewHandler;
 
-  constructor(lineDatas: LineData[], graphConfig: GraphConfig = initialConfig) {
+  constructor(lineDatas: LineData[], graphConfig: GraphConfig) {
     this.Invalidated = true;
     this.lineDatas = new Map();
-    this.config = graphConfig;
+    this.config = {...initialConfig, ...graphConfig};
 
     this.SetLineDatas(lineDatas);
   }
@@ -100,6 +100,23 @@ export default class GraphModel {
   }
 
   /**
+   * @name Legend
+   * @Description
+   * Legend show
+   */
+  ShowLegend(show: boolean, updateView?: boolean): void {
+    if (!this.viewHandler) {
+      return;
+    }
+
+    this.config.legendVisible = show;
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.LEGEND_VISIBLE);
+    }
+  }
+
+  /**
    * @name Title
    * @Description
    * Title text, color, location
@@ -109,7 +126,19 @@ export default class GraphModel {
       return;
     }
 
-    this.config.title = title;
+    this.config.title.text = title;
+
+    if (updateView !== false) {
+      this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE);
+    }
+  }
+
+  ShowTitle(show: boolean, updateView?: boolean): void {
+    if (!this.viewHandler) {
+      return;
+    }
+
+    this.config.title.visible = show;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE);
@@ -121,7 +150,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.titleColor = color;
+    this.config.title.color = color;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_COLOR);
@@ -133,7 +162,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.titleLocation = location;
+    this.config.title.location = location;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.TITLE_LOCATION);
@@ -150,7 +179,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.gridVisible = show;
+    this.config.grid.visible = show;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_VISIBLE);
@@ -162,7 +191,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.gridColor = color;
+    this.config.grid.color = color;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.GRID_COLOR);
@@ -179,7 +208,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.borderVisible = show;
+    this.config.border.visible = show;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_VISIBLE);
@@ -191,7 +220,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.borderColor = color;
+    this.config.border.color = color;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_COLOR);
@@ -203,7 +232,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.borderWidth = width;
+    this.config.border.width = width;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.BORDER_WIDTH);
@@ -309,11 +338,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.axisX.range = {
-      start: range.start,
-      end: range.end,
-      value: Math.abs(range.end - range.start),
-    };
+    this.config.axisX.range = range;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISX_RANGE);
@@ -378,11 +403,7 @@ export default class GraphModel {
       return;
     }
 
-    this.config.axisY.range = {
-      start: range.start,
-      end: range.end,
-      value: Math.abs(range.end - range.start),
-    };
+    this.config.axisY.range = range;
 
     if (updateView !== false) {
       this.viewHandler.UpdateViewModel(UPDATE_TYPE.AXISY_RANGE);
