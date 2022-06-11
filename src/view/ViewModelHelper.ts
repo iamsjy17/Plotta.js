@@ -1,12 +1,13 @@
 import {HorizontalAlignType, Point, Rect, UPDATE_TYPE, VerticalAlignType} from '../model/model';
 import GraphModel from '../model/graphModel';
 import {LineData} from '../model/lineData';
-import {DrawLineData, LegendData, PosData, TableData, TicData, ViewModel} from './viewModel';
+import {DrawLineData, Legend, PosData, TableData, TicData, ViewModel} from './viewModel';
 import {Axis} from '../model/axis';
 
 const initialViewModel: ViewModel = {
   font: '',
   title: {
+    visible: true,
     text: '',
     color: 'black',
     position: null,
@@ -43,7 +44,7 @@ const initialViewModel: ViewModel = {
     yTics: null,
   },
   lineDatas: null,
-  legendDatas: null,
+  legendData: null,
   tableData: {
     visible: true,
     selectedTic: NaN,
@@ -80,7 +81,7 @@ const initialViewModel: ViewModel = {
  * @method CanvasPoint2GraphPoint
  * @method GraphPoint2CanvasPoint
  * @method GetLineDatas
- * @method GetLegendDatas
+ * @method GetLegends
  * @method GetSelectedTic
  * @method GetTableData
  */
@@ -194,30 +195,13 @@ export default class ViewModelHelper {
       return;
     }
 
-    const {
-      font,
-      legendVisible,
-      title,
-      titleColor,
-      titleLocation,
-      gridType,
-      gridVisible,
-      gridColor,
-      borderType,
-      borderVisible,
-      borderColor,
-      borderWidth,
-      axisX,
-      axisY,
-      tics,
-      tableVisible,
-    } = this.graphModel.config;
+    const {font, legendVisible, title, grid, border, axisX, axisY, tics, tableVisible} = this.graphModel.config;
 
     this.viewModel.canvasWidth = this.canvasWidth;
     this.viewModel.canvasHeight = this.canvasHeight;
 
     // LegendDatas
-    this.viewModel.legendDatas = this.GetLegendDatas();
+    this.viewModel.legendData = {visible: legendVisible, legends: this.GetLegends()};
 
     // ViewRect
     this.viewModel.graphRect = this.graphRect;
@@ -225,20 +209,16 @@ export default class ViewModelHelper {
 
     // Title
     this.viewModel.font = font;
-    this.viewModel.title.text = title;
-    this.viewModel.title.color = titleColor;
-    this.viewModel.title.position = this.GetTitlePos(titleLocation);
+    this.viewModel.title.text = title.text;
+    this.viewModel.title.visible = title.visible;
+    this.viewModel.title.color = title.color;
+    this.viewModel.title.position = this.GetTitlePos(title.location);
 
     // Border
-    this.viewModel.border.visible = borderVisible;
-    this.viewModel.border.type = borderType;
-    this.viewModel.border.color = borderColor;
-    this.viewModel.border.width = borderWidth;
+    this.viewModel.border = border;
 
     // Grid
-    this.viewModel.grid.visible = gridVisible;
-    this.viewModel.grid.type = gridType;
-    this.viewModel.grid.color = gridColor;
+    this.viewModel.grid = grid;
 
     // AxisX
     this.viewModel.axis.xLabel.visible = axisX.visible;
@@ -294,7 +274,7 @@ export default class ViewModelHelper {
         // Update Rect, Tics, Table, Lines, Axis, Legends
 
         // LegendDatas
-        this.viewModel.legendDatas = this.GetLegendDatas();
+        this.viewModel.legendData = {visible: this.graphModel.config.legendVisible, legends: this.GetLegends()};
 
         // Rect
         this.viewModel.graphRect = this.graphRect;
@@ -332,7 +312,7 @@ export default class ViewModelHelper {
         this.viewModel.font = this.graphModel.config.font;
 
         // legendDatas
-        this.viewModel.legendDatas = this.GetLegendDatas();
+        this.viewModel.legendData = {visible: this.graphModel.config.legendVisible, legends: this.GetLegends()};
 
         // tableDatas
         const tableDatas = this.GetTableData(this.graphModel.lineDatas, this.graphModel.config.tics.value.x);
@@ -348,28 +328,31 @@ export default class ViewModelHelper {
         break;
       }
       case UPDATE_TYPE.TITLE:
-        this.viewModel.title.text = this.graphModel.config.title;
+        this.viewModel.title.text = this.graphModel.config.title.text;
+        break;
+      case UPDATE_TYPE.TITLE:
+        this.viewModel.title.text = this.graphModel.config.title.text;
         break;
       case UPDATE_TYPE.TITLE_COLOR:
-        this.viewModel.title.color = this.graphModel.config.titleColor;
+        this.viewModel.title.color = this.graphModel.config.title.color;
         break;
       case UPDATE_TYPE.TITLE_LOCATION:
-        this.viewModel.title.position = this.GetTitlePos(this.graphModel.config.titleLocation);
+        this.viewModel.title.position = this.GetTitlePos(this.graphModel.config.title.location);
         break;
       case UPDATE_TYPE.GRID_VISIBLE:
-        this.viewModel.grid.visible = this.graphModel.config.gridVisible;
+        this.viewModel.grid.visible = this.graphModel.config.grid.visible;
         break;
       case UPDATE_TYPE.GRID_COLOR:
-        this.viewModel.grid.color = this.graphModel.config.gridColor;
+        this.viewModel.grid.color = this.graphModel.config.grid.color;
         break;
       case UPDATE_TYPE.BORDER_VISIBLE:
-        this.viewModel.border.visible = this.graphModel.config.borderVisible;
+        this.viewModel.border.visible = this.graphModel.config.border.visible;
         break;
       case UPDATE_TYPE.BORDER_COLOR:
-        this.viewModel.border.color = this.graphModel.config.borderColor;
+        this.viewModel.border.color = this.graphModel.config.border.color;
         break;
       case UPDATE_TYPE.BORDER_WIDTH:
-        this.viewModel.border.width = this.graphModel.config.borderWidth;
+        this.viewModel.border.width = this.graphModel.config.border.width;
         break;
       case UPDATE_TYPE.TICS_VISIBLE:
         this.viewModel.tics.visible = this.graphModel.config.tics.visible;
@@ -419,14 +402,14 @@ export default class ViewModelHelper {
   }
 
   /**
-   * @name GetLegendDatas
+   * @name GetLegends
    * @Description
    * Get Legend Data Using Line Data.
    * Default Font Size : 14px,
    * Decreases the height of the GraphRect by the height of the calculated LegendRect.
    */
-  private GetLegendDatas(): LegendData[] {
-    const legendDatas: LegendData[] = [];
+  private GetLegends(): Legend[] {
+    const legendDatas: Legend[] = [];
     const lineHeight = 30;
     const defaultLegendWidth = 30;
     const legendRect = {
@@ -468,7 +451,7 @@ export default class ViewModelHelper {
       point.x = lineWidth - curLegendWidth;
       point.y = legendRect.h - lineHeight;
 
-      legendDatas.push({legend, color, point});
+      legendDatas.push({name: legend, color, point});
     });
 
     ctx.restore();
@@ -625,9 +608,12 @@ export default class ViewModelHelper {
       return null;
     }
 
+    const axisXValue = Math.abs(this.axisX.range.end - this.axisX.range.start);
+    const axisYValue = Math.abs(this.axisY.range.end - this.axisY.range.start);
+
     return {
-      x: (x / this.graphRect.w) * this.axisX.range.value + this.axisX.range.start,
-      y: (y / this.graphRect.h) * this.axisY.range.value + this.axisY.range.start,
+      x: (x / this.graphRect.w) * axisXValue + this.axisX.range.start,
+      y: (y / this.graphRect.h) * axisYValue + this.axisY.range.start,
     };
   }
 
@@ -648,9 +634,12 @@ export default class ViewModelHelper {
       return null;
     }
 
+    const axisXValue = Math.abs(this.axisX.range.end - this.axisX.range.start);
+    const axisYValue = Math.abs(this.axisY.range.end - this.axisY.range.start);
+
     return {
-      x: ((x - this.axisX.range.start) / this.axisX.range.value) * this.graphRect.w,
-      y: ((y - this.axisY.range.start) / this.axisY.range.value) * this.graphRect.h,
+      x: ((x - this.axisX.range.start) / axisXValue) * this.graphRect.w,
+      y: ((y - this.axisY.range.start) / axisYValue) * this.graphRect.h,
     };
   }
 
@@ -728,7 +717,8 @@ export default class ViewModelHelper {
     let canvasPoint = null;
 
     if (type === 'func' && typeof func === 'function') {
-      const coefficientX = this.axisX.range.value / dotNum;
+      const axisXValue = Math.abs(this.axisX.range.end - this.axisX.range.start);
+      const coefficientX = axisXValue / dotNum;
 
       for (let i = 0; i <= dotNum; i++) {
         x = i * coefficientX + this.axisX.range.start;
