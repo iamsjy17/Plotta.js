@@ -104,9 +104,7 @@ import {HorizontalAlignType, Point, VerticalAlignType} from './model/model';
  *         end: 10
  *       }
  *    },
- *    table: {
- *       visible: true
- *    }
+ *    tableVisible: visible: true
  *  }
  * });
  *
@@ -163,12 +161,25 @@ export default class Plotta {
   }
 
   /**
+   * @name Legend
+   * @Description
+   * Legend show
+   */
+  ShowLegend(show: boolean): void {
+    this.GraphModel.ShowLegend(show);
+  }
+
+  /**
    * @name Title
    * @Description
-   * Title text, color, location
+   * Title show, text, color, location
    */
   SetTitle(title: string): void {
     this.GraphModel.SetTitle(title);
+  }
+
+  ShowTitle(show: boolean): void {
+    this.GraphModel.ShowTitle(show);
   }
 
   SetTitleColor(color: string): void {
