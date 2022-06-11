@@ -47,35 +47,30 @@ const testData = {
       dotNum: 1000,
     },
   ],
-  config: {
-    font: '',
+  graphConfig: {
+    font: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     legendVisible: true,
     title: {
+      visible: true,
       location: 'center',
       color: '#666666',
       text: 'Plotta.ts',
     },
     grid: {
-      type: '',
       visible: true,
+      type: 'solid',
       color: '#888888',
     },
     border: {
-      type: '',
       visible: true,
+      type: 'solid',
       color: '#DDDDDD',
       width: 1,
     },
-    tics: {
-      visible: true,
-      color: '#888888',
-      value: {
-        x: 2,
-        y: 2,
-      },
-    },
+    tableVisible: true,
     axisX: {
       visible: true,
+      type: 'number',
       label: 'X',
       color: '#666666',
       location: 'center',
@@ -86,6 +81,7 @@ const testData = {
     },
     axisY: {
       visible: true,
+      type: 'number',
       label: 'Y',
       color: '#666666',
       location: 'middle',
@@ -94,8 +90,14 @@ const testData = {
         end: 10,
       },
     },
-    table: {
+    tics: {
       visible: true,
+      color: '#888888',
+      type: 'solid',
+      value: {
+        x: 2,
+        y: 2,
+      },
     },
   },
 };
