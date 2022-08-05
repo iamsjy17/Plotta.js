@@ -1,6 +1,6 @@
-const xy = (x) => x;
+const xy = x => x;
 const testData = {
-  linedatas: [
+  lineDatas: [
     {
       id: 'line1',
       type: 'func',
@@ -47,57 +47,57 @@ const testData = {
       dotNum: 1000,
     },
   ],
-  config: {
-    font: '',
+  graphConfig: {
+    font: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     legendVisible: true,
     title: {
+      visible: true,
       location: 'center',
       color: '#666666',
-      text: 'Plotta.js',
+      text: 'Plotta.ts',
     },
     grid: {
-      type: '',
       visible: true,
+      type: 'solid',
       color: '#888888',
     },
     border: {
-      type: '',
       visible: true,
+      type: 'solid',
       color: '#DDDDDD',
       width: 1,
+    },
+    tableVisible: true,
+    axisX: {
+      visible: true,
+      type: 'number',
+      label: 'X',
+      color: '#666666',
+      location: 'center',
+      range: {
+        start: -10,
+        end: 10,
+      },
+    },
+    axisY: {
+      visible: true,
+      type: 'number',
+      label: 'Y',
+      color: '#666666',
+      location: 'middle',
+      range: {
+        start: -10,
+        end: 10,
+      },
     },
     tics: {
       visible: true,
       color: '#888888',
+      type: 'solid',
       value: {
         x: 2,
         y: 2,
       },
-    },
-    axis: {
-      x: {
-        visible: true,
-        label: 'X',
-        color: '#666666',
-        location: 'center',
-        range: {
-          start: -10,
-          end: 10,
-        },
-      },
-      y: {
-        visible: true,
-        label: 'Y',
-        color: '#666666',
-        location: 'center',
-        range: {
-          start: -10,
-          end: 10,
-        },
-      },
-    },
-    table: {
-      visible: true,
     },
   },
 };

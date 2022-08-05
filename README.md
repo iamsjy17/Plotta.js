@@ -1,28 +1,28 @@
-<p align="left"><img src="./img/plottajs_logo.png" width="80%"/></a></p>
+<p align="left"><img src="./doc/img/plottajs_logo.png" width="80%"/></a></p>
 
 ![npm version](https://img.shields.io/npm/v/plotta.js.svg) ![license](https://img.shields.io/npm/l/plotta.js.svg)
 <a href="https://www.npmjs.com/package/plotta.js"><img src="https://img.shields.io/npm/dt/plotta.js.svg" alt="Downloads"></a>
 
-`Plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas.
-`Plotta.js` Renders using an HTML5 Canvas.
+`plotta.js` is a Open Source JavaScript library that plot mathematical functions And Datas.
+`plotta.js` Renders using an HTML5 Canvas.
 
-<p align="left"><img src="./img/plotta_demo1.gif" /></a></p>
+<p align="left"><img src="./doc/img/plotta_demo1.gif" /></a></p>
 
 ## Features
 
 #### HTML5 Canvas
 
-Plotta.js uses HTML5 Canvas without library dependency.
+plotta.js uses HTML5 Canvas without library dependency.
 
 #### User Interections
 
-Plotta.js supports Zoom In/Zoom Out, Data table.
+plotta.js supports Zoom In/Zoom Out, Data table.
 
 #### Custom
 
 You can customize various properties such as axis, grid, font, title, tics, lineDatas, and colors.
 
-<p align="left"><img src="./img/plotta_demo2.gif" /></a></p>
+<p align="left"><img src="./doc/img/plotta_demo2.gif" /></a></p>
 
 ## Demo
 
@@ -31,26 +31,6 @@ https://iamsjy17.github.io/plotta.js-page/
 ## Version
 
 1.1.1
-
-## RoadMap
-
-#### 1.0
-
-- April 2019, Initial Release
-- only supports Chrome and whale browsers.
-
-#### 1.1
-
-- Coming in July 2019
-- Added more documentation on usage and examples.
-- Supports all major browsers.
-
-#### 1.2
-
-- Coming in 2021
-- Feature: Line Types.(Dotted lines, stick lines, Bar etc.)
-- Feature: Add export related API(SaveAsImage, SaveAsPDF)
-- Feature: Move coordinate system by dragging mouse
 
 ## Browser Support
 
@@ -85,12 +65,7 @@ $ npm install plotta.js
 ### HTML
 
 ```html
-<canvas
-  id="canvas"
-  width="700px"
-  height="700px"
-  style="width:700px; height:700px; border:1px solid #d3d3d3;"
-></canvas>
+<canvas id="canvas" width="700px" height="700px" style="width:700px; height:700px; border:1px solid #d3d3d3;"></canvas>
 ```
 
 ### Javascript
@@ -109,18 +84,22 @@ const plotta = new Plotta(canvas, {
       dotNum: 1000,
     },
   ],
-  config: {
+  graphConfig: {
+    legendVisible: true,
     title: {
+      visible: true,
       location: 'center',
       color: '#666666',
-      text: 'Plotta.js',
+      text: 'plotta.ts',
     },
     grid: {
       visible: true,
+      type: 'solid',
       color: '#888888',
     },
     border: {
       visible: true,
+      type: 'solid',
       color: '#DDDDDD',
       width: 1,
     },
@@ -140,6 +119,7 @@ Provides APIs to control various properties.
 - Font
   - [SetFont](#setfont)
 - Title
+  - [ShowTitle](#showtitle)
   - [SetTitle](#settitle)
   - [SetTitleColor](#settitlecolor)
   - [SetTitleLocation](#settitlelocation)
@@ -165,6 +145,8 @@ Provides APIs to control various properties.
   - [SetAxisYLabelLocation](#setaxisylabellocation)
 - Table
   - [ShowTable](#showtable)
+- Legend
+  - [ShowLegend](#showlegend)
 
 ### UpdateGraph
 
@@ -172,21 +154,22 @@ Provides APIs to control various properties.
 
 Update all graph data And only the properties of the dataSet object with the properties of the graph.
 
-> Plotta.UpdateGraph(dataSet);
+> plotta.UpdateGraph(lineData, graphConfig);
 
 ##### Parameters
 
-|  Name   | Type   | Description        |
-| :-----: | ------ | ------------------ |
-| dataSet | Object | Data set to update |
+|    Name     | Type        | Description |
+| :---------: | ----------- | ----------- |
+|  lineDatas  | LineData[]  |             |
+| graphConfig | GraphConfig |             |
 
 ##### Example
 
 Update `line1`, gridVisible, gridColor, borderVisible, borderColor, borderWidth.
 
 ```js
-Plotta.UpdateGraph({
-  linedatas: [
+plotta.UpdateGraph(
+  [
     {
       id: 'line1',
       type: 'func',
@@ -197,18 +180,27 @@ Plotta.UpdateGraph({
       dotNum: 1000,
     },
   ],
-  config: {
+  {
+    legendVisible: true,
+    title: {
+      visible: true,
+      location: 'center',
+      color: '#666666',
+      text: 'plotta.ts',
+    },
     grid: {
       visible: true,
+      type: 'solid',
       color: '#888888',
     },
     border: {
       visible: true,
+      type: 'solid',
       color: '#DDDDDD',
       width: 1,
     },
-  },
-});
+  }
+);
 ```
 
 ### AddLine
@@ -217,18 +209,18 @@ Plotta.UpdateGraph({
 
 Add New Line. If it is an existing id, it is not added.
 
-> Plotta.AddLine(lineData);
+> plotta.AddLine(lineData);
 
 ##### Parameters
 
-|   Name   | Type   | Description         |
-| :------: | ------ | ------------------- |
-| lineData | Object | LineData set to Add |
+|   Name   | Type     | Description         |
+| :------: | -------- | ------------------- |
+| lineData | LineData | LineData set to Add |
 
 ##### Example
 
 ```js
-Plotta.AddLine({
+plotta.AddLine({
   id: 'line1',
   type: 'func',
   legend: 'cos',
@@ -245,7 +237,7 @@ Plotta.AddLine({
 
 Delete the line that matches the id you entered.
 
-> Plotta.DeleteLine(id);
+> plotta.DeleteLine(id);
 
 ##### Parameters
 
@@ -256,7 +248,7 @@ Delete the line that matches the id you entered.
 ##### Example
 
 ```js
-Plotta.DeleteLine('line1');
+plotta.DeleteLine('line1');
 ```
 
 ### SetFont
@@ -265,7 +257,7 @@ Plotta.DeleteLine('line1');
 
 Set the font.
 
-> Plotta.SetFont(font);
+> plotta.SetFont(font);
 
 ##### Parameters
 
@@ -276,7 +268,27 @@ Set the font.
 ##### Example
 
 ```js
-Plotta.SetFont(`Helvetica Neue', Helvetica, Arial, sans-serif`);
+plotta.SetFont(`Helvetica Neue', Helvetica, Arial, sans-serif`);
+```
+
+### ShowTitle
+
+##### Description
+
+Set the visibility value of the title.
+
+> plotta.ShowTitle(show);
+
+##### Parameters
+
+| Name | Type    | Description                    |
+| :--: | ------- | ------------------------------ |
+| show | boolean | visibility value of the title. |
+
+##### Example
+
+```js
+plotta.ShowTitle(true);
 ```
 
 ### SetTitle
@@ -285,7 +297,7 @@ Plotta.SetFont(`Helvetica Neue', Helvetica, Arial, sans-serif`);
 
 Set the graph title.
 
-> Plotta.SetTitle(title);
+> plotta.SetTitle(title);
 
 ##### Parameters
 
@@ -296,7 +308,7 @@ Set the graph title.
 ##### Example
 
 ```js
-Plotta.SetTitle('Hello Graph');
+plotta.SetTitle('Hello Graph');
 ```
 
 ### SetTitleColor
@@ -305,7 +317,7 @@ Plotta.SetTitle('Hello Graph');
 
 set color of graph title.
 
-> Plotta.SetTitleColor(color);
+> plotta.SetTitleColor(color);
 
 ##### Parameters
 
@@ -316,7 +328,7 @@ set color of graph title.
 ##### Example
 
 ```js
-Plotta.SetTitleColor(`#FFA500`);
+plotta.SetTitleColor(`#FFA500`);
 ```
 
 ### SetTitleLocation
@@ -325,7 +337,7 @@ Plotta.SetTitleColor(`#FFA500`);
 
 Set the location of the title.
 
-> Plotta.SetTitleLocation(location);
+> plotta.SetTitleLocation(location);
 
 ##### Parameters
 
@@ -338,7 +350,7 @@ The default value is center.
 ##### Example
 
 ```js
-Plotta.SetTitleLocation('left');
+plotta.SetTitleLocation('left');
 ```
 
 ### ShowGrid
@@ -347,7 +359,7 @@ Plotta.SetTitleLocation('left');
 
 Set the visibility value of the grid.
 
-> Plotta.ShowGrid(show);
+> plotta.ShowGrid(show);
 
 ##### Parameters
 
@@ -358,7 +370,7 @@ Set the visibility value of the grid.
 ##### Example
 
 ```js
-Plotta.ShowGrid(true);
+plotta.ShowGrid(true);
 ```
 
 ### SetGridColor
@@ -367,7 +379,7 @@ Plotta.ShowGrid(true);
 
 set color of grid.
 
-> Plotta.SetGridColor(color);
+> plotta.SetGridColor(color);
 
 ##### Parameters
 
@@ -378,7 +390,7 @@ set color of grid.
 ##### Example
 
 ```js
-Plotta.SetGridColor(`orange`);
+plotta.SetGridColor(`orange`);
 ```
 
 ### ShowBorder
@@ -387,7 +399,7 @@ Plotta.SetGridColor(`orange`);
 
 Set the visibility value of the border.
 
-> Plotta.ShowBorder(show);
+> plotta.ShowBorder(show);
 
 ##### Parameters
 
@@ -398,7 +410,7 @@ Set the visibility value of the border.
 ##### Example
 
 ```js
-Plotta.ShowBorder(false);
+plotta.ShowBorder(false);
 ```
 
 ### SetBorderColor
@@ -407,7 +419,7 @@ Plotta.ShowBorder(false);
 
 set color of border.
 
-> Plotta.SetBorderColor(color);
+> plotta.SetBorderColor(color);
 
 ##### Parameters
 
@@ -418,7 +430,7 @@ set color of border.
 ##### Example
 
 ```js
-Plotta.SetGridColor(`black`);
+plotta.SetGridColor(`black`);
 ```
 
 ### SetBorderWidth
@@ -427,7 +439,7 @@ Plotta.SetGridColor(`black`);
 
 set width of border.
 
-> Plotta.SetBorderWidth(width);
+> plotta.SetBorderWidth(width);
 
 ##### Parameters
 
@@ -438,7 +450,7 @@ set width of border.
 ##### Example
 
 ```js
-Plotta.SetBorderWidth(1);
+plotta.SetBorderWidth(1);
 ```
 
 ### ShowTics
@@ -447,7 +459,7 @@ Plotta.SetBorderWidth(1);
 
 Set the visibility value of the ticks.
 
-> Plotta.ShowTics(show);
+> plotta.ShowTics(show);
 
 ##### Parameters
 
@@ -458,7 +470,7 @@ Set the visibility value of the ticks.
 ##### Example
 
 ```js
-Plotta.ShowTics(true);
+plotta.ShowTics(true);
 ```
 
 ### SetTicsColor
@@ -467,7 +479,7 @@ Plotta.ShowTics(true);
 
 set color of ticks.
 
-> Plotta.SetTicsColor(color);
+> plotta.SetTicsColor(color);
 
 ##### Parameters
 
@@ -478,7 +490,7 @@ set color of ticks.
 ##### Example
 
 ```js
-Plotta.SetTicsColor(`#888888`);
+plotta.SetTicsColor(`#888888`);
 ```
 
 ### SetTicsValue
@@ -488,7 +500,7 @@ Plotta.SetTicsColor(`#888888`);
 Set the tick value object.
 The `tick value` is the unit size of a tick on the x and y axes.
 
-> Plotta.SetTicsValue(value);
+> plotta.SetTicsValue(value);
 
 ##### Parameters
 
@@ -499,7 +511,7 @@ The `tick value` is the unit size of a tick on the x and y axes.
 ##### Example
 
 ```js
-Plotta.SetTicsValue({ x: 2, y: 2 });
+plotta.SetTicsValue({x: 2, y: 2});
 ```
 
 ### ShowAxisXLabel
@@ -508,7 +520,7 @@ Plotta.SetTicsValue({ x: 2, y: 2 });
 
 Set the visibility value of the X axis label.
 
-> Plotta.ShowAxisXLabel(show);
+> plotta.ShowAxisXLabel(show);
 
 ##### Parameters
 
@@ -519,7 +531,7 @@ Set the visibility value of the X axis label.
 ##### Example
 
 ```js
-Plotta.ShowAxisXLabel(true);
+plotta.ShowAxisXLabel(true);
 ```
 
 ### SetAxisXLabel
@@ -528,7 +540,7 @@ Plotta.ShowAxisXLabel(true);
 
 Set the X axis label.
 
-> Plotta.SetAxisXLabel(lebel);
+> plotta.SetAxisXLabel(lebel);
 
 ##### Parameters
 
@@ -539,7 +551,7 @@ Set the X axis label.
 ##### Example
 
 ```js
-Plotta.SetAxisXLabel('X label');
+plotta.SetAxisXLabel('X label');
 ```
 
 ### SetAxisXLabelColor
@@ -548,7 +560,7 @@ Plotta.SetAxisXLabel('X label');
 
 set color of X axis label.
 
-> Plotta.SetAxisXLabelColor(color);
+> plotta.SetAxisXLabelColor(color);
 
 ##### Parameters
 
@@ -559,7 +571,7 @@ set color of X axis label.
 ##### Example
 
 ```js
-Plotta.SetAxisXLabelColor(`#888888`);
+plotta.SetAxisXLabelColor(`#888888`);
 ```
 
 ### SetAxisXLabelLocation
@@ -568,7 +580,7 @@ Plotta.SetAxisXLabelColor(`#888888`);
 
 Set the location of the X axis label.
 
-> Plotta.SetAxisXLabelLocation(location);
+> plotta.SetAxisXLabelLocation(location);
 
 ##### Parameters
 
@@ -581,7 +593,7 @@ The default value is center.
 ##### Example
 
 ```js
-Plotta.SetAxisXLabelLocation('center');
+plotta.SetAxisXLabelLocation('center');
 ```
 
 ### ShowAxisYLabel
@@ -590,7 +602,7 @@ Plotta.SetAxisXLabelLocation('center');
 
 Set the visibility value of the Y axis label.
 
-> Plotta.ShowAxisYLabel(show);
+> plotta.ShowAxisYLabel(show);
 
 ##### Parameters
 
@@ -601,7 +613,7 @@ Set the visibility value of the Y axis label.
 ##### Example
 
 ```js
-Plotta.ShowAxisYLabel(true);
+plotta.ShowAxisYLabel(true);
 ```
 
 ### SetAxisYLabel
@@ -610,7 +622,7 @@ Plotta.ShowAxisYLabel(true);
 
 Set the Y axis label.
 
-> Plotta.SetAxisYLabel(lebel);
+> plotta.SetAxisYLabel(lebel);
 
 ##### Parameters
 
@@ -621,7 +633,7 @@ Set the Y axis label.
 ##### Example
 
 ```js
-Plotta.SetAxisXLabel('Y label');
+plotta.SetAxisXLabel('Y label');
 ```
 
 ### SetAxisYLabelColor
@@ -630,7 +642,7 @@ Plotta.SetAxisXLabel('Y label');
 
 set color of Y axis label.
 
-> Plotta.SetAxisYLabelColor(color);
+> plotta.SetAxisYLabelColor(color);
 
 ##### Parameters
 
@@ -641,7 +653,7 @@ set color of Y axis label.
 ##### Example
 
 ```js
-Plotta.SetAxisYLabelColor(`#888888`);
+plotta.SetAxisYLabelColor(`#888888`);
 ```
 
 ### SetAxisYLabelLocation
@@ -650,7 +662,7 @@ Plotta.SetAxisYLabelColor(`#888888`);
 
 Set the location of the Y axis label.
 
-> Plotta.SetAxisYLabelLocation(location);
+> plotta.SetAxisYLabelLocation(location);
 
 ##### Parameters
 
@@ -663,7 +675,7 @@ The default value is center.
 ##### Example
 
 ```js
-Plotta.SetAxisYLabelLocation('middle');
+plotta.SetAxisYLabelLocation('middle');
 ```
 
 ### ShowTable
@@ -672,7 +684,7 @@ Plotta.SetAxisYLabelLocation('middle');
 
 Set the visibility value of the Table.
 
-> Plotta.ShowTable(show);
+> plotta.ShowTable(show);
 
 ##### Parameters
 
@@ -683,7 +695,27 @@ Set the visibility value of the Table.
 ##### Example
 
 ```js
-Plotta.ShowTable(true);
+plotta.ShowTable(true);
+```
+
+### ShowLegend
+
+##### Description
+
+Set the visibility value of the Legend.
+
+> plotta.ShowLegend(show);
+
+##### Parameters
+
+| Name | Type    | Description                     |
+| :--: | ------- | ------------------------------- |
+| show | boolean | visibility value of the Legend. |
+
+##### Example
+
+```js
+plotta.ShowLegend(true);
 ```
 
 ## Commit Message Convention
@@ -692,4 +724,4 @@ Plotta.ShowTable(true);
 
 ## CopyLight & License
 
-Copyright (c) 2019 Song Jewoo. Plotta.js, Plotta.js is released under the [MIT license](https://opensource.org/licenses/MIT).
+Copyright (c) 2019 Song Jewoo. plotta.js, plotta.js is released under the [MIT license](https://opensource.org/licenses/MIT).
