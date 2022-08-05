@@ -30,7 +30,7 @@ https://iamsjy17.github.io/plotta.js-page/
 
 ## Version
 
-1.1.1
+2.0.0
 
 ## Browser Support
 
