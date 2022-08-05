@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.2.0 (2022-08-05)
+
+
+### Features
+
+* Add platform-specific types ([51c608f](https://github.com/iamsjy17/Plotta.js/commit/51c608f0ca83291259f30b75d5aab81cd89872c0))
+* add showLegend, showTitle ([d8d4e36](https://github.com/iamsjy17/Plotta.js/commit/d8d4e3653998162b39a11625dd0d6f49732efa26))
+
+
+### Bug Fixes
+
+* incorrect legend data ([acb6799](https://github.com/iamsjy17/Plotta.js/commit/acb6799ca578341451e5e95d22c64e14a00ee2cd))
+* Modify Axis of Initial Range value ([abd3b11](https://github.com/iamsjy17/Plotta.js/commit/abd3b11d723d08458e83b269630499848a587392))
+* type error(util.ts, platform.ts) ([1a47839](https://github.com/iamsjy17/Plotta.js/commit/1a478399467ac6fafd222d7063abc95b6d77df8b))
+
 ## 1.1.1 (2019-07-31)
 
 ### Bug Fixes
